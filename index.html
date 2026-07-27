@@ -1,0 +1,2249 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نورِ صبا — شیعہ کیلنڈر پاکستان</title>
+<meta name="description" content="پاکستانی شیعہ مؤمنین کے لیے اردو کیلنڈر: مناسبتیں، اوقاتِ شرعی فقہِ جعفری، قمر در عقرب، اذان اور آب و ہوا۔">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#141F3C">
+<link rel="icon" href="./favicon-64.png" sizes="64x64" type="image/png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="نورِ صبا">
+<meta name="mobile-web-app-capable" content="yes">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night1:#141F3C; --night2:#24406B;      /* آسمانِ شب */
+    --gold:#C9A227; --gold-soft:#E8D48A;     /* زری / عَلَم */
+    --red:#B93A32;                            /* مناسبتِ عزا و تعطیل */
+    --paper:#F2F4F7; --card:#FFFFFF;
+    --ink:#1E2430; --ink-soft:#5A6478; --line:#E3E7EE;
+    --nasta:'Noto Nastaliq Urdu', serif;
+    --naskh:'Noto Naskh Arabic', 'Segoe UI', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  [hidden]{display:none !important}   /* class display rules ورنہ hidden کو دبا دیتی ہیں */
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--paper);color:var(--ink);font-family:var(--naskh);line-height:1.9}
+  button,select{font-family:inherit}
+  button{cursor:pointer}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+
+  .wrap{max-width:520px;margin:0 auto;padding-bottom:56px}
+  .ins-bar{display:flex;align-items:center;gap:9px;margin:10px 14px 0;padding:10px 12px;border-radius:14px;
+    background:linear-gradient(135deg,#FBF3D9,#F6EAC6);border:1px solid var(--gold-soft);
+    box-shadow:0 2px 10px rgba(120,95,20,.10)}
+  .ins-ic{width:32px;height:32px;flex:0 0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:#fff;border:1px solid var(--gold-soft);color:#7A5A00}
+  .ins-tx{flex:1;min-width:0;font-size:.84rem;font-weight:700;color:#5C4400;line-height:1.5}
+  .ins-go{flex:0 0 auto;border:1px solid var(--night2);background:var(--night2);color:#fff;border-radius:10px;
+    padding:7px 13px;font-size:.8rem;font-weight:700}
+  .ins-x{flex:0 0 auto;border:none;background:transparent;color:#8A7434;font-size:.9rem;padding:2px 4px}
+
+  /* ───── سرورق: آسمانِ شب ───── */
+  header.sky{
+    background:
+      radial-gradient(circle at 82% 16%, rgba(232,212,138,.16), transparent 40%),
+      linear-gradient(168deg, var(--night1) 0%, var(--night2) 100%);
+    color:#F4F1E6; padding:12px 16px 14px;
+    border-radius:0 0 22px 22px; position:relative; overflow:hidden;
+  }
+  header.sky::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background-image:
+      radial-gradient(1.2px 1.2px at 12% 22%, rgba(255,255,255,.8), transparent 60%),
+      radial-gradient(1px 1px at 28% 64%, rgba(255,255,255,.5), transparent 60%),
+      radial-gradient(1.3px 1.3px at 55% 12%, rgba(255,255,255,.65), transparent 60%),
+      radial-gradient(1px 1px at 88% 52%, rgba(255,255,255,.45), transparent 60%);
+  }
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;position:relative;z-index:1}
+  .masthead{display:flex;align-items:center;justify-content:center;gap:12px;
+    position:relative;z-index:1;margin-bottom:12px}
+  .mh-line{flex:1;max-width:42px;height:1px;
+    background:linear-gradient(to left, transparent, rgba(232,212,138,.55));}
+  .mh-line:last-child{background:linear-gradient(to right, transparent, rgba(232,212,138,.55));}
+  .mh-text{font-size:.6rem;font-weight:600;color:rgba(232,212,138,.82);letter-spacing:1.3px;white-space:nowrap}
+  .mh-text b{font-weight:400;color:rgba(232,212,138,.4);margin:0 5px;letter-spacing:0}
+  .brand{font-family:var(--nasta);font-size:1rem;font-weight:700;line-height:2.1;flex:1;min-width:0}
+  .brand-txt-wrap{position:relative;display:inline-block}
+  .brand-txt{position:relative;z-index:1}
+  .brand-orbit-outer{position:absolute;top:50%;left:50%;width:0;height:0;
+    transform:scaleY(.42);pointer-events:none;z-index:0}
+  .brand-orbit-inner{position:absolute;top:0;left:0;width:0;height:0;
+    animation:brandOrbitCycle 10s linear infinite}
+  .brand-dot{position:absolute;top:0;left:58px;width:0;height:0;margin:-5px 0 0 -5px;
+    font-size:.63rem;line-height:1;color:#FCEFC7;
+    text-shadow:0 0 4px #fff,0 0 9px rgba(232,212,138,.95),0 0 16px rgba(232,212,138,.55);
+    opacity:0;animation:brandDotCycle 10s ease-in-out infinite}
+  @keyframes brandOrbitCycle{
+    0%,5%{transform:rotate(0deg)}
+    45%,100%{transform:rotate(360deg)}
+  }
+  @keyframes brandDotCycle{
+    0%,100%{opacity:0}
+    5%,45%{opacity:1}
+    50%{opacity:0}
+  }
+  .brand-orbit-inner.s2, .brand-orbit-inner.s2 .brand-dot{animation-delay:-.3s}
+  .brand-orbit-inner.s3, .brand-orbit-inner.s3 .brand-dot{animation-delay:-.6s}
+  .brand-orbit-inner.s4, .brand-orbit-inner.s4 .brand-dot{animation-delay:-.9s}
+  .brand-orbit-inner.s5, .brand-orbit-inner.s5 .brand-dot{animation-delay:-1.2s}
+  @media (prefers-reduced-motion:reduce){
+    .brand-orbit-inner{animation:none}
+    .brand-dot{animation:none;opacity:0}
+  }
+
+  .citybox{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;line-height:1;flex:0 0 auto;
+    background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.07));
+    border:1px solid rgba(232,212,138,.38);
+    box-shadow:0 2px 10px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.18);
+    max-width:130px}
+  .citybox .pin{color:var(--gold-soft);display:flex;flex:0 0 auto}
+  .citybox .chev{color:rgba(244,241,230,.75);display:flex;flex:0 0 auto}
+  select.city{appearance:none;-webkit-appearance:none;background:transparent;border:none;
+    color:#F4F1E6;font-size:.82rem;font-weight:700;font-family:inherit;line-height:1.6;
+    width:auto;max-width:82px;text-overflow:ellipsis;padding:0;margin:0;direction:rtl;height:26px}
+  select.city option,select.city optgroup{color:var(--ink);background:#fff}
+
+  .today{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;position:relative;z-index:1}
+  .today .side{flex:1;min-width:0}
+  .today .weekday{font-family:var(--nasta);font-size:1rem;font-weight:600;line-height:2.3;white-space:nowrap}
+  .today .hijri-line{font-size:clamp(.7rem,3.3vw,.84rem);color:var(--gold-soft);white-space:nowrap}
+  .today .greg-line{font-size:clamp(.68rem,3.2vw,.8rem);opacity:.9;white-space:nowrap}
+  .today .side.left{text-align:left}
+
+  .moon{width:80px;height:80px;flex:0 0 auto;border-radius:50%;
+    background:radial-gradient(circle at 34% 30%, #3D5A8C, #1B2A4A 68%);
+    border:2px solid rgba(232,212,138,.5);
+    box-shadow:0 0 0 5px rgba(232,212,138,.09), 0 7px 20px rgba(0,0,0,.32),
+      0 0 14px 2px rgba(232,212,138,.16);
+    display:flex;align-items:center;justify-content:center;position:relative;
+    animation:moonBreathe 3.6s ease-in-out infinite}
+  .moon::after{content:"";position:absolute;inset:-7px;border-radius:50%;
+    border:1px solid rgba(232,212,138,.5);pointer-events:none;
+    animation:moonHalo 3.6s ease-in-out infinite}
+  .moon .num{font-family:var(--naskh);font-size:1.95rem;font-weight:700;color:#FDF9EC;line-height:1;position:relative;z-index:1}
+  @keyframes moonBreathe{
+    0%,100%{ box-shadow:0 0 0 5px rgba(232,212,138,.09), 0 7px 20px rgba(0,0,0,.32), 0 0 14px 2px rgba(232,212,138,.16); }
+    50%{ box-shadow:0 0 0 5px rgba(232,212,138,.15), 0 7px 22px rgba(0,0,0,.32), 0 0 22px 6px rgba(232,212,138,.30); }
+  }
+  @keyframes moonHalo{
+    0%,100%{ transform:scale(1); opacity:.6; }
+    50%{ transform:scale(1.09); opacity:.15; }
+  }
+  @media (prefers-reduced-motion:reduce){ .moon, .moon::after{animation:none} }
+
+  .hdr-foot{display:flex;flex-direction:column;align-items:stretch;gap:8px;
+    margin-top:11px;position:relative;z-index:1}
+  .hdr-chip{align-self:center;font-size:.74rem;font-weight:700;background:rgba(232,212,138,.16);
+    color:var(--gold-soft);border:1px solid rgba(232,212,138,.42);border-radius:999px;padding:4px 13px;
+    max-width:92%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+  .hdr-chip.hol{background:rgba(185,58,50,.22);border-color:rgba(240,180,174,.55);color:#FFD9D5}
+  .hilal{display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px 8px 12px;border-radius:14px;
+    background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.05));
+    border:1px solid rgba(232,212,138,.30);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 3px 12px rgba(0,0,0,.20)}
+  .hilal .hmoon{width:30px;height:30px;flex:0 0 auto;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;color:var(--gold-soft);background:rgba(232,212,138,.14);
+    border:1px solid rgba(232,212,138,.34)}
+  .hilal .lbl{flex:1;min-width:0;font-size:.78rem;opacity:.92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hstep{display:inline-flex;align-items:center;gap:2px;flex:0 0 auto;padding:3px;border-radius:999px;
+    background:rgba(10,16,32,.30);border:1px solid rgba(232,212,138,.26)}
+  .hstep button{width:28px;height:28px;border-radius:50%;border:none;color:var(--gold-soft);
+    background:rgba(232,212,138,.16);font-size:1rem;font-weight:700;line-height:1;
+    display:flex;align-items:center;justify-content:center;transition:background .15s}
+  .hstep button:active{background:rgba(232,212,138,.34)}
+  .hstep .val{min-width:52px;text-align:center;color:var(--gold-soft);font-weight:700;font-size:.8rem}
+
+  /* ───── کارڈز ───── */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;margin:14px 14px 0;padding:16px 18px;box-shadow:0 2px 10px rgba(20,31,60,.05)}
+  .card h2{font-family:var(--nasta);font-size:1.02rem;font-weight:600;color:var(--night2);display:flex;align-items:center;gap:8px;line-height:2.2;white-space:nowrap;min-width:0}
+  .card h2>span{flex:0 0 auto;white-space:nowrap}
+  .card h2::after{content:"";flex:1 1 12px;min-width:12px;height:1px;background:linear-gradient(to left, var(--gold), transparent)}
+  .ann-card{padding:4px 0;overflow:hidden}
+  .ann-item{position:relative;display:flex;gap:12px;align-items:flex-start;
+    padding:14px 44px 14px 18px;border-bottom:1px solid var(--line)}
+  .ann-item:last-child{border-bottom:none}
+  .ann-ic{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:rgba(201,162,39,.13);
+    color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+  .ann-item.type-lecture .ann-ic{background:rgba(36,64,107,.12);color:var(--night2)}
+  .ann-item.type-donation .ann-ic{background:rgba(30,122,70,.13);color:#1E7A46}
+  .ann-body{flex:1;min-width:0}
+  .ann-title{font-family:var(--nasta);font-weight:700;font-size:1rem;color:var(--night2);margin-bottom:2px}
+  .ann-text{font-size:.86rem;color:var(--ink-soft);line-height:1.75}
+  .ann-link{display:inline-block;margin-top:6px;font-size:.8rem;font-weight:700;color:var(--night2);
+    border-bottom:1px solid var(--gold)}
+  .ann-x{position:absolute;top:10px;left:10px;width:26px;height:26px;border-radius:50%;border:none;
+    background:var(--paper);color:var(--ink-soft);font-size:.85rem;line-height:1;cursor:pointer}
+  .ad-banner{padding-top:10px}
+  .ad-label{font-size:.68rem;color:var(--ink-soft);text-align:center;margin-bottom:8px;letter-spacing:.5px}
+
+  /* جدولِ ماہ */
+  .mnav{display:flex;direction:rtl;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+  #prevM{order:1} .mnav .mid{order:2} #nextM{order:3}
+  .todaybtn{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;
+    border:1px solid var(--gold);background:#FDFAF0;color:var(--night2);border-radius:999px;
+    padding:9px 18px;font-size:.82rem;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;
+    box-shadow:0 6px 18px rgba(20,31,60,.22);animation:todayPop .22s ease-out}
+  .todaybtn:active{background:#F6EDD2;transform:translateX(-50%) scale(.96)}
+  @keyframes todayPop{from{opacity:0;transform:translate(-50%,10px) scale(.92)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+  @media (prefers-reduced-motion:reduce){ .todaybtn{animation:none} }
+  .updbtn{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:70;
+    border:1px solid var(--night2);background:var(--night2);color:#fff;border-radius:999px;
+    padding:9px 18px;font-size:.8rem;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;
+    box-shadow:0 6px 18px rgba(20,31,60,.3);display:flex;align-items:center;gap:7px;animation:todayPop .22s ease-out}
+  .updbtn:active{transform:translateX(-50%) scale(.96)}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:80;
+    background:var(--night2);color:#fff;padding:10px 18px;border-radius:999px;font-size:.82rem;
+    font-family:inherit;box-shadow:0 6px 18px rgba(20,31,60,.3);opacity:0;pointer-events:none;
+    transition:opacity .25s}
+  .toast.show{opacity:1}
+  .mnav .mid{flex:1;min-width:0;text-align:center}
+  .mnav .title{font-family:var(--naskh);font-size:1.02rem;font-weight:700;color:var(--night2);line-height:1.8}
+  .mnav .sub{font-size:.72rem;color:var(--ink-soft);text-align:center;line-height:1.6}
+  .mnav-arrow{width:40px;height:40px;flex:0 0 auto;border-radius:50%;
+    border:1px solid var(--line);background:linear-gradient(180deg,#fff,#F3F5F8);color:var(--night2);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 6px rgba(20,31,60,.08);transition:transform .12s,box-shadow .12s,background .12s}
+  .mnav-arrow:active{transform:scale(.90);background:#E7EDF8;box-shadow:0 1px 3px rgba(20,31,60,.12)}
+  .mnav-arrow svg{pointer-events:none}
+  table.grid{width:100%;border-collapse:collapse;table-layout:fixed}
+  .grid th{font-size:.72rem;font-weight:500;color:var(--ink-soft);padding:6px 0}
+  .grid th.sun{color:var(--red)}
+  .grid td{text-align:center;padding:3px 0}
+  .cell{width:44px;height:58px;margin:0 auto;border-radius:13px;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:2px;cursor:pointer;position:relative}
+  /* عیسوی عدد */
+  .cell .g{font-size:1.02rem;font-weight:700;line-height:1.15;color:var(--ink)}
+  .cell.sun .g{color:var(--red)}
+  .cell.hol .g{color:var(--red)}
+  /* قمری عدد — اپنی گولی میں */
+  .cell .h{font-size:.63rem;font-weight:700;color:#5A6478;background:#EDF0F5;border-radius:7px;
+    padding:0 5px;min-width:19px;text-align:center;line-height:1.6;box-shadow:inset 0 0 0 1px #E1E6EE}
+  .cell.mstart .h{background:#FBF2D6;color:#7A5A00;box-shadow:inset 0 0 0 1px var(--gold)}
+  /* نشانات کی قطار — ہر خانے میں جگہ محفوظ تاکہ اونچائی نہ بدلے */
+  .cell .mk{height:6px;display:flex;align-items:center;gap:3px}
+  .cell .mk i{width:5px;height:5px;border-radius:50%;display:block}
+  .cell .mk i.h{background:var(--red)}
+  .cell .mk i.o{background:var(--night2);opacity:.4}
+  .cell .mk i.a{background:#7A5CC4;animation:aqDot 1.8s ease-in-out infinite}
+  /* آج / منتخب / ذاتی اندراج */
+  .cell.sel{background:#E7EDF8;box-shadow:0 0 0 2px var(--night2)}
+  .cell.today{background:var(--night2);box-shadow:0 0 0 2px var(--gold)}
+  .cell.today .g{color:#fff}
+  .cell.today .h{background:rgba(255,255,255,.16);color:#FDF9EC;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+  .cell.today .mk i.o{background:#fff;opacity:.7}
+  .cell.mine::after{content:"";position:absolute;top:4px;inset-inline-start:4px;width:6px;height:6px;
+    border-radius:50%;background:#1E7A46}
+  @media (prefers-reduced-motion:reduce){ .cell .mk i.a{animation:none} }
+  .cell.today{background:var(--night2);box-shadow:0 0 0 2px var(--gold)}
+  .cell.today .g,.cell.today .h{color:#fff}
+
+  /* مناسبتیں */
+  .occ-today{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#FBF6E7,#F6EDD2);
+    border:1px solid var(--gold-soft);border-radius:12px;padding:10px 14px;margin:10px 0 4px;
+    font-size:.93rem;line-height:1.6}
+  .occ-today.none{display:block}
+  .occ-today.none{background:var(--paper);border-color:var(--line);color:var(--ink-soft)}
+  ul.occ-list{list-style:none;margin-top:8px}
+  ul.occ-list li{display:flex;justify-content:space-between;gap:12px;padding:9px 2px;border-bottom:1px dashed var(--line);font-size:.9rem;line-height:1.95}
+  ul.occ-list li:last-child{border-bottom:none}
+  .salawat{color:#96731C;font-weight:700;font-size:.35em;letter-spacing:0;
+    font-family:var(--nasta);white-space:nowrap}
+  .w-shahadat{color:var(--red);font-weight:700}
+  .w-wiladat{color:#1E7A46;font-weight:700}
+  .occ-chk{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;
+    border-radius:50%;background:#1E7A46;color:#fff;font-size:.62rem;font-weight:700;
+    flex:0 0 auto;margin-inline-end:6px;vertical-align:-2px}
+  ul.occ-list li.today{background:linear-gradient(90deg,#FBF6E7,transparent);border-radius:10px;
+    margin:0 -8px;padding:9px 8px;border-bottom:1px dashed var(--line)}
+  ul.occ-list li.today .what{display:flex;align-items:center;gap:9px}
+  .occ-today-badge{display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+    width:36px;height:36px;border-radius:50%;background:var(--night2);color:var(--gold-soft);
+    font-family:var(--nasta);font-size:1rem;font-weight:700;box-shadow:0 3px 8px rgba(20,31,60,.22);
+    border:1.5px solid rgba(232,212,138,.55)}
+  ul.occ-list .when{color:var(--ink-soft);font-size:.78rem;white-space:nowrap;padding-top:3px}
+  ul.occ-list li.holiday .what{color:var(--red)}
+  .tag{display:inline-block;font-size:.64rem;font-weight:700;background:var(--red);color:#fff;
+    border-radius:7px;padding:1px 8px;margin-inline-start:8px;line-height:1.75;white-space:nowrap;
+    vertical-align:3px;transform:translateY(-1px)}
+
+  /* اوقاتِ شرعی */
+  .times{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+  .t{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center}
+  .t .n{font-size:.74rem;color:var(--ink-soft)}
+  .t .v{font-size:.98rem;font-weight:700;color:var(--night2);direction:ltr}
+  .t.next{background:var(--night2);border-color:var(--night2)}
+  .t.next .n{color:var(--gold-soft)}
+  .t.next .v{color:#fff}
+  .t.mag{border-color:var(--gold-soft);background:#FDFAF0}
+  .t.sahar{border-color:#1E7A46;background:#F1FAF4}
+  .t.sahar .v{color:#1E7A46}
+
+  /* ایڈجسٹمنٹ آپشن */
+  .adjbox{margin-top:14px;border-top:1px dashed var(--line);padding-top:10px}
+  .adjbox summary{cursor:pointer;font-size:.85rem;color:var(--night2);font-weight:700;list-style-position:inside}
+  .adj-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 2px;border-bottom:1px dashed var(--line);font-size:.88rem}
+  .adj-row:last-of-type{border-bottom:none}
+  .adj-row .ctrl{display:flex;align-items:center;gap:8px}
+  .adj-row button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--night2);font-size:1rem;font-weight:700}
+  .adj-row .mv{min-width:52px;text-align:center;font-weight:700;color:var(--night2);direction:ltr}
+  .adj-note{font-size:.72rem;color:var(--ink-soft);margin-top:8px}
+  .src-note{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);
+    display:flex;flex-direction:column;gap:6px}
+  .src-line{font-family:var(--nasta);font-weight:700;font-size:.5rem;color:var(--ink-soft);
+    display:flex;align-items:center;gap:7px}
+  .src-ic{font-size:.85rem;flex:0 0 auto}
+
+  /* آب و ہوا */
+  .wx-now{display:flex;align-items:center;gap:14px;margin-top:10px;padding:13px 14px;border-radius:16px;
+    background:linear-gradient(135deg,#EAF2FD,#DDE9FA);border:1px solid #C8D9F0}
+  .wx-ic{width:52px;height:52px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+    font-size:1.9rem;border-radius:50%;background:#fff;border:1px solid #C8D9F0;box-shadow:0 2px 8px rgba(30,60,120,.10)}
+  .wx-main{flex:1;min-width:0}
+  .wx-temp{font-size:1.85rem;font-weight:700;color:#1B3A6B;line-height:1.1;direction:ltr;text-align:start}
+  .wx-desc{font-size:.86rem;color:#3C5A88;margin-top:1px}
+  .wx-meta{display:flex;flex-direction:column;gap:3px;flex:0 0 auto;font-size:.72rem;color:#3C5A88;text-align:start}
+  .wx-meta b{color:#1B3A6B}
+  .wx-days{display:flex;gap:7px;margin-top:11px;overflow-x:auto;padding-bottom:2px}
+  .wx-day{flex:0 0 auto;min-width:62px;text-align:center;padding:9px 6px;border-radius:13px;
+    background:var(--paper);border:1px solid var(--line)}
+  .wx-day .d{font-size:.7rem;color:var(--ink-soft)}
+  .wx-day .i{font-size:1.1rem;line-height:1.7}
+  .wx-day .t{font-size:.76rem;font-weight:700;color:var(--night2);direction:ltr}
+  .wx-day .t span{color:var(--ink-soft);font-weight:400}
+  .wx-load,.wx-err{font-size:.84rem;color:var(--ink-soft);padding:4px 2px}
+  .wx-err b{color:var(--red)}
+  .wx-src{margin-top:9px;font-size:.66rem;color:var(--ink-soft);text-align:center}
+  .wx-retry{margin-inline-start:8px;border:1px solid var(--line);background:var(--paper);color:var(--night2);
+    border-radius:8px;padding:3px 10px;font-size:.74rem;font-weight:700}
+  /* سہولیات: مستقل فریم */
+  .tools-card{display:flex;align-items:center;gap:10px;width:calc(100% - 28px);margin:14px 14px 0;
+    background:linear-gradient(135deg,var(--night2),#1B2A4A);color:#F4F1E6;border:none;
+    border-radius:16px;padding:13px 16px;box-shadow:0 3px 10px rgba(20,31,60,.18);font-family:inherit;cursor:pointer}
+  .tools-ic{width:30px;height:30px;flex:0 0 auto;border-radius:50%;background:rgba(232,212,138,.16);
+    border:1px solid rgba(232,212,138,.4);display:flex;align-items:center;justify-content:center;
+    color:var(--gold-soft);font-size:1.05rem;font-weight:700}
+  .tools-tx{flex:1;text-align:start;font-size:.92rem;font-weight:700}
+  .tools-arrow{color:var(--gold-soft);font-size:1rem}
+  /* سعد و نحس: گرافیکی بیج */
+  .nahs-badge{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);
+    border-radius:14px;padding:12px 14px;margin-top:8px}
+  .nahs-ic{width:38px;height:38px;flex:0 0 auto;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;font-size:1.15rem;font-weight:700;color:#fff}
+  .nahs-ic.good{background:#1E7A46}
+  .nahs-ic.bad{background:var(--red)}
+  .nahs-ic.neutral{background:#8A93A6}
+  .nahs-tx{display:flex;flex-direction:column;gap:1px}
+  .nahs-lbl{font-size:.72rem;color:var(--ink-soft)}
+  .nahs-val{font-size:1rem;font-weight:700;color:var(--ink)}
+  .info-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 2px;border-bottom:1px dashed var(--line);font-size:.9rem;margin-top:6px}
+  .info-row:last-of-type{border-bottom:none}
+  .ilbl{color:var(--ink-soft)}
+  .ival{font-weight:700;color:var(--night2);text-align:left}
+  .ival.bad{color:var(--red)}
+  .ival.good{color:#1E7A46}
+  .cell.aqrab::before{content:"";position:absolute;top:4px;inset-inline-end:5px;width:5px;height:5px;border-radius:50%;background:#7A5CC4}
+  .aq-list{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:12px}
+  .aq-item{background:linear-gradient(180deg,#FBF9FF,#F4F0FC);border:1px solid #DDD3F2;border-radius:14px;padding:14px 14px 10px}
+  .aq-ends{display:flex;align-items:flex-start;gap:6px}
+  .aq-end{flex:0 0 auto;text-align:center;min-width:74px}
+  .aq-end .lbl{display:block;font-size:.68rem;color:#6B4BB8;font-weight:700;letter-spacing:.5px}
+  .aq-end .dt{display:block;font-size:.78rem;color:var(--ink);margin-top:1px}
+  .aq-end .tm{display:block;font-size:1.06rem;font-weight:700;color:#4A2F94;direction:ltr;line-height:1.4}
+  .aq-track{flex:1;min-width:0;position:relative;align-self:center;height:26px;margin-top:16px}
+  .aq-track::before{content:"";position:absolute;top:11px;inset-inline:0;height:4px;border-radius:2px;
+    background:linear-gradient(to left,#6B4BB8,#B9A3E8,#6B4BB8)}
+  .aq-track .knb{position:absolute;top:6px;width:14px;height:14px;border-radius:50%;background:#fff;
+    border:3px solid #6B4BB8;box-sizing:border-box}
+  .aq-track .knb.s{inset-inline-start:-4px}
+  .aq-track .knb.e{inset-inline-end:-4px}
+  .aq-track .chip{position:absolute;top:0;left:50%;transform:translateX(-50%);background:#fff;
+    border:1px solid #DDD3F2;border-radius:999px;padding:2px 9px;font-size:.7rem;color:#4A2F94;font-weight:700;white-space:nowrap}
+  .aq-track.open::before{background:repeating-linear-gradient(to left,#6B4BB8 0 7px,transparent 7px 13px);height:3px;top:12px}
+  .aq-now{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:9px;
+    font-size:.74rem;font-weight:700;color:var(--red)}
+  .aq-now .dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:aqDot 1.4s ease-in-out infinite}
+  .aq-none{color:var(--ink-soft);font-size:.88rem;padding:6px 2px}
+  .toolbtn{margin-inline-start:auto;border:1px solid var(--line);background:var(--paper);color:var(--night2);border-radius:999px;padding:3px 12px;font-size:.72rem;font-weight:700;white-space:nowrap;line-height:1.7;order:2}
+  .card h2 .toolbtn{flex:0 0 auto}
+  .ovl{position:fixed;inset:0;background:rgba(10,16,32,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+  .sheet{background:var(--card);width:100%;max-width:520px;max-height:88vh;border-radius:20px 20px 0 0;display:flex;flex-direction:column;overflow:hidden}
+  .sheet-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--night2);color:#F4F1E6;font-family:var(--nasta);font-size:1.05rem;line-height:2.2}
+  .sheet-hd button{background:transparent;border:none;color:#F4F1E6;font-size:1.1rem}
+  .sheet-bd{padding:14px 18px 22px;overflow-y:auto}
+  .sheet-day{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:9px 12px;font-size:.88rem;font-weight:700;color:var(--night2);text-align:center}
+  /* تبادلہ تاریخ */
+  .conv-tabs{display:flex;gap:8px;margin-bottom:14px}
+  .conv-tab{flex:1;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);
+    border-radius:10px;padding:9px 6px;font-size:.82rem;font-weight:700;font-family:inherit;cursor:pointer}
+  .conv-tab.on{background:var(--night2);border-color:var(--night2);color:#fff}
+  .conv-lbl{display:block;font-size:.78rem;color:var(--ink-soft);margin-bottom:6px}
+  .conv-pane input[type=date],.conv-pane input[type=number],.conv-pane select{
+    width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;
+    font-size:.92rem;font-family:inherit;background:#fbfcfe}
+  .conv-row3{display:flex;gap:8px}
+  .conv-row3 input{flex:1;min-width:0}
+  .conv-row3 select{flex:2;min-width:0}
+  .conv-go{width:100%;margin-top:12px;border:none;background:var(--gold);color:var(--night2);
+    border-radius:10px;padding:10px;font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer}
+  .conv-result{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:12px;
+    padding:12px 14px;text-align:center;font-family:var(--nasta);font-size:1.05rem;font-weight:700;color:var(--night2)}
+  .info-sec{margin-bottom:18px}
+  .info-sec-hd{font-family:var(--nasta);font-weight:700;font-size:1rem;color:var(--night2);margin-bottom:8px}
+  .info-txt{font-size:.88rem;color:var(--ink-soft);margin:0 0 10px}
+  .clist{list-style:none;margin:8px 0 0;padding:0}
+  .clist li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+  .clist li:last-child{border-bottom:none}
+  .clist .ic{width:30px;height:30px;border-radius:50%;background:rgba(201,162,39,.13);color:var(--gold);
+    display:flex;align-items:center;justify-content:center;font-size:.9rem;flex:0 0 auto}
+  .clist a{color:var(--night2);font-weight:700;text-decoration:none;border-bottom:1px solid var(--gold);font-size:.86rem}
+  .clist-txt{display:flex;flex-direction:column;gap:2px}
+  .clist-name{font-family:var(--nasta);font-weight:700;font-size:.92rem;color:var(--night2)}
+  .tool-sec{margin-top:16px}
+  .tool-hd{font-size:.9rem;font-weight:700;color:var(--night2);margin-bottom:6px}
+  .tool-list{list-style:none}
+  .tool-list li{display:flex;align-items:center;gap:8px;padding:8px 2px;border-bottom:1px dashed var(--line);font-size:.88rem}
+  .tool-list li:last-child{border-bottom:none}
+  .tool-list .tm{font-weight:700;color:var(--night2);direction:ltr;flex:0 0 auto}
+  .tool-list .tx{flex:1;min-width:0}
+  .tool-list .del{border:none;background:transparent;color:var(--red);font-size:1rem;flex:0 0 auto}
+  .tool-list li.empty{color:var(--ink-soft);border:none}
+  .amal-sec{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+  .amal-hd{font-family:var(--nasta);font-weight:700;font-size:.96rem;color:var(--night2);margin-bottom:4px}
+  .tool-add{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .tool-add input[type=text]{width:100%}
+  .tool-add-row2{display:flex;gap:6px}
+  .tool-add-row2 input[type=date]{flex:1;min-width:0}
+  .tool-add-row2 input[type=time]{flex:0 0 auto}
+  .tool-add input{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.86rem;font-family:inherit;background:var(--paper)}
+  .tool-add button{border:1px solid var(--night2);background:var(--night2);color:#fff;border-radius:10px;padding:8px 14px;font-size:.82rem;font-weight:700;flex:0 0 auto}
+  .store-warn{background:#FDECEA;border:1px solid #F0B4AE;color:#8E2B24;border-radius:12px;
+    padding:10px 12px;font-size:.78rem;line-height:1.7;margin-top:14px}
+  .all-list li{flex-direction:column;align-items:flex-start;gap:2px}
+  .all-list .tx{font-size:.88rem}
+  .all-list .dt{font-size:.74rem;color:var(--ink-soft)}
+  .tool-jump{width:100%;margin-top:18px;border:1px solid var(--gold);background:#FDFAF0;color:var(--night2);border-radius:12px;padding:11px;font-size:.88rem;font-weight:700}
+  /* قمر در عقرب: متحرک انتباہی نشان */
+  .card h2 .aq-warn{width:22px;height:22px;font-size:.82rem}
+  .aq-warn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;
+    border-radius:50%;background:#FDECEA;position:relative;flex:0 0 auto;font-size:.95rem;line-height:1;
+    animation:aqPulse 1.8s ease-in-out infinite}
+  .aq-warn::after{content:"";position:absolute;inset:-3px;border-radius:50%;
+    border:2px solid var(--red);opacity:.7;animation:aqRing 1.8s ease-out infinite}
+  @keyframes aqPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+  @keyframes aqRing{0%{transform:scale(.85);opacity:.75}70%{transform:scale(1.35);opacity:0}100%{opacity:0}}
+  .aq-alert{display:flex;align-items:center;gap:10px;background:#FDECEA;border:1px solid #F0B4AE;
+    border-radius:12px;padding:10px 12px;margin-top:10px;font-size:.84rem;color:#8E2B24}
+  .aq-alert b{color:var(--red)}
+  .cell.aqrab::before{animation:aqDot 1.8s ease-in-out infinite}
+  @keyframes aqDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.55}}
+  @media (prefers-reduced-motion:reduce){
+    .aq-warn,.aq-warn::after,.cell.aqrab::before{animation:none}
+  }
+  /* اذان */
+  .azan-intro{font-size:.82rem;color:var(--ink-soft);margin:4px 0 12px}
+  .az-grid{display:flex;flex-direction:column;gap:9px}
+  .az-tile{display:flex;align-items:center;gap:11px;padding:10px 12px;border:1px solid var(--line);
+    border-radius:14px;background:var(--paper);cursor:pointer;transition:background .18s,border-color .18s}
+  .az-tile.on{background:#F1FAF4;border-color:#9AD3B4}
+  .az-ic{width:36px;height:36px;flex:0 0 auto;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;font-size:1.05rem;background:#fff;border:1px solid var(--line)}
+  .az-tile.on .az-ic{border-color:#9AD3B4}
+  .az-txt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.5}
+  .az-nm{font-size:.92rem;color:var(--ink)}
+  .az-tm{font-size:.8rem;font-weight:700;color:var(--night2);direction:ltr;align-self:flex-start}
+  .az-tile .chk{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
+  .az-sw{width:44px;height:25px;border-radius:13px;background:#DDE3EC;position:relative;flex:0 0 auto;transition:background .2s}
+  .az-sw::after{content:"";position:absolute;top:2px;inset-inline-start:2px;width:21px;height:21px;
+    border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+  .chk:checked + .az-sw{background:#1E7A46}
+  .chk:checked + .az-sw::after{transform:translateX(-19px)}
+  .az-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .az-play{flex:1;min-width:120px;border:1px solid var(--night2);background:var(--night2);color:#fff;
+    border-radius:12px;padding:11px;font-size:.88rem;font-weight:700}
+  .az-play.stop{background:var(--red);border-color:var(--red)}
+  .az-pick{flex:1;min-width:120px;border:1px solid var(--line);background:var(--paper);color:var(--night2);
+    border-radius:12px;padding:11px;font-size:.86rem;font-weight:700;text-align:center;cursor:pointer}
+  .az-src{margin-top:9px;font-size:.74rem;color:var(--ink-soft);text-align:center}
+  .muezzin-sec{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+  .muezzin-hd{font-family:var(--nasta);font-weight:700;font-size:.94rem;color:var(--night2);margin-bottom:8px}
+  .mz-item{display:flex;align-items:center;gap:9px;padding:9px 4px;border-bottom:1px solid var(--line)}
+  .mz-item:last-child{border-bottom:none}
+  .mz-radio{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);
+    background:var(--paper);color:var(--gold);font-size:1rem;line-height:1;cursor:pointer}
+  .mz-item.on .mz-radio{border-color:var(--gold);color:var(--gold)}
+  .mz-name{flex:1;font-size:.86rem;color:var(--ink)}
+  .mz-item.on .mz-name{font-weight:700;color:var(--night2)}
+  .mz-tag{flex:0 0 auto;font-size:.72rem;color:#1E7A46;font-weight:700}
+  .mz-up{flex:0 0 auto;font-size:.74rem;color:var(--night2);border:1px solid var(--gold);
+    background:#FDFAF0;border-radius:999px;padding:5px 11px;cursor:pointer}
+  .mz-up.small{border-style:dashed;color:var(--ink-soft);border-color:var(--line);background:transparent}
+
+  footer{margin:22px 14px 0;text-align:center;font-size:.72rem;color:var(--ink-soft)}
+  .footer-links{margin-top:10px;display:flex;align-items:center;justify-content:center;gap:10px}
+  .footer-links button{background:none;border:none;padding:0;font-family:inherit;font-size:.72rem;cursor:pointer;
+    color:var(--night2);font-weight:700;border-bottom:1px solid var(--gold)}
+  .footer-links span{color:var(--line)}
+  @media (max-width:380px){
+    .moon{width:70px;height:70px}
+    .moon .num{font-size:1.7rem}
+    .times{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .card{animation:rise .45s ease both}
+    @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <button id="todayBtn" class="todaybtn" hidden>⟲ آج پر واپس</button>
+
+  <div class="ins-bar" id="insBar" hidden>
+    <span class="ins-ic" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+    </span>
+    <span class="ins-tx">نورِ صبا کو ہوم اسکرین پر شامل کریں</span>
+    <button id="insBtn" class="ins-go">Install</button>
+    <button id="insX" class="ins-x" aria-label="بند کریں">✕</button>
+  </div>
+
+
+  <header class="sky">
+    <div class="masthead">
+      <span class="mh-line"></span>
+      <span class="mh-text">SHIA CALENDAR<b>·</b>PAKISTAN</span>
+      <span class="mh-line"></span>
+    </div>
+    <div class="topbar">
+      <div class="brand">
+        <span class="brand-txt-wrap">
+          <span class="brand-orbit-outer" aria-hidden="true">
+            <span class="brand-orbit-inner s1"><span class="brand-dot">✦</span></span>
+            <span class="brand-orbit-inner s2"><span class="brand-dot">✦</span></span>
+            <span class="brand-orbit-inner s3"><span class="brand-dot">✦</span></span>
+            <span class="brand-orbit-inner s4"><span class="brand-dot">✦</span></span>
+            <span class="brand-orbit-inner s5"><span class="brand-dot">✦</span></span>
+          </span>
+          <span class="brand-txt">نورِ صبا</span>
+        </span>
+      </div>
+      <div class="citybox">
+        <span class="pin" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        </span>
+        <select class="city" id="citySel" aria-label="شہر منتخب کریں"></select>
+        <span class="chev" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6"
+               stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="today">
+      <div class="side">
+        <div class="weekday" id="tWeekday">—</div>
+        <div class="hijri-line" id="tHijri">—</div>
+      </div>
+      <div class="moon" aria-hidden="true">
+        <div class="num" id="moonDay">—</div>
+      </div>
+      <div class="side left">
+        <div class="greg-line" id="tGreg">—</div>
+      </div>
+    </div>
+
+    <div class="hdr-foot">
+      <span class="hdr-chip" id="hdrChip" hidden></span>
+      <div class="hilal">
+        <span class="hmoon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round"><path d="M20.5 14.5A8.5 8.5 0 1 1 11 3.2a6.8 6.8 0 0 0 9.5 11.3z"/></svg>
+        </span>
+        <span class="lbl">رؤیتِ ہلال ایڈجسٹمنٹ</span>
+        <span class="hstep">
+          <button id="adjMinus" aria-label="ایک دن کم">−</button>
+          <span class="val" id="adjVal">0 دن</span>
+          <button id="adjPlus" aria-label="ایک دن زیادہ">+</button>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <section class="card ann-card" id="annCard" hidden aria-label="اعلانات"></section>
+
+  <!-- جدولِ ماہ -->
+  <section class="card" aria-label="ماہانہ جدول">
+    <div class="mnav">
+      <button id="prevM" class="mnav-arrow" aria-label="پچھلا مہینہ">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <div class="mid">
+        <div class="title" id="gridTitle">—</div>
+        <div class="sub" id="gridSub">—</div>
+      </div>
+      <button id="nextM" class="mnav-arrow" aria-label="اگلا مہینہ">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+    </div>
+    <table class="grid" id="gridTable"></table>
+  </section>
+
+  <!-- مناسبتیں -->
+  <section class="card" aria-label="مناسبتیں">
+    <h2>مناسبتیں اور تعطیلات</h2>
+    <div class="occ-today" id="occToday">—</div>
+    <ul class="occ-list" id="occList"></ul>
+  </section>
+
+  <!-- اوقاتِ شرعی -->
+  <section class="card" aria-label="اوقات شرعی">
+    <h2>اوقاتِ شرعی فقہِ جعفری <span id="cityName" style="font-size:.8rem;color:var(--ink-soft)"></span></h2>
+    <div class="times" id="timesGrid"></div>
+    <details class="adjbox">
+      <summary>⚙ اوقات کی ایڈجسٹمنٹ (منٹ میں)</summary>
+      <div id="adjRows"></div>
+      <div class="adj-note">اپنے مقامی نقشے (مثلاً انجمنِ حسینی) سے ملانے کے لیے ہر وقت میں احتیاطی منٹ کم یا زیادہ کریں</div>
+    </details>
+  </section>
+
+  <!-- آب و ہوا -->
+  <section class="card" aria-label="آب و ہوا">
+    <h2><span>آب و ہوا</span> <span id="wxCity" style="font-size:.8rem;color:var(--ink-soft)"></span></h2>
+    <div class="wx-now" id="wxNow">
+      <div class="wx-load">موسم کی معلومات لی جا رہی ہیں…</div>
+    </div>
+    <div class="wx-days" id="wxDays"></div>
+    <div class="wx-src" id="wxSrc"></div>
+  </section>
+
+  <!-- سہولیات: اپنا الگ فریم -->
+  <button id="openTools" class="tools-card">
+    <span class="tools-ic" aria-hidden="true">⋮</span>
+    <span class="tools-tx">سہولیاتِ روز</span>
+    <span class="tools-arrow" aria-hidden="true">‹</span>
+  </button>
+
+  <!-- دن کی معلومات -->
+  <section class="card" id="infoCard" aria-label="دن کی معلومات">
+    <h2>دن کی معلومات</h2>
+
+    <div class="nahs-badge" id="nahsBadge">
+      <span class="nahs-ic" id="nahsIcon">•</span>
+      <span class="nahs-tx">
+        <span class="nahs-lbl">سعد و نحس</span>
+        <span class="nahs-val" id="iNahs">—</span>
+      </span>
+    </div>
+
+    <div class="info-row" id="rowAqrab">
+      <span class="ilbl"><span class="aq-warn" aria-hidden="true">🦂</span> قمر در عقرب</span>
+      <span class="ival" id="iAqrab">—</span>
+    </div>
+    <div class="aq-alert" id="aqAlert" hidden>
+      <span class="aq-warn" aria-hidden="true">🦂</span>
+      <span><b>احتیاط:</b> روایتاً اس دوران نکاح، سفر اور اہم کاموں سے پرہیز کیا جاتا ہے</span>
+    </div>
+    <div class="amal-sec">
+      <div class="amal-hd">📖 اعمالِ روز</div>
+      <ul class="tool-list" id="amalListMain"></ul>
+    </div>
+
+    <div class="src-note">
+      <div class="src-line"><span class="src-ic" aria-hidden="true">🌐</span>سعد و نحس انجمنِ حسینی کے کیلنڈر کے مطابق</div>
+      <div class="src-line"><span class="src-ic" aria-hidden="true">🕐</span>قمر در عقرب فلکیاتی حساب سے</div>
+    </div>
+  </section>
+
+  <!-- قمر در عقرب: ماہانہ -->
+  <section class="card" aria-label="قمر در عقرب اس ماہ">
+    <h2><span class="aq-warn" aria-hidden="true">🦂</span> <span>قمر در عقرب</span> <span id="aqMonth" style="font-size:.8rem;color:var(--ink-soft)"></span></h2>
+    <ul class="aq-list" id="aqList"></ul>
+  </section>
+
+  <!-- تبادلہ تاریخ -->
+  <section class="card" aria-label="تاریخ کا تبادلہ">
+    <h2><span>🔄 تبادلہ تاریخ</span></h2>
+    <div class="conv-tabs">
+      <button class="conv-tab on" id="convTabG2H" type="button">عیسوی ← ہجری</button>
+      <button class="conv-tab" id="convTabH2G" type="button">ہجری ← عیسوی</button>
+    </div>
+
+    <div class="conv-pane" id="convG2H">
+      <label class="conv-lbl" for="convGDate">عیسوی تاریخ منتخب کریں</label>
+      <input type="date" id="convGDate">
+    </div>
+
+    <div class="conv-pane" id="convH2G" hidden>
+      <label class="conv-lbl">ہجری تاریخ درج کریں</label>
+      <div class="conv-row3">
+        <input type="number" id="convHDay" min="1" max="30" placeholder="دن">
+        <select id="convHMon"></select>
+        <input type="number" id="convHYear" min="1300" max="1500" placeholder="سال">
+      </div>
+    </div>
+
+    <button class="conv-go" id="convGo" type="button">تبدیل کریں</button>
+    <div class="conv-result" id="convResult" hidden></div>
+  </section>
+
+  <!-- سہولیاتِ روز -->
+  <div class="ovl" id="ovl" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+      <div class="sheet-hd"><span id="shTitle">سہولیات</span><button id="shClose" aria-label="بند کریں">✕</button></div>
+      <div class="sheet-bd">
+        <div class="sheet-day" id="shDay">—</div>
+
+        <div class="tool-sec">
+          <div class="tool-hd">⏰ یاد دہانیاں</div>
+          <ul class="tool-list" id="remList"></ul>
+          <div class="tool-add">
+            <input type="text" id="remText" placeholder="یاد دہانی لکھیں…">
+            <div class="tool-add-row2">
+              <input type="date" id="remDate" aria-label="تاریخ">
+              <input type="time" id="remTime">
+              <button id="remAdd">شامل</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tool-sec">
+          <div class="tool-hd">🕌 مجالس</div>
+          <ul class="tool-list" id="majList"></ul>
+          <div class="tool-add">
+            <input type="text" id="majText" placeholder="مجلس / محل وقوع…">
+            <div class="tool-add-row2">
+              <input type="date" id="majDate" aria-label="تاریخ">
+              <input type="time" id="majTime">
+              <button id="majAdd">شامل</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tool-sec">
+          <div class="tool-hd">📖 اعمالِ روز</div>
+          <ul class="tool-list" id="amalList"></ul>
+        </div>
+
+        <div class="store-warn" id="storeWarn" hidden>⚠ اس فون پر مستقل محفوظ کاری کام نہیں کر رہی — اندراجات صرف اسی سیشن تک رہیں گے۔ مستقل محفوظ کاری کے لیے ایپ کو براؤزر لنک سے کھولیں (فائل کے بجائے)۔</div>
+
+        <div class="tool-sec">
+          <div class="tool-hd">📋 تمام اندراجات (تاریخ کے ساتھ)</div>
+          <ul class="tool-list all-list" id="allList"></ul>
+        </div>
+
+        <button class="tool-jump" id="jumpTimes">🕰 اوقاتِ شرعی دیکھیں</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- درباره ما -->
+  <div class="ovl" id="aboutOvl" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+      <div class="sheet-hd"><span id="aboutTitle">About Us</span><button id="aboutClose" aria-label="بند کریں">✕</button></div>
+      <div class="sheet-bd">
+        <div class="info-sec">
+          <div class="info-sec-hd">نورِ صبا کیا ہے؟</div>
+          <p class="info-txt">
+            نورِ صبا ایک اردو زبان اسلامی (شیعہ) کیلنڈر ایپ ہے، جو خاص طور پر پاکستان اور بیرونِ ملک اردو بولنے والی
+            کمیونٹی کے لیے تیار کی گئی ہے۔ اس میں ہجری تاریخیں، مناسبتیں، نمازوں کے اوقات، قمر در عقرب، اور روزانہ کے
+            دینی اعمال شامل ہیں۔
+          </p>
+        </div>
+        <div class="info-sec">
+          <div class="info-sec-hd">مقصد</div>
+          <p class="info-txt">
+            اس ایپ کا مقصد کمیونٹی کو مذہبی تاریخوں، مجالس، اور اہم دنوں سے باخبر رکھنا ہے، تاکہ ہر کوئی آسانی سے
+            اپنی روزمرہ عبادات اور مناسبتوں کا خیال رکھ سکے۔
+          </p>
+        </div>
+        <div class="info-sec">
+          <div class="info-sec-hd">ہمارے پروجیکٹس</div>
+          <ul class="clist">
+            <li><span class="ic">🌙</span><span class="clist-txt"><span class="clist-name">نورِ صبا</span></span></li>
+            <li><span class="ic">📚</span><span class="clist-txt"><span class="clist-name">سحاب ڈیجیٹل لائبریری</span></span></li>
+            <li><span class="ic">⚖️</span><span class="clist-txt"><span class="clist-name">تقسیمِ میراثِ شیعہ کیلکولیٹر</span></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ارتباط با ما -->
+  <div class="ovl" id="contactOvl" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+      <div class="sheet-hd"><span id="contactTitle">Contact Us</span><button id="contactClose" aria-label="بند کریں">✕</button></div>
+      <div class="sheet-bd">
+        <div class="info-sec">
+          <div class="info-sec-hd">ہم سے رابطہ کریں</div>
+          <p class="info-txt">سوالات، تجاویز، یا کسی مسئلے کی اطلاع کے لیے درج ذیل ذرائع سے رابطہ کر سکتے ہیں:</p>
+          <ul class="clist">
+            <li><span class="ic">✉️</span>
+              <span class="clist-txt">
+                <span class="clist-name">مولانا سید انیس الحسن نقوی</span>
+                <a href="mailto:anisnaqvi5@gmail.com" dir="ltr">anisnaqvi5@gmail.com</a>
+              </span>
+            </li>
+            <li><span class="ic">📱</span><a href="https://wa.me/923325479345" target="_blank" rel="noopener" dir="ltr">+92 332 5479345</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- اذان -->
+  <section class="card" aria-label="اذان">
+    <h2><span>اذان</span></h2>
+    <p class="azan-intro">جو اذانیں چلانا چاہتے ہیں اُن کا انتخاب کریں</p>
+
+    <div class="az-grid">
+      <label class="az-tile" id="tile-fajr">
+        <span class="az-ic dawn">🌅</span>
+        <span class="az-txt"><span class="az-nm">اذانِ فجر</span><span class="az-tm" id="azT-fajr">—</span></span>
+        <input type="checkbox" class="chk" data-az="fajr"><span class="az-sw"></span>
+      </label>
+      <label class="az-tile" id="tile-zuhr">
+        <span class="az-ic noon">☀️</span>
+        <span class="az-txt"><span class="az-nm">اذانِ ظہرین</span><span class="az-tm" id="azT-zuhr">—</span></span>
+        <input type="checkbox" class="chk" data-az="zuhr"><span class="az-sw"></span>
+      </label>
+      <label class="az-tile" id="tile-maghrib">
+        <span class="az-ic dusk">🌇</span>
+        <span class="az-txt"><span class="az-nm">اذانِ مغربین</span><span class="az-tm" id="azT-maghrib">—</span></span>
+        <input type="checkbox" class="chk" data-az="maghrib"><span class="az-sw"></span>
+      </label>
+    </div>
+
+    <div class="az-actions">
+      <button id="azanTest" class="az-play" aria-label="اذان سنیں">▶</button>
+      <button id="azanStop" class="az-play stop" hidden aria-label="روکیں">⏹</button>
+    </div>
+
+    <div class="muezzin-sec">
+      <div class="muezzin-hd">🎙️ مؤذن منتخب کریں</div>
+      <div class="muezzin-list" id="muezzinList"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       اشتہاراتی بینر (تیسرا فریق — مثلاً گوگل ایڈسینس)
+       جب آپ کا AdSense اکاؤنٹ منظور ہو جائے:
+       ۱) اپنا publisher کوڈ (ca-pub-...) اس فائل کے <head> میں ایک بار شامل کریں:
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+       ۲) نیچے دیے گئے <ins> ٹیگ میں اپنا data-ad-client اور data-ad-slot نمبر بھریں
+       ۳) جب تک یہ خالی ہے، یہ بینر خود بخود چھپا رہتا ہے — صارف کو کچھ نظر نہیں آئے گا
+     ═══════════════════════════════════════════════════════════════ -->
+  <section class="card ad-banner" id="adBanner" aria-label="اشتہار" hidden>
+    <div class="ad-label">اشتہار</div>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="0000000000"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+  </section>
+
+  <footer>
+    ابتدائی نمونہ · اوقات کا حساب مقامی طور پر ہوتا ہے، انٹرنیٹ درکار نہیں<br>
+    <div class="footer-links">
+      <button id="openAbout" type="button">ℹ️ About Us</button>
+      <span aria-hidden="true">·</span>
+      <button id="openContact" type="button">✉️ Contact Us</button>
+      <span aria-hidden="true">·</span>
+      <button id="shareApp" type="button">🔗 دوسروں کو بھیجیں</button>
+    </div>
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* ───────────────────────── بنیادی ڈیٹا ───────────────────────── */
+const CITIES = [
+  /* ── اہم شہر ── */
+  {n:"کراچی",            lat:24.86, lng:67.01, tz:5, g:"پاکستان", imp:true},
+  {n:"لاہور",            lat:31.55, lng:74.34, tz:5, g:"پاکستان", imp:true},
+  {n:"اسلام آباد",       lat:33.68, lng:73.05, tz:5, g:"پاکستان", imp:true},
+  {n:"راولپنڈی",         lat:33.60, lng:73.04, tz:5, g:"پاکستان", imp:true},
+  {n:"فیصل آباد",        lat:31.42, lng:73.08, tz:5, g:"پاکستان", imp:true},
+  {n:"ملتان",            lat:30.20, lng:71.45, tz:5, g:"پاکستان", imp:true},
+  {n:"پشاور",            lat:34.01, lng:71.55, tz:5, g:"پاکستان", imp:true},
+  {n:"کوئٹہ",            lat:30.18, lng:66.99, tz:5, g:"پاکستان", imp:true},
+  /* ── پنجاب ── */
+  {n:"جھنگ",             lat:31.27, lng:72.32, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"سرگودھا",          lat:32.08, lng:72.67, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"گوجرانوالہ",       lat:32.16, lng:74.19, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"سیالکوٹ",          lat:32.49, lng:74.53, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"بہاولپور",         lat:29.40, lng:71.68, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"ڈیرہ غازی خان",    lat:30.05, lng:70.63, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"جہلم",             lat:32.94, lng:73.73, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"گجرات",            lat:32.57, lng:74.08, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"ساہیوال",          lat:30.67, lng:73.11, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"اوکاڑہ",           lat:30.81, lng:73.44, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"قصور",             lat:31.12, lng:74.45, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"شیخوپورہ",         lat:31.72, lng:73.99, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"چنیوٹ",            lat:31.72, lng:72.98, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"وہاڑی",            lat:30.03, lng:72.35, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"رحیم یار خان",     lat:28.42, lng:70.30, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"مظفرگڑھ",          lat:30.07, lng:71.19, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"لیہ",              lat:30.97, lng:70.94, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"بھکر",             lat:31.62, lng:71.07, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"میانوالی",         lat:32.59, lng:71.55, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"اٹک",              lat:33.77, lng:72.36, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"چکوال",            lat:32.93, lng:72.86, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"نارووال",          lat:32.10, lng:74.88, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"حافظ آباد",        lat:32.07, lng:73.69, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"ٹوبہ ٹیک سنگھ",    lat:30.97, lng:72.48, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"خانیوال",          lat:30.30, lng:71.93, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"پاکپتن",           lat:30.34, lng:73.39, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"راجن پور",         lat:29.10, lng:70.33, tz:5, g:"پاکستان", prov:"پنجاب"},
+  {n:"بہاولنگر",         lat:30.00, lng:73.26, tz:5, g:"پاکستان", prov:"پنجاب"},
+  /* ── سندھ ── */
+  {n:"حیدرآباد",         lat:25.38, lng:68.37, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"سکھر",             lat:27.70, lng:68.86, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"لاڑکانہ",          lat:27.56, lng:68.21, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"خیرپور",           lat:27.53, lng:68.76, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"نوابشاہ",          lat:26.24, lng:68.41, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"میرپور خاص",       lat:25.53, lng:69.01, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"جیکب آباد",        lat:28.28, lng:68.45, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"شکارپور",          lat:27.96, lng:68.64, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"دادو",             lat:26.73, lng:67.78, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"ٹھٹھہ",            lat:24.75, lng:67.92, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"بدین",             lat:24.66, lng:68.84, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"ٹنڈو الہ یار",     lat:25.46, lng:68.72, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"ٹنڈو آدم",         lat:25.77, lng:68.66, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"عمرکوٹ",           lat:25.36, lng:69.74, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"گھوٹکی",           lat:28.01, lng:69.32, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"کشمور",            lat:28.43, lng:69.58, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"سانگھڑ",           lat:26.05, lng:68.95, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"نوشہرو فیروز",     lat:26.84, lng:68.13, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"مورو",             lat:26.66, lng:68.00, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"مٹیاری",           lat:25.60, lng:68.44, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"جامشورو",          lat:25.43, lng:68.27, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"کوٹری",            lat:25.37, lng:68.31, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"رانی پور",         lat:27.30, lng:68.59, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"سیہون شریف",       lat:26.43, lng:67.86, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"ٹنڈو جام",         lat:25.42, lng:68.53, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"نوری آباد",        lat:25.20, lng:67.95, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"روہڑی",            lat:27.69, lng:68.89, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"حالہ",             lat:25.81, lng:68.42, tz:5, g:"پاکستان", prov:"سندھ"},
+  {n:"پنوعاقل",          lat:27.86, lng:69.12, tz:5, g:"پاکستان", prov:"سندھ"},
+  /* ── بلوچستان ── */
+  {n:"خضدار",            lat:27.80, lng:66.63, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"سبی",              lat:29.54, lng:67.88, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"ژوب",              lat:31.34, lng:69.45, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"تربت",             lat:26.00, lng:63.05, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"گوادر",            lat:25.12, lng:62.33, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"چمن",              lat:30.92, lng:66.46, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"لورالائی",         lat:30.37, lng:68.60, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"ڈیرہ بگٹی",        lat:29.03, lng:69.16, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"نوشکی",            lat:29.55, lng:66.02, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"مستونگ",           lat:29.80, lng:66.85, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"پشین",             lat:30.58, lng:67.00, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"قلات",             lat:29.03, lng:66.59, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"پنجگور",           lat:26.97, lng:64.10, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"حب",               lat:25.00, lng:66.80, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"خاران",            lat:28.58, lng:65.42, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"بارکھان",          lat:29.90, lng:69.54, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"زیارت",            lat:30.38, lng:67.73, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"اوتھل",            lat:25.81, lng:66.62, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  {n:"ڈیرہ مراد جمالی",  lat:28.52, lng:68.28, tz:5, g:"پاکستان", prov:"بلوچستان"},
+  /* ── خیبر پختونخوا ── */
+  {n:"کوہاٹ",            lat:33.58, lng:71.44, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"پاراچنار",         lat:33.90, lng:70.10, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"ڈیرہ اسماعیل خان", lat:31.83, lng:70.90, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"ایبٹ آباد",        lat:34.15, lng:73.22, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"مردان",            lat:34.20, lng:72.04, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"سوات (مینگورہ)",   lat:34.77, lng:72.36, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"مانسہرہ",          lat:34.33, lng:73.20, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"صوابی",            lat:34.12, lng:72.47, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"نوشہرہ",           lat:34.02, lng:71.97, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"چارسدہ",           lat:34.15, lng:71.74, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"بنوں",             lat:32.99, lng:70.60, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"ٹانک",             lat:32.22, lng:70.38, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"لکی مروت",         lat:32.61, lng:70.91, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"کرک",              lat:33.12, lng:71.10, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"ہنگو",             lat:33.53, lng:71.06, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"باجوڑ (خار)",      lat:34.58, lng:71.53, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"مالاکنڈ (بٹ خیلہ)", lat:34.62, lng:71.97, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"بونیر (دگر)",      lat:34.52, lng:72.45, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"شانگلہ (الپوری)",  lat:34.87, lng:72.63, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"لوئر دیر (تیمرگرہ)",lat:34.83, lng:71.84, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"اپر دیر",          lat:35.20, lng:71.87, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"ہری پور",          lat:34.00, lng:72.94, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  {n:"چترال",            lat:35.85, lng:71.79, tz:5, g:"پاکستان", prov:"خیبر پختونخوا"},
+  /* ── آزاد کشمیر ── */
+  {n:"مظفرآباد",         lat:34.36, lng:73.47, tz:5, g:"پاکستان", prov:"آزاد کشمیر"},
+  {n:"میرپور",           lat:33.15, lng:73.75, tz:5, g:"پاکستان", prov:"آزاد کشمیر"},
+  {n:"کوٹلی",            lat:33.52, lng:73.90, tz:5, g:"پاکستان", prov:"آزاد کشمیر"},
+  {n:"باغ",              lat:33.98, lng:73.77, tz:5, g:"پاکستان", prov:"آزاد کشمیر"},
+  {n:"راولاکوٹ",         lat:33.86, lng:73.76, tz:5, g:"پاکستان", prov:"آزاد کشمیر"},
+  {n:"بھمبر",            lat:32.98, lng:74.08, tz:5, g:"پاکستان", prov:"آزاد کشمیر"},
+  {n:"ہٹیاں بالا",       lat:34.22, lng:73.64, tz:5, g:"پاکستان", prov:"آزاد کشمیر"},
+  {n:"ایتھمقام (نیلم)",  lat:34.59, lng:73.92, tz:5, g:"پاکستان", prov:"آزاد کشمیر"},
+  {n:"پلندری",           lat:33.72, lng:73.68, tz:5, g:"پاکستان", prov:"آزاد کشمیر"},
+  /* ── گلگت بلتستان ── */
+  {n:"گلگت",             lat:35.92, lng:74.31, tz:5, g:"پاکستان", prov:"گلگت بلتستان"},
+  {n:"اسکردو",           lat:35.30, lng:75.63, tz:5, g:"پاکستان", prov:"گلگت بلتستان"},
+  {n:"ہنزہ (کریم آباد)", lat:36.31, lng:74.66, tz:5, g:"پاکستان", prov:"گلگت بلتستان"},
+  {n:"کھپلو (غانچے)",    lat:35.17, lng:76.33, tz:5, g:"پاکستان", prov:"گلگت بلتستان"},
+  {n:"شگر",              lat:35.42, lng:75.73, tz:5, g:"پاکستان", prov:"گلگت بلتستان"},
+  {n:"استور",            lat:35.34, lng:74.90, tz:5, g:"پاکستان", prov:"گلگت بلتستان"},
+  {n:"چلاس (دیامیر)",    lat:35.42, lng:74.10, tz:5, g:"پاکستان", prov:"گلگت بلتستان"},
+  {n:"گاہکوچ (غذر)",     lat:36.17, lng:73.78, tz:5, g:"پاکستان", prov:"گلگت بلتستان"},
+  {n:"نگر خاص",          lat:36.23, lng:74.68, tz:5, g:"پاکستان", prov:"گلگت بلتستان"},
+  {n:"خرمنگ",            lat:34.95, lng:76.20, tz:5, g:"پاکستان", prov:"گلگت بلتستان"},
+  /* ── بیرونِ ملک ── */
+  {n:"دبئی",             lat:25.20, lng:55.27, tz:4,  g:"بیرونِ ملک"},
+  {n:"مسقط",             lat:23.59, lng:58.41, tz:4,  g:"بیرونِ ملک"},
+  {n:"نجفِ اشرف",        lat:32.03, lng:44.34, tz:3,  g:"بیرونِ ملک"},
+  {n:"کربلائے معلیٰ",    lat:32.62, lng:44.02, tz:3,  g:"بیرونِ ملک"},
+  {n:"مشہدِ مقدس",       lat:36.30, lng:59.61, tz:3.5,g:"بیرونِ ملک"},
+  {n:"قم",               lat:34.64, lng:50.88, tz:3.5,g:"بیرونِ ملک"},
+  {n:"مدینہ منورہ",      lat:24.47, lng:39.61, tz:3,  g:"بیرونِ ملک"},
+  {n:"مکہ مکرمہ",        lat:21.39, lng:39.86, tz:3,  g:"بیرونِ ملک"},
+  {n:"جدہ",              lat:21.49, lng:39.19, tz:3,  g:"بیرونِ ملک"},
+  {n:"بغداد",            lat:33.32, lng:44.37, tz:3,  g:"بیرونِ ملک"},
+  {n:"کاظمین",           lat:33.38, lng:44.34, tz:3,  g:"بیرونِ ملک"},
+  {n:"سامرا",            lat:34.20, lng:43.89, tz:3,  g:"بیرونِ ملک"},
+  {n:"تہران",            lat:35.69, lng:51.39, tz:3.5,g:"بیرونِ ملک"},
+  {n:"نیشاپور",          lat:36.21, lng:58.80, tz:3.5,g:"بیرونِ ملک"},
+  {n:"زاہدان",           lat:29.50, lng:60.86, tz:3.5,g:"بیرونِ ملک"},
+  {n:"کرمان",            lat:30.28, lng:57.08, tz:3.5,g:"بیرونِ ملک"},
+  {n:"کاشان",            lat:33.99, lng:51.41, tz:3.5,g:"بیرونِ ملک"},
+  {n:"چابہار",           lat:25.29, lng:60.64, tz:3.5,g:"بیرونِ ملک"},
+  {n:"لندن",             lat:51.51, lng:-0.13, tz:1,  g:"بیرونِ ملک"},
+  {n:"فرینکفرٹ",         lat:50.11, lng:8.68,  tz:2,  g:"بیرونِ ملک"},
+  {n:"ٹورنٹو",           lat:43.65, lng:-79.38,tz:-4, g:"بیرونِ ملک"},
+  {n:"نیویارک",          lat:40.71, lng:-74.01,tz:-4, g:"بیرونِ ملک"},
+  {n:"سڈنی",             lat:-33.87,lng:151.21,tz:10, g:"بیرونِ ملک"},
+  {n:"میلبورن",          lat:-37.81,lng:144.96,tz:10, g:"بیرونِ ملک"},
+  {n:"ہیوسٹن",           lat:29.76, lng:-95.37,tz:-5, g:"بیرونِ ملک"},
+  {n:"شکاگو",            lat:41.88, lng:-87.63,tz:-5, g:"بیرونِ ملک"},
+  {n:"ڈیئربورن",         lat:42.32, lng:-83.18,tz:-4, g:"بیرونِ ملک"},
+  {n:"لکھنؤ",            lat:26.85, lng:80.95, tz:5.5,g:"بیرونِ ملک"},
+  {n:"دہلی",             lat:28.70, lng:77.10, tz:5.5,g:"بیرونِ ملک"},
+  {n:"ممبئی",            lat:19.08, lng:72.88, tz:5.5,g:"بیرونِ ملک"},
+  {n:"حیدرآباد دکن",     lat:17.39, lng:78.49, tz:5.5,g:"بیرونِ ملک"},
+  {n:"سرینگر",           lat:34.08, lng:74.80, tz:5.5,g:"بیرونِ ملک"},
+  {n:"کرگل",             lat:34.55, lng:76.13, tz:5.5,g:"بیرونِ ملک"},
+  {n:"لیہ (لداخ)",       lat:34.15, lng:77.58, tz:5.5,g:"بیرونِ ملک"},
+  {n:"نوبرا (دسکت)",     lat:34.53, lng:77.56, tz:5.5,g:"بیرونِ ملک"},
+  {n:"زنسکار (پدم)",     lat:33.47, lng:76.88, tz:5.5,g:"بیرونِ ملک"},
+  {n:"احمد آباد",        lat:23.02, lng:72.57, tz:5.5,g:"بیرونِ ملک"},
+  {n:"اونا",             lat:20.82, lng:71.04, tz:5.5,g:"بیرونِ ملک"},
+  {n:"کوڈینار",          lat:20.79, lng:70.70, tz:5.5,g:"بیرونِ ملک"},
+  {n:"ڈھاکہ",            lat:23.81, lng:90.41, tz:6,  g:"بیرونِ ملک"},
+  {n:"چٹاگانگ",          lat:22.36, lng:91.78, tz:6,  g:"بیرونِ ملک"},
+  {n:"سلہٹ",             lat:24.89, lng:91.87, tz:6,  g:"بیرونِ ملک"},
+  {n:"کھلنا",            lat:22.85, lng:89.54, tz:6,  g:"بیرونِ ملک"},
+  {n:"راجشاہی",          lat:24.37, lng:88.60, tz:6,  g:"بیرونِ ملک"},
+];
+
+/* مناسبتیں: قمری تاریخ سے — ماخذ: کیلنڈرِ انجمنِ حسینی کراچی 2026ء / 1447-1448ھ */
+const OCC_HIJRI = [
+  /* محرم الحرام */
+  {m:1,d:1, t:"آغازِ ایامِ عزا — نیا ہجری سال"},
+  {m:1,d:2, t:"حضرت امام حسینؑ کربلا تشریف لائے"},
+  {m:1,d:7, t:"قافلۂ حسینی پر پانی بند ہوا"},
+  {m:1,d:9, t:"تاسوعا — شبِ عاشورہ", hol:true},
+  {m:1,d:10,t:"یومِ عاشورہ — شہادتِ حضرت امام حسینؑ و انصار", hol:true},
+  {m:1,d:11,t:"روانگیِ اسیرانِ کربلا بطرفِ کوفہ"},
+  {m:1,d:12,t:"سوم شہدائے کربلا"},
+  {m:1,d:18,t:"تبدیلیِ قبلہ بجانبِ خانہ کعبہ (2ھ)"},
+  {m:1,d:25,t:"شہادتِ حضرت امام زین العابدینؑ (95ھ)"},
+  /* صفر المظفر */
+  {m:2,d:2, t:"شہادتِ حضرت زید شہیدؒ"},
+  {m:2,d:6, t:"بقول شہادتِ بی بی سکینہؑ (61ھ)"},
+  {m:2,d:7, t:"ولادتِ حضرت امام موسیٰ کاظمؑ (128ھ)"},
+  {m:2,d:9, t:"شہادتِ عمار بن یاسرؓ (جنگِ صفین 38ھ)"},
+  {m:2,d:11,t:"شہادتِ جناب اویس قرنیؒ (صفین)"},
+  {m:2,d:13,t:"شہادتِ بی بی سکینہؑ (61ھ)"},
+  {m:2,d:14,t:"شہادتِ محمد بن ابی بکرؒ"},
+  {m:2,d:17,t:"شہادتِ حضرت امام علی رضاؑ (203ھ)"},
+  {m:2,d:20,t:"چہلم — اربعینِ حضرت امام حسینؑ"},
+  {m:2,d:24,t:"بقول شہادتِ بی بی زینبؑ (61ھ)"},
+  {m:2,d:28,t:"وفاتِ حضرت رسولِ اکرم صلی اللہ علیہ وآلہ و شہادتِ حضرت امام حسنؑ"},
+  /* ربیع الاول */
+  {m:3,d:8, t:"شہادتِ حضرت امام حسن عسکریؑ (260ھ)"},
+  {m:3,d:9, t:"عیدِ شجاع — عید زہراؑ"},
+  {m:3,d:12,t:"عید میلادِ حضرت رسولِ خدا صلی اللہ علیہ وآلہ", hol:true},
+  {m:3,d:17,t:"ولادتِ حضرت رسولِ اکرم صلی اللہ علیہ وآلہ و حضرت امام جعفر صادقؑ"},
+  {m:3,d:26,t:"وفاتِ حضرت ابوطالبؑ"},
+  /* ربیع الثانی */
+  {m:4,d:10,t:"ولادتِ حضرت امام حسن عسکریؑ (232ھ)"},
+  {m:4,d:12,t:"شہادتِ بی بی فاطمہ معصومہ قمؑ"},
+  {m:4,d:18,t:"ولادتِ بی بی اُم کلثومؑ"},
+  /* جمادی الاول */
+  {m:5,d:5, t:"بروایت ولادتِ بی بی زینبؑ"},
+  {m:5,d:7, t:"شہادتِ حضرت جعفر طیارؓ (جنگِ موتہ 8ھ)"},
+  {m:5,d:13,t:"شہادتِ حضرت بی بی فاطمہ زہراؑ (11ھ) — ایامِ فاطمیہ"},
+  {m:5,d:15,t:"ولادتِ حضرت امام زین العابدینؑ (38ھ)"},
+  /* جمادی الثانی */
+  {m:6,d:3, t:"شہادتِ حضرت بی بی فاطمہ زہراؑ — ایامِ فاطمیہ"},
+  {m:6,d:7, t:"عرسِ بی بی پاک دامنؑ (لاہور)"},
+  {m:6,d:10,t:"فتحِ جنگِ جمل (37ھ)"},
+  {m:6,d:13,t:"وفاتِ جناب اُم البنینؑ والدۂ حضرت عباسؑ"},
+  {m:6,d:20,t:"ولادتِ حضرت بی بی فاطمہ زہراؑ"},
+  {m:6,d:22,t:"نذرِ حضرت امام حسنؑ"},
+  /* رجب المرجب */
+  {m:7,d:1, t:"ولادتِ حضرت امام محمد باقرؑ (57ھ)"},
+  {m:7,d:3, t:"شہادتِ حضرت امام علی نقیؑ (254ھ)"},
+  {m:7,d:5, t:"ولادتِ حضرت امام علی نقیؑ (214ھ)"},
+  {m:7,d:9, t:"ولادتِ حضرت علی اصغرؑ (60ھ)"},
+  {m:7,d:10,t:"ولادتِ حضرت امام محمد تقیؑ (195ھ)"},
+  {m:7,d:13,t:"ولادتِ امیر المومنین حضرت علیؑ"},
+  {m:7,d:15,t:"بقول شہادتِ بی بی زینبؑ"},
+  {m:7,d:18,t:"وفاتِ حضرت ابراہیمؑ فرزندِ حضرت پیغمبرِ اکرم صلی اللہ علیہ وآلہ"},
+  {m:7,d:20,t:"ولادتِ بی بی سکینہ بنتِ حضرت امام حسینؑ"},
+  {m:7,d:24,t:"فتحِ جنگِ خیبر (7ھ)"},
+  {m:7,d:25,t:"شہادتِ حضرت امام موسیٰ کاظمؑ (183ھ)"},
+  {m:7,d:26,t:"شبِ معراج"},
+  {m:7,d:27,t:"عیدِ بعثتِ حضرت رسولِ خدا صلی اللہ علیہ وآلہ"},
+  {m:7,d:28,t:"حضرت امام حسینؑ کی مدینہ سے روانگی (60ھ)"},
+  /* شعبان المعظم */
+  {m:8,d:1, t:"ولادتِ بی بی زینبؑ (5ھ)"},
+  {m:8,d:2, t:"ماہِ رمضان کے روزے فرض ہوئے (2ھ)"},
+  {m:8,d:3, t:"ولادتِ حضرت امام حسینؑ (4ھ)"},
+  {m:8,d:4, t:"ولادتِ حضرت عباس علمدارؑ"},
+  {m:8,d:5, t:"ولادتِ حضرت امام زین العابدینؑ (38ھ)"},
+  {m:8,d:7, t:"ولادتِ حضرت قاسم ابنِ حسنؑ"},
+  {m:8,d:11,t:"ولادتِ شہزادہ علی اکبرؑ"},
+  {m:8,d:14,t:"شبِ برأت"},
+  {m:8,d:15,t:"ولادتِ حضرت امام زمانہ عج (256ھ)"},
+  /* رمضان المبارک */
+  {m:9,d:1, t:"صحیفۂ ابراہیمؑ نازل ہوا"},
+  {m:9,d:2, t:"حضرت امام رضاؑ کی ولی عہدی کا دن"},
+  {m:9,d:6, t:"توریت نازل ہوئی"},
+  {m:9,d:7, t:"وفاتِ بی بی فاطمہ بنتِ اسدؑ"},
+  {m:9,d:10,t:"وفاتِ بی بی خدیجۃ الکبریٰؑ"},
+  {m:9,d:15,t:"ولادتِ حضرت امام حسنؑ (3ھ)"},
+  {m:9,d:17,t:"فتحِ جنگِ بدر (2ھ)"},
+  {m:9,d:18,t:"زبور نازل ہوئی — شبِ قدر"},
+  {m:9,d:19,t:"ضربتِ امیر المومنین علیؑ"},
+  {m:9,d:21,t:"شہادتِ امیر المومنین حضرت علیؑ (40ھ)"},
+  {m:9,d:23,t:"نزولِ قرآنِ پاک — شبِ قدر"},
+  /* شوال المکرم */
+  {m:10,d:1, t:"عید الفطر (پہلا دن)", hol:true},
+  {m:10,d:2, t:"عید الفطر (دوسرا دن)", hol:true},
+  {m:10,d:3, t:"عید الفطر (تیسرا دن)", hol:true},
+  {m:10,d:8, t:"یومِ انہدامِ جنت البقیع (1344ھ)"},
+  {m:10,d:10,t:"آغازِ غیبتِ کبریٰ (329ھ)"},
+  {m:10,d:15,t:"شہادتِ حضرت امام جعفر صادقؑ (148ھ)"},
+  {m:10,d:17,t:"شہادتِ حضرت حمزہؑ (جنگِ احد 3ھ)"},
+  {m:10,d:20,t:"حضرت امام موسیٰ کاظمؑ کو ہارون نے قید کیا"},
+  {m:10,d:25,t:"بروایت شہادتِ حضرت امام جعفر صادقؑ"},
+  {m:10,d:29,t:"ولادتِ حضرت ابوطالبؑ"},
+  /* ذیقعدہ */
+  {m:11,d:1, t:"ولادتِ بی بی فاطمہ معصومہ قمؑ"},
+  {m:11,d:5, t:"حضرت ابراہیمؑ و اسماعیلؑ نے خانہ کعبہ کی بنیاد رکھی"},
+  {m:11,d:8, t:"حج فرض ہوا (8ھ)"},
+  {m:11,d:11,t:"ولادتِ حضرت امام علی رضاؑ (148ھ)"},
+  {m:11,d:23,t:"بروایت شہادتِ حضرت امام علی رضاؑ"},
+  {m:11,d:25,t:"عیدِ دحو الارض — ولادتِ حضرت ابراہیمؑ و عیسیؑ"},
+  {m:11,d:29,t:"شہادتِ حضرت امام محمد تقیؑ (220ھ)"},
+  /* ذی الحجہ */
+  {m:12,d:1, t:"عقدِ حضرت بی بی فاطمہ زہراؑ"},
+  {m:12,d:3, t:"حضرت آدمؑ کی توبہ قبول ہوئی"},
+  {m:12,d:5, t:"وفاتِ حضرت ابوذر غفاریؓ"},
+  {m:12,d:7, t:"شہادتِ حضرت امام محمد باقرؑ (114ھ)"},
+  {m:12,d:8, t:"مکہ سے حضرت امام حسینؑ کا سفر"},
+  {m:12,d:9, t:"یومِ عرفہ — شہادتِ مسلم بن عقیلؑ و ہانیؒ"},
+  {m:12,d:10,t:"عید الاضحیٰ (پہلا دن)", hol:true},
+  {m:12,d:11,t:"عید الاضحیٰ (دوسرا دن)", hol:true},
+  {m:12,d:12,t:"عید الاضحیٰ (تیسرا دن)", hol:true},
+  {m:12,d:12,t:"شہادتِ طفلانِ مسلمؑ"},
+  {m:12,d:15,t:"ولادتِ حضرت امام علی نقیؑ"},
+  {m:12,d:18,t:"عیدِ غدیر (10ھ)"},
+  {m:12,d:19,t:"شبِ رخصتی حضرت بی بی فاطمہ زہراؑ"},
+  {m:12,d:22,t:"شہادتِ میثم تمارؒ"},
+  {m:12,d:24,t:"عیدِ مباہلہ — بروایت ولادتِ بی بی سکینہؑ"},
+];
+/* مناسبتیں: عیسوی تاریخ سے (پاکستان) */
+const OCC_GREG = [
+  {m:1, d:1, t:"نئے سال کا دن (بینک تعطیل)"},
+  {m:2, d:5, t:"یومِ یکجہتیِ کشمیر", hol:true},
+  {m:2, d:18,t:"بینک تعطیل"},
+  {m:3, d:23,t:"یومِ پاکستان", hol:true},
+  {m:5, d:1, t:"یومِ مزدور", hol:true},
+  {m:5, d:28,t:"یومِ تکبیر", hol:true},
+  {m:7, d:1, t:"بینک تعطیل"},
+  {m:8, d:14,t:"یومِ آزادیِ پاکستان", hol:true},
+  {m:9, d:11,t:"وفاتِ قائدِ اعظم محمد علی جناح"},
+  {m:11,d:9, t:"یومِ اقبال", hol:true},
+  {m:12,d:25,t:"یومِ قائدِ اعظم و کرسمس", hol:true},
+  {m:12,d:26,t:"کرسمس (مسیحی برادری کے لیے تعطیل)", hol:true},
+];
+
+const WD = ["اتوار","پیر","منگل","بدھ","جمعرات","جمعہ","ہفتہ"];
+const GMON = ["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"];
+const HMON = ["محرم الحرام","صفر المظفر","ربیع الاول","ربیع الثانی","جمادی الاول","جمادی الثانی","رجب المرجب","شعبان المعظم","رمضان المبارک","شوال المکرم","ذیقعدہ","ذی الحجہ"];
+const HMON_SHORT = ["محرم","صفر","ربیع الاول","ربیع الثانی","جمادی الاول","جمادی الثانی","رجب","شعبان","رمضان","شوال","ذیقعدہ","ذی الحجہ"];
+
+/* عیسوی اعداد: انگریزی ہندسے | اسلامی (قمری) تاریخ: اردو ہندسے */
+const ud  = n => String(n);
+const UD_D = "۰۱۲۳۴۵۶۷۸۹";
+const udh = n => String(n).replace(/[0-9]/g, c => UD_D[+c]);
+const addDays = (dt,n) => { const d=new Date(dt); d.setDate(d.getDate()+n); return d; };
+
+/* ─────────────── قمری تاریخ: Intl + کیلیبریشن ─────────────── */
+/* حوالہ: ۲۶ جولائی ۲۰۲۶ = ۱۱ صفر ۱۴۴۸ (پاکستان) */
+const ANCHOR_G = new Date(2026,6,26);
+const ANCHOR_H = {y:1448,m:2,d:11};
+let hijriFmt = null;
+try { hijriFmt = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura",{year:"numeric",month:"numeric",day:"numeric"}); } catch(e){}
+
+function rawHijri(date){
+  if(!hijriFmt) return null;
+  const o = {};
+  for(const p of hijriFmt.formatToParts(date)){
+    if(p.type==="year")  o.y = parseInt(p.value);
+    if(p.type==="month") o.m = parseInt(p.value);
+    if(p.type==="day")   o.d = parseInt(p.value);
+  }
+  return (o.y&&o.m&&o.d) ? o : null;
+}
+let calibShift = 0;
+(function calibrate(){
+  for(let s=-3;s<=3;s++){
+    const h = rawHijri(addDays(ANCHOR_G,s));
+    if(h && h.y===ANCHOR_H.y && h.m===ANCHOR_H.m && h.d===ANCHOR_H.d){ calibShift=s; return; }
+  }
+})();
+let userAdj = 0; /* رؤیتِ ہلال: صارف کی ایڈجسٹمنٹ */
+function julian(y,m,d){
+  if(m<=2){ y-=1; m+=12; }
+  const A = Math.floor(y/100), B = 2 - A + Math.floor(A/4);
+  return Math.floor(365.25*(y+4716)) + Math.floor(30.6001*(m+1)) + d + B - 1524.5;
+}
+/* انجمنِ حسینی کے نقشے کے مطابق قمری مہینوں کا آغاز (عیسوی تاریخ → قمری مہینہ)
+   اس دائرے میں انجمن کا حساب مقدم ہے؛ باہر فلکیاتی حساب استعمال ہوتا ہے۔ */
+const ANJ_STARTS = [
+  [2025,12,22, 1447,7 ], [2026,1, 21, 1447,8 ], [2026,2, 19, 1447,9 ],
+  [2026,3, 20, 1447,10], [2026,4, 19, 1447,11], [2026,5, 18, 1447,12],
+  [2026,6, 17, 1448,1 ], [2026,7, 16, 1448,2 ], [2026,8, 15, 1448,3 ],
+  [2026,9, 13, 1448,4 ], [2026,10,13, 1448,5 ], [2026,11,12, 1448,6 ],
+  [2026,12,11, 1448,7 ],
+].map(([y,m,d,hy,hm]) => ({jd: julian(y,m,d), hy, hm}));
+
+function anjHijri(date){
+  const jd = julian(date.getFullYear(), date.getMonth()+1, date.getDate());
+  if(jd < ANJ_STARTS[0].jd) return null;
+  let e = null;
+  for(const s of ANJ_STARTS){ if(jd >= s.jd) e = s; else break; }
+  const day = jd - e.jd + 1;
+  return day <= 30 ? {y:e.hy, m:e.hm, d:day} : null;
+}
+function hijriOf(date){
+  const d = addDays(date, userAdj);
+  return anjHijri(d) || rawHijri(addDays(d, calibShift)) || {y:0,m:1,d:0};
+}
+
+/* ─────────────── اوقاتِ شرعی (فقہِ جعفری) ─────────────── */
+const rad = d => d*Math.PI/180, deg = r => r*180/Math.PI;
+const fixA = a => ((a%360)+360)%360;
+const fixH = h => ((h%24)+24)%24;
+
+
+function sunPos(jd){
+  const D = jd - 2451545.0;
+  const g = fixA(357.529 + 0.98560028*D);
+  const q = fixA(280.459 + 0.98564736*D);
+  const L = fixA(q + 1.915*Math.sin(rad(g)) + 0.020*Math.sin(rad(2*g)));
+  const e = 23.439 - 0.00000036*D;
+  const RA = deg(Math.atan2(Math.cos(rad(e))*Math.sin(rad(L)), Math.cos(rad(L))))/15;
+  return { decl: deg(Math.asin(Math.sin(rad(e))*Math.sin(rad(L)))), eqt: q/15 - fixH(RA) };
+}
+/* زاویۂ اُفق سے وقت (گھنٹے) — null اگر ممکن نہ ہو */
+function hourAngle(depr, lat, decl){
+  const x = (-Math.sin(rad(depr)) - Math.sin(rad(lat))*Math.sin(rad(decl))) /
+            (Math.cos(rad(lat))*Math.cos(rad(decl)));
+  if(x < -1 || x > 1) return null;
+  return deg(Math.acos(x))/15;
+}
+/* احتیاطی ایڈجسٹمنٹ (منٹ) — انجمنِ حسینی کے نقشے سے کیلیبریٹڈ؛ صارف اپ کے اندر سے بدل سکتا ہے */
+let ADJ = { fajr:2, sunrise:0, zuhr:2, sunset:0, maghrib:0, midnight:0 };
+const ADJ_NAMES = { fajr:"نماز فجر", sunrise:"طلوعِ آفتاب", zuhr:"نماز ظہرین", sunset:"غروبِ آفتاب", maghrib:"نماز مغربین", midnight:"نصفِ شب" };
+
+function prayerTimes(date, city){
+  const jd = julian(date.getFullYear(), date.getMonth()+1, date.getDate()) + 0.5 - city.lng/(15*24);
+  const s  = sunPos(jd);
+  const noon = fixH(12 + city.tz - city.lng/15 - s.eqt);
+  const H = a => hourAngle(a, city.lat, s.decl);
+  const hs = H(0.833), hf = H(17.7);
+
+  const t = {};
+  t.fajr    = hf!==null ? fixH(noon-hf) : null;
+  t.sunrise = hs!==null ? fixH(noon-hs) : null;
+  t.zuhr    = noon; /* نماز ظہرین */
+  t.sunset  = hs!==null ? fixH(noon+hs) : null;
+  /* نماز مغربین: غروبِ آفتاب + 13 منٹ (انجمنِ حسینی کا قاعدہ) */
+  t.maghrib = t.sunset!==null ? fixH(t.sunset + 13/60) : null;
+  t.midnight = (t.sunset!==null && t.fajr!==null)
+    ? fixH(t.sunset + fixH(t.fajr + 24 - t.sunset)/2) : null;
+  for(const k in ADJ) if(t[k]!==null && t[k]!==undefined) t[k] = fixH(t[k] + ADJ[k]/60);
+  /* انتہائے سحر: نماز فجر سے 10 منٹ پہلے (انجمن کا قاعدہ) */
+  t.sahar = t.fajr!==null ? fixH(t.fajr - 10/60) : null;
+  return t;
+}
+const fmtT = h => {
+  if(h===null) return "—";
+  let hh = Math.floor(h), mm = Math.round((h-hh)*60);
+  if(mm===60){ mm=0; hh=(hh+1)%24; }
+  return ud(hh) + ":" + ud(String(mm).padStart(2,"0"));
+};
+
+
+/* ─────────── چاند کا مقام (Meeus) — قمر در عقرب کے لیے ─────────── */
+const MT=[[0,0,1,0,6288774],[2,0,-1,0,1274027],[2,0,0,0,658314],[0,0,2,0,213618],
+[0,1,0,0,-185116],[0,0,0,2,-114332],[2,0,-2,0,58793],[2,-1,-1,0,57066],
+[2,0,1,0,53322],[2,-1,0,0,45758],[0,1,-1,0,-40923],[1,0,0,0,-34720],
+[0,1,1,0,-30383],[2,0,0,-2,15327],[0,0,1,2,-12528],[0,0,1,-2,10980],
+[4,0,-1,0,10675],[0,0,3,0,10034],[4,0,-2,0,8548],[2,1,-1,0,-7888],
+[2,1,0,0,-6766],[1,0,-1,0,-5163],[1,1,0,0,4987],[2,-1,1,0,4036],
+[2,0,2,0,3994],[4,0,0,0,3861],[2,0,-3,0,3665],[0,1,-2,0,-2689],
+[2,0,-1,2,-2602],[2,-1,-2,0,2390],[1,0,1,0,-2348],[2,-2,0,0,2236],
+[0,1,2,0,-2120],[0,2,0,0,-2069],[2,-2,-1,0,2048],[2,0,1,-2,-1773],
+[2,0,0,2,-1595],[4,-1,-1,0,1215],[0,0,2,2,-1110],[3,0,-1,0,-892],
+[2,1,1,0,-810],[4,-1,-2,0,759],[0,2,-1,0,-713],[2,2,-1,0,-700],
+[2,1,-2,0,691],[2,-1,0,-2,596],[4,0,1,0,549],[0,0,4,0,537],
+[4,-1,0,0,520],[1,0,-2,0,-487],[2,1,0,-2,-399],[0,0,2,-2,-381],
+[1,1,1,0,351],[3,0,-2,0,-340],[4,0,-3,0,330],[2,-1,2,0,327],
+[0,2,1,0,-323],[1,1,-1,0,299],[2,0,3,0,294]];
+function moonLon(jd){
+  const T=(jd-2451545.0)/36525.0;
+  const Lp=218.3164477+481267.88123421*T-0.0015786*T*T+T*T*T/538841-T*T*T*T/65194000;
+  const D =297.8501921+445267.1114034*T-0.0018819*T*T+T*T*T/545868-T*T*T*T/113065000;
+  const M =357.5291092+35999.0502909*T-0.0001536*T*T+T*T*T/24490000;
+  const Mp=134.9633964+477198.8675055*T+0.0087414*T*T+T*T*T/69699-T*T*T*T/14712000;
+  const F =93.2720950+483202.0175233*T-0.0036539*T*T-T*T*T/3526000+T*T*T*T/863310000;
+  const E=1-0.002516*T-0.0000074*T*T;
+  let s=0;
+  for(const [d_,m_,mp_,f_,c] of MT)
+    s += c*Math.pow(E,Math.abs(m_))*Math.sin(rad(d_*D+m_*M+mp_*Mp+f_*F));
+  s += 3958*Math.sin(rad(119.75+131.849*T)) + 1962*Math.sin(rad(Lp-F)) + 318*Math.sin(rad(53.09+479264.290*T));
+  return fixA(Lp + s/1e6);
+}
+/* برجِ عقرب = 210°–240° */
+const inAqrab = jd => fixA(moonLon(jd) - 210) < 30;
+
+function aqrabInfo(date, city){
+  const jd0 = julian(date.getFullYear(), date.getMonth()+1, date.getDate()) - city.tz/24;
+  let start=null, end=null, any=false, prev=inAqrab(jd0);
+  if(prev) any=true;
+  for(let i=1;i<=1440;i++){
+    const cur = inAqrab(jd0 + i/1440);
+    if(cur) any=true;
+    if(cur && !prev) start = i/60;
+    if(!cur && prev) end = i/60;
+    prev = cur;
+  }
+  return {any, start, end, allDay: any && start===null && end===null};
+}
+/* جدول کے خانوں کے لیے تیز چیک (3 نقطے) */
+function aqrabQuick(date, city){
+  const jd0 = julian(date.getFullYear(), date.getMonth()+1, date.getDate()) - city.tz/24;
+  return inAqrab(jd0) || inAqrab(jd0+0.5) || inAqrab(jd0+0.999);
+}
+
+
+
+
+/* ───────── سعد و نحس ایام — انجمنِ حسینی کے نقشے سے (قمری مہینہ + قمری تاریخ) ─────────
+   N=نیک  H=نحس  A=نحسِ اکبر  M=میانہ  -=دستیاب نہیں   (اشاریہ: دن 1..30) */
+const SN_TABLE = {
+  1 : "HHHNHNAAAAAAHA" + "NHMNNMHANHANHHN" + "-",            /* محرم */
+  2 : "AHHNHHNNHANNHHNH" + "HNNANNNHHNNHNN",                 /* صفر */
+  3 : "NHHAHHNHNNNNHNNHN" + "NNAHNNHHHNNN" + "-",            /* ربیع الاول */
+  4 : "ANHNHNNNNNAHHNNHMN" + "NMHNNHHNNANN",                 /* ربیع الثانی */
+  5 : "NNHNNNHNNAANHNNHMNN" + "MHNNHHNMANN",                 /* جمادی الاول */
+  6 : "ANHNHNNNNNAAHNNHMNN" + "AHNNHHNNNN" + "-",            /* جمادی الثانی */
+  7 : "NNHNNNNNNN" + "AANNHHMHNNANHNHNNHNN",                 /* رجب */
+  8 : "NNNNNNNNNNN" + "NHNNHNNNAHNNHHANNN" + "-",            /* شعبان */
+  9 : "NNANHNHNNH" + "NNHHNHMNHAANNAHNNNN" + "-",            /* رمضان */
+  10: "NNHNHANANNNN" + "HNHHHNNMHNNHHNNNNN",                 /* شوال */
+  11: "NNHNNANNNANN" + "HNNHMNNMNNHHNNNAH" + "-",            /* ذیقعدہ */
+  12: "NNHHHNHAHNNHHN" + "NHMNNAHHNNHNNANN",                 /* ذی الحجہ */
+};
+const SN_NAME = {N:"نیک", H:"نحس", A:"نحسِ اکبر", M:"میانہ"};
+function saadNahs(hj){
+  const row = SN_TABLE[hj.m]; if(!row) return null;
+  const c = row[hj.d-1];
+  return (c && SN_NAME[c]) ? {code:c, name:SN_NAME[c]} : null;
+}
+
+/* اس ماہ کے تمام ادوارِ قمر در عقرب — شروع و ختم کے اوقات کے ساتھ */
+function aqrabPeriods(y, m, city){
+  const jdStart = julian(y, m+1, 1) - city.tz/24;
+  const days = new Date(y, m+1, 0).getDate();
+  const total = days*1440, STEP = 10;
+  const at = min => inAqrab(jdStart + min/1440);
+  /* دو نقطوں کے درمیان تبدیلی کا لمحہ منٹ تک نکالیں */
+  const refine = (a,b) => { let lo=a, hi=b, s=at(a);
+    while(hi-lo>1){ const mid=(lo+hi)>>1; if(at(mid)===s) lo=mid; else hi=mid; }
+    return hi; };
+  const out=[]; let prev=at(0), cur=null;
+  if(prev) cur={from:null};                       /* پچھلے ماہ سے جاری */
+  for(let t=STEP; t<=total; t+=STEP){
+    const now=at(t);
+    if(now!==prev){
+      const edge=refine(t-STEP, t);
+      if(now) cur={from:edge};                    /* شروع */
+      else { if(cur){ cur.to=edge; out.push(cur); cur=null; } }
+    }
+    prev=now;
+  }
+  if(cur){ cur.to=null; out.push(cur); }          /* اگلے ماہ تک جاری */
+  return out.map(pr=>({
+    from: pr.from===null ? null : {d: Math.floor(pr.from/1440)+1, h: (pr.from%1440)/60},
+    to:   pr.to  ===null ? null : {d: Math.floor(pr.to/1440)+1,   h: (pr.to%1440)/60}
+  }));
+}
+
+/* ─────────────── مناسبتیں ─────────────── */
+function occOf(date){
+  const h = hijriOf(date), out = [];
+  for(const o of OCC_HIJRI) if(o.m===h.m && o.d===h.d) out.push({...o, sys:"h"});
+  for(const o of OCC_GREG)  if(o.m===date.getMonth()+1 && o.d===date.getDate()) out.push({...o, sys:"g"});
+  return out;
+}
+/* مناسبتوں کے مخصوص اعمال — ہجری تاریخ کی کلید (مہینہ-دن) سے */
+const AMAL_MAP = {
+  "1-1":  "روزہ مستحب، دعائے آغازِ سال",
+  "1-9":  "مجالسِ عزا کی تیاری",
+  "1-10": "زیارتِ عاشورہ کی تلاوت، ماتم و نوحہ، مجالسِ عزا",
+  "2-20": "زیارتِ اربعین کی تلاوت",
+  "3-9":  "خوشی کا اظہار، شکرانہ کے نوافل",
+  "3-12": "میلاد کی خوشی، کثرتِ صلوات",
+  "6-20": "ولادت کی خوشی، کثرتِ صلوات و درود",
+  "7-1":  "روزہ مستحب",
+  "7-13": "روزہ مستحب، خوشی کا اظہار",
+  "7-15": "دعائے کمیل کی تلاوت مستحب",
+  "7-26": "شبِ معراج کی عبادت و بیداری، دعا",
+  "7-27": "روزہ مستحب، رات کی عبادت",
+  "8-14": "غسل، دعائے کمیل، شبِ برأت کی عبادت و بیداری",
+  "8-15": "غسل، روزہ مستحب، دعائے کمیل، صد رکعت نماز",
+  "9-18": "احیاء کی راتوں میں سے — بیداری، دعا و تلاوتِ قرآن",
+  "9-19": "دعا و توسل، یادِ ضربتِ امیر المومنینؑ",
+  "9-21": "ماتم و ذکرِ مصائبِ امیر المومنینؑ، مجالس",
+  "9-23": "احیاء کی راتوں میں سے — بیداری، دعا و تلاوتِ قرآن",
+  "10-1": "غسل، نمازِ عید، زکوٰۃ الفطرہ کی ادائیگی، تکبیرات",
+  "10-2": "عید الفطر کے ایامِ خوشی جاری",
+  "10-3": "عید الفطر کے ایامِ خوشی جاری",
+  "12-9": "روزہ مستحب (اگر حج پر نہ ہوں)، دعائے عرفہ",
+  "12-10":"غسل، نمازِ عید، قربانی، تکبیرات",
+  "12-11":"عید الاضحیٰ کے ایامِ تشریق جاری",
+  "12-12":"عید الاضحیٰ کے ایامِ تشریق جاری",
+  "12-18":"غسل، روزہ مستحب، دعا و زیارتِ غدیر، مومنین کو تہنیت",
+};
+
+/* ─────────────── رینڈرنگ ─────────────── */
+const $ = id => document.getElementById(id);
+const today = new Date();
+let selDate = new Date(today); /* منتخب دن — جدول میں کسی بھی تاریخ پر ٹیپ کریں */
+const sameDay = (a,b) => a.toDateString() === b.toDateString();
+let viewY = today.getFullYear(), viewM = today.getMonth();
+let cityIdx = 0;
+
+function renderHeader(){
+  const h = hijriOf(selDate);
+  $("tWeekday").textContent = WD[selDate.getDay()];
+  $("tHijri").textContent = ud(selDate.getDate()) + " " + GMON[selDate.getMonth()] + " " + ud(selDate.getFullYear()) + "ء";
+  $("tGreg").textContent = udh(h.d) + " " + HMON[h.m-1] + " " + udh(h.y) + "ھ";
+  $("moonDay").textContent = ud(selDate.getDate());
+  $("adjVal").textContent = (userAdj>0?"+":"") + ud(userAdj) + " دن";
+  const oc = occOf(selDate), chip = $("hdrChip");
+  if(oc.length){
+    const hol = oc.find(o=>o.hol);
+    chip.innerHTML = colorWords((hol || oc[0]).t);
+    chip.className = "hdr-chip" + (hol ? " hol" : "");
+    chip.hidden = false;
+  } else chip.hidden = true;
+}
+
+function renderGrid(){
+  const first = new Date(viewY, viewM, 1);
+  const daysIn = new Date(viewY, viewM+1, 0).getDate();
+  const h1 = hijriOf(first), h2 = hijriOf(new Date(viewY, viewM, daysIn));
+  $("gridTitle").textContent = GMON[viewM] + " " + ud(viewY);
+  $("gridSub").textContent = HMON_SHORT[h1.m-1] + (h1.m!==h2.m ? " – " + HMON_SHORT[h2.m-1] : "") + " " + udh(h2.y) + "ھ";
+
+  let html = "<tr>" + WD.map((w,i)=>`<th class="${i===0?"sun":""}">${w}</th>`).join("") + "</tr><tr>";
+  let col = 0;
+  for(let i=0;i<first.getDay();i++){ html += "<td></td>"; col++; }
+  for(let d=1; d<=daysIn; d++){
+    const dt = new Date(viewY, viewM, d);
+    const h  = hijriOf(dt);
+    const cls = ["cell"];
+    if(dt.getDay()===0) cls.push("sun");
+    const oc = occOf(dt);
+    const isHol = oc.some(o=>o.hol);
+    if(isHol) cls.push("hol");
+    if(h.d===1) cls.push("mstart");
+    const kk = keyOf(dt);
+    if((store.rem[kk]&&store.rem[kk].length)||(store.maj[kk]&&store.maj[kk].length)) cls.push("mine");
+    const isAq = aqrabQuick(dt, CITIES[cityIdx]);
+    if(sameDay(dt, selDate)) cls.push("sel");
+    if(sameDay(dt, today)) cls.push("today");
+    let mk = "";
+    if(isHol) mk += '<i class="h"></i>';
+    else if(oc.length) mk += '<i class="o"></i>';
+    if(isAq) mk += '<i class="a"></i>';
+    html += `<td><div class="${cls.join(" ")}" data-d="${d}" role="button" tabindex="0" aria-label="${ud(d)} ${GMON[viewM]} · ${udh(h.d)} ${HMON_SHORT[h.m-1]}">`+
+            `<span class="g">${ud(d)}</span><span class="h">${udh(h.d)}</span><span class="mk">${mk}</span></div></td>`;
+    if(++col===7 && d<daysIn){ html += "</tr><tr>"; col=0; }
+  }
+  html += "</tr>";
+  $("gridTable").innerHTML = html;
+}
+
+/* مناسبتوں کے متن میں "شہادت" سرخ اور "ولادت" سبز نمایاں کریں */
+function colorWords(s){
+  return s
+    .replace(/شہادت(ِ?)/g, '<span class="w-shahadat">شہادت$1</span>')
+    .replace(/ولادت(ِ?)/g, '<span class="w-wiladat">ولادت$1</span>')
+    .replace(/صلی اللہ علیہ وآلہ/g, '<span class="salawat">﴿ صلی اللہ علیہ وآلہ ﴾</span>');
+}
+function renderOccasions(){
+  const dayOcc = occOf(selDate);
+  const isToday = sameDay(selDate, today);
+  const lbl = isToday ? '<span class="occ-today-badge">آج</span>' : ud(selDate.getDate()) + " " + GMON[selDate.getMonth()];
+  const box = $("occToday");
+  if(dayOcc.length){
+    box.className = "occ-today";
+    box.innerHTML = lbl + ": " + dayOcc.map(o => colorWords(o.t) + (o.hol?'<span class="tag">تعطیل</span>':"")).join(" · ");
+  } else {
+    box.className = "occ-today none";
+    box.innerHTML = lbl + ": کوئی خاص مناسبت نہیں";
+  }
+  /* پورے دکھائے جانے والے مہینے کی مناسبتیں — ماضی کی جھلک بھی، آئندہ کی بھی */
+  const dim = new Date(viewY, viewM+1, 0).getDate();
+  let items = [];
+  for(let d=1; d<=dim; d++){
+    const dt = new Date(viewY, viewM, d);
+    for(const o of occOf(dt)) items.push({dt,o});
+  }
+  $("occList").innerHTML = items.map(({dt,o})=>{
+    const h = hijriOf(dt);
+    const st = sameDay(dt,today) ? "today" : (dt < today ? "past" : "future");
+    const prefix = st==="today" ? '<span class="occ-today-badge">آج</span>' : st==="past" ? '<span class="occ-chk" aria-hidden="true">✓</span>' : "";
+    return `<li class="${st} ${o.hol?"holiday":""}">
+      <span class="what">${prefix}${colorWords(o.t)}</span>
+      <span class="when">${WD[dt.getDay()]}، ${ud(dt.getDate())} ${GMON[dt.getMonth()]} · ${udh(h.d)} ${HMON_SHORT[h.m-1]}</span>
+    </li>`;
+  }).join("") || "<li><span class='what' style='color:var(--ink-soft)'>اس مہینے کوئی مناسبت درج نہیں</span></li>";
+}
+
+function renderTimes(){
+  const city = CITIES[cityIdx];
+  $("cityName").textContent = "· " + city.n;
+  const t = prayerTimes(selDate, city);
+  const rows = [
+    ["نماز فجر",t.fajr],["طلوعِ آفتاب",t.sunrise],["نماز ظہرین",t.zuhr],
+    ["غروبِ آفتاب",t.sunset],["نماز مغربین",t.maghrib],["نصفِ شب",t.midnight],
+  ];
+  /* ماہِ رمضان میں انتہائے سحر بھی */
+  if(hijriOf(selDate).m === 9) rows.unshift(["انتہائے سحر", t.sahar]);
+  /* اگلا وقت صرف آج کے دن نمایاں ہو */
+  let nextName = null;
+  if(sameDay(selDate, today)){
+    const nowCity = fixH((Date.now()/3600000) % 24 + city.tz);
+    for(const [n,v] of rows){ if(v!==null && v>nowCity){ nextName=n; break; } }
+    if(!nextName) nextName = "نماز فجر";
+  }
+  $("timesGrid").innerHTML = rows.map(([n,v]) =>
+    `<div class="t ${n===nextName?"next":""} ${n==="نماز مغربین"?"mag":""} ${n==="انتہائے سحر"?"sahar":""}"><div class="n">${n}</div><div class="v">${fmtT(v)}</div></div>`
+  ).join("");
+}
+
+function renderAdj(){
+  $("adjRows").innerHTML = Object.keys(ADJ).map(k =>
+    `<div class="adj-row"><span>${ADJ_NAMES[k]}</span>
+      <span class="ctrl">
+        <button data-k="${k}" data-s="-1" aria-label="${ADJ_NAMES[k]} ایک منٹ کم">−</button>
+        <span class="mv">${ADJ[k]>0?"+":""}${ud(ADJ[k])} m</span>
+        <button data-k="${k}" data-s="1" aria-label="${ADJ_NAMES[k]} ایک منٹ زیادہ">+</button>
+      </span></div>`
+  ).join("");
+  $("adjRows").querySelectorAll("button").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const k=b.dataset.k, s=+b.dataset.s;
+      ADJ[k] = Math.max(-15, Math.min(15, ADJ[k]+s));
+      renderAdj(); renderTimes(); renderAzanTimes(); saveSettings();
+    });
+  });
+}
+
+function updateTodayBtn(){
+  $("todayBtn").hidden = sameDay(selDate, today) && viewY===today.getFullYear() && viewM===today.getMonth();
+}
+function renderInfo(){
+  const city = CITIES[cityIdx], hj = hijriOf(selDate);
+  const sn = saadNahs(hj), eN = $("iNahs"), eIc = $("nahsIcon");
+  eN.textContent = sn ? sn.name : "—";
+  const kind = !sn ? "neutral" : sn.code==="N" ? "good" : sn.code==="M" ? "neutral" : "bad";
+  eIc.className = "nahs-ic " + kind;
+  eIc.textContent = kind==="good" ? "✓" : kind==="bad" ? "!" : "–";
+  renderAmal();
+  const a = aqrabInfo(selDate, city);
+  /* قمر در عقرب صرف اُن دنوں میں دکھائیں جن میں واقعی ہو */
+  $("rowAqrab").hidden = !a.any;
+  $("aqAlert").hidden  = !a.any;
+  if(!a.any) return;
+  const eA = $("iAqrab");
+  eA.textContent = a.allDay ? "تمام دن"
+    : [a.start!==null ? "شروع " + fmtT(a.start) : null,
+       a.end!==null   ? "ختم "  + fmtT(a.end)   : null].filter(Boolean).join(" · ");
+  eA.className = "ival bad";
+}
+function renderAqMonth(){
+  const city = CITIES[cityIdx];
+  $("aqMonth").textContent = "· " + GMON[viewM] + " " + ud(viewY);
+  const ps = aqrabPeriods(viewY, viewM, city);
+  if(!ps.length){ $("aqList").innerHTML = '<li class="aq-none">اس ماہ قمر در عقرب نہیں</li>'; return; }
+  const nowMin = (() => { const n = new Date();
+    return (n.getFullYear()===viewY && n.getMonth()===viewM)
+      ? n.getDate()*1440 + n.getHours()*60 + n.getMinutes() : null; })();
+
+  $("aqList").innerHTML = ps.map(pr=>{
+    const dm = d => ud(d) + " " + GMON[viewM];
+    const S = pr.from, E = pr.to;
+    const endBlock = (lbl, pt) => pt
+      ? `<div class="aq-end"><span class="lbl">${lbl}</span><span class="dt">${dm(pt.d)}</span><span class="tm">${fmtT(pt.h)}</span></div>`
+      : `<div class="aq-end"><span class="lbl">${lbl}</span><span class="dt">—</span><span class="tm">…</span></div>`;
+    let chip = "جاری";
+    if(S && E){
+      const mins = (E.d*1440 + E.h*60) - (S.d*1440 + S.h*60);
+      chip = ud(Math.floor(mins/60)) + " گھنٹے";
+    } else chip = S ? "اگلے ماہ تک" : "پچھلے ماہ سے";
+    const live = nowMin!==null && (!S || nowMin >= S.d*1440+S.h*60) && (!E || nowMin <= E.d*1440+E.h*60);
+    return `<li class="aq-item">
+      <div class="aq-ends">
+        ${endBlock("شروع", S)}
+        <div class="aq-track ${(!S||!E)?"open":""}">
+          <span class="knb s"></span><span class="chip">${chip}</span><span class="knb e"></span>
+        </div>
+        ${endBlock("ختم", E)}
+      </div>
+      ${live ? '<div class="aq-now"><span class="dot"></span>ابھی جاری ہے</div>' : ""}
+    </li>`;
+  }).join("");
+}
+function renderAll(){ renderHeader(); renderGrid(); renderOccasions(); renderTimes(); renderInfo(); renderAqMonth(); renderAdj(); updateTodayBtn();
+  if(typeof renderAzanTimes==="function") renderAzanTimes(); }
+
+/* جدول میں کسی دن پر ٹیپ = وہ دن منتخب */
+function selectCell(el){
+  if(!el || !el.dataset.d) return;
+  selDate = new Date(viewY, viewM, +el.dataset.d);
+  renderHeader(); renderGrid(); renderOccasions(); renderTimes(); renderInfo(); updateTodayBtn();
+}
+$("gridTable").addEventListener("click", e => selectCell(e.target.closest(".cell")));
+$("gridTable").addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" ") { e.preventDefault(); selectCell(e.target.closest(".cell")); } });
+$("todayBtn").addEventListener("click", ()=>{
+  selDate = new Date(today); viewY = today.getFullYear(); viewM = today.getMonth();
+  renderAll();
+});
+
+/* ─────────────── ایونٹس ─────────────── */
+const sel = $("citySel");
+(function buildCities(){
+  const PROV_ORDER = ["پنجاب","سندھ","خیبر پختونخوا","بلوچستان","آزاد کشمیر","گلگت بلتستان"];
+  function addGroup(label, idxs){
+    if(!idxs.length) return;
+    const og = document.createElement("optgroup"); og.label = label;
+    for(const i of idxs){ const o=document.createElement("option"); o.value=i; o.textContent=CITIES[i].n; og.appendChild(o); }
+    sel.appendChild(og);
+  }
+  /* اہم شہر — سب سے اوپر، اصل ترتیب میں */
+  addGroup("اہم شہر", CITIES.map((c,i)=>i).filter(i=>CITIES[i].imp));
+  /* ہر صوبہ — حروفِ تہجی کی ترتیب سے */
+  const byProv = {};
+  CITIES.forEach((c,i)=>{ if(!c.imp && c.prov) (byProv[c.prov] = byProv[c.prov] || []).push(i); });
+  for(const p in byProv) byProv[p].sort((a,b)=>CITIES[a].n.localeCompare(CITIES[b].n,"ur"));
+  for(const prov of PROV_ORDER) addGroup(prov, byProv[prov] || []);
+  /* بیرونِ ملک — جیسی تھی ویسی */
+  addGroup("بیرونِ ملک", CITIES.map((c,i)=>i).filter(i=>CITIES[i].g==="بیرونِ ملک"));
+})();
+sel.addEventListener("change", e=>{ cityIdx=+e.target.value; renderTimes(); renderInfo(); renderGrid(); renderAqMonth(); renderAzanTimes(); loadWeather(); saveSettings(); });
+
+$("adjMinus").addEventListener("click", ()=>{ if(userAdj>-2){ userAdj--; renderAll(); saveSettings(); } });
+$("adjPlus").addEventListener("click",  ()=>{ if(userAdj< 2){ userAdj++; renderAll(); saveSettings(); } });
+$("prevM").addEventListener("click", ()=> goMonth(-1));
+$("nextM").addEventListener("click", ()=> goMonth(1));
+function goMonth(delta){
+  viewM += delta;
+  if(viewM<0){ viewM=11; viewY--; } else if(viewM>11){ viewM=0; viewY++; }
+  renderGrid(); renderAqMonth(); renderOccasions(); updateTodayBtn();
+}
+/* ماہ بدلنے کے لیے جدول پر دائیں/بائیں سوائپ */
+(function swipeMonths(){
+  const el = $("gridTable");
+  let x0=null, y0=null, t0=0;
+  const start = e => { const t=e.touches?e.touches[0]:e; x0=t.clientX; y0=t.clientY; t0=Date.now(); };
+  const end = e => {
+    if(x0===null) return;
+    const t=e.changedTouches?e.changedTouches[0]:e;
+    const dx=t.clientX-x0, dy=t.clientY-y0, dt=Date.now()-t0;
+    x0=null;
+    if(Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)*1.4 && dt<600){
+      goMonth(dx>0 ? -1 : 1);
+    }
+  };
+  el.addEventListener("touchstart", start, {passive:true});
+  el.addEventListener("touchend", end, {passive:true});
+})();
+
+
+
+/* ─────────────── آب و ہوا (Open-Meteo — API key کی ضرورت نہیں) ─────────────── */
+const WX_CODE = {
+  0:["☀️","صاف"],1:["🌤️","تقریباً صاف"],2:["⛅","جزوی ابر آلود"],3:["☁️","ابر آلود"],
+  45:["🌫️","کہر"],48:["🌫️","کہر (برفیلی)"],
+  51:["🌦️","ہلکی پھوار"],53:["🌦️","پھوار"],55:["🌦️","تیز پھوار"],
+  61:["🌧️","ہلکی بارش"],63:["🌧️","بارش"],65:["🌧️","تیز بارش"],
+  66:["🌧️","برفیلی بارش"],67:["🌧️","تیز برفیلی بارش"],
+  71:["🌨️","ہلکی برف"],73:["🌨️","برف باری"],75:["🌨️","تیز برف باری"],77:["🌨️","برف کے دانے"],
+  80:["🌦️","بارش کے چھینٹے"],81:["🌧️","تیز چھینٹے"],82:["⛈️","شدید بارش"],
+  85:["🌨️","برف کے چھینٹے"],86:["🌨️","تیز برف"],
+  95:["⛈️","گرج چمک"],96:["⛈️","گرج چمک و ژالہ"],99:["⛈️","شدید ژالہ باری"]
+};
+const wxInfo = c => WX_CODE[c] || ["🌡️","—"];
+let wxCache = {};   /* شہر → {t, data}  — 30 منٹ */
+try{ const s = localStorage.getItem("noorSabaWx"); if(s) wxCache = JSON.parse(s); }catch(e){}
+
+function wxRender(d){
+  const cur = d.current, day = d.daily;
+  const [ic, desc] = wxInfo(cur.weather_code);
+  $("wxNow").innerHTML =
+    `<div class="wx-ic">${ic}</div>
+     <div class="wx-main">
+       <div class="wx-temp">${Math.round(cur.temperature_2m)}°C</div>
+       <div class="wx-desc">${desc}</div>
+     </div>
+     <div class="wx-meta">
+       <span>نمی: <b>${Math.round(cur.relative_humidity_2m)}%</b></span>
+       <span>ہوا: <b>${Math.round(cur.wind_speed_10m)} km/h</b></span>
+       <span>محسوس: <b>${Math.round(cur.apparent_temperature)}°</b></span>
+     </div>`;
+  let out = "";
+  for(let i=0; i<Math.min(5, day.time.length); i++){
+    const dt = new Date(day.time[i] + "T00:00");
+    const [di] = wxInfo(day.weather_code[i]);
+    const lbl = i===0 ? "آج" : WD[dt.getDay()];
+    out += `<div class="wx-day"><div class="d">${lbl}</div><div class="i">${di}</div>
+      <div class="t">${Math.round(day.temperature_2m_max[i])}° <span>${Math.round(day.temperature_2m_min[i])}°</span></div></div>`;
+  }
+  $("wxDays").innerHTML = out;
+  $("wxSrc").textContent = "ماخذ: Open-Meteo.com (CC BY 4.0)";
+}
+function wxError(){
+  $("wxNow").innerHTML = '<div class="wx-err">موسم کی معلومات دستیاب نہیں — <b>انٹرنیٹ درکار ہے</b>'+
+    '<button class="wx-retry" id="wxRetry">دوبارہ کوشش</button></div>';
+  $("wxDays").innerHTML = ""; $("wxSrc").textContent = "";
+  const r = document.getElementById("wxRetry");
+  if(r) r.addEventListener("click", ()=>loadWeather(true));
+}
+async function loadWeather(force){
+  const city = CITIES[cityIdx];
+  $("wxCity").textContent = "· " + city.n;
+  const key = city.n, hit = wxCache[key];
+  if(!force && hit && (Date.now() - hit.t) < 30*60*1000){ wxRender(hit.data); return; }
+  $("wxNow").innerHTML = '<div class="wx-load">موسم کی معلومات لی جا رہی ہیں…</div>';
+  $("wxDays").innerHTML = ""; $("wxSrc").textContent = "";
+  try{
+    const u = "https://api.open-meteo.com/v1/forecast?latitude=" + city.lat + "&longitude=" + city.lng +
+      "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m" +
+      "&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=5&timezone=auto";
+    const res = await fetch(u);
+    if(!res.ok) throw new Error("http " + res.status);
+    const data = await res.json();
+    if(!data.current || !data.daily) throw new Error("bad payload");
+    wxCache[key] = {t: Date.now(), data};
+    try{ localStorage.setItem("noorSabaWx", JSON.stringify(wxCache)); }catch(e){}
+    wxRender(data);
+  }catch(e){ if(hit) wxRender(hit.data); else wxError(); }
+}
+
+/* ─────────────── سہولیاتِ روز: یاد دہانیاں، مجالس، اعمال ─────────────── */
+const keyOf = d => d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+let store = {rem:{}, maj:{}};
+function loadStore(){ try{ const s = localStorage.getItem("noorSaba"); if(s) store = JSON.parse(s); }catch(e){} }
+function saveStore(){ try{ localStorage.setItem("noorSaba", JSON.stringify(store)); }catch(e){} }
+loadStore();
+
+function renderToolList(kind, ulId){
+  const k = keyOf(selDate), items = (store[kind][k] || []).slice().sort((a,b)=>(a.t||"").localeCompare(b.t||""));
+  const ul = $(ulId);
+  if(!items.length){ ul.innerHTML = '<li class="empty">'+(kind==="rem"?"کوئی یاد دہانی نہیں":"کوئی مجلس درج نہیں")+'</li>'; return; }
+  ul.innerHTML = items.map((it,i)=>
+    `<li><span class="tm">${it.t||"—"}</span><span class="tx">${it.x.replace(/[<>&]/g,"")}</span>`+
+    `<button class="del" data-k="${kind}" data-i="${i}" aria-label="حذف کریں">🗑</button></li>`).join("");
+  ul.querySelectorAll(".del").forEach(b=>b.addEventListener("click", ()=>{
+    const arr = store[b.dataset.k][k].slice().sort((a,b2)=>(a.t||"").localeCompare(b2.t||""));
+    const gone = arr[+b.dataset.i];
+    store[b.dataset.k][k] = store[b.dataset.k][k].filter(o=>o!==gone);
+    if(!store[b.dataset.k][k].length) delete store[b.dataset.k][k];
+    saveStore(); renderToolList(b.dataset.k, ulId); renderAllList();
+  }));
+}
+function pad2(n){ return String(n).padStart(2,"0"); }
+function isoOf(d){ return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
+function keyFromIso(s){ const [y,m,d] = s.split("-").map(Number); return y+"-"+m+"-"+d; }
+function addItem(kind, txtId, dateId, timeId, ulId){
+  const x = $(txtId).value.trim(); if(!x) return;
+  const dv = $(dateId).value;
+  const k = dv ? keyFromIso(dv) : keyOf(selDate);
+  (store[kind][k] = store[kind][k] || []).push({x, t: $(timeId).value || ""});
+  saveStore(); $(txtId).value = ""; $(timeId).value = "";
+  renderToolList(kind, ulId); renderAllList();
+}
+/* تمام اندراجات، سب تاریخوں سے، تاریخ کے ساتھ */
+function fmtDateKey(k){
+  const [y,m,d] = k.split("-").map(Number);
+  const dt = new Date(y, m-1, d);
+  return WD[dt.getDay()] + "، " + ud(d) + " " + GMON[m-1] + " " + ud(y) + "ء";
+}
+function renderAllList(){
+  const ul = $("allList"); if(!ul) return;
+  const rows = [];
+  for(const k in store.rem) for(const it of store.rem[k]) rows.push({kind:"rem", k, it});
+  for(const k in store.maj) for(const it of store.maj[k]) rows.push({kind:"maj", k, it});
+  rows.sort((a,b)=>{
+    const [ay,am,ad]=a.k.split("-").map(Number), [by,bm,bd]=b.k.split("-").map(Number);
+    const da = new Date(ay,am-1,ad), db = new Date(by,bm-1,bd);
+    if(da-db) return da-db;
+    return (a.it.t||"").localeCompare(b.it.t||"");
+  });
+  if(!rows.length){ ul.innerHTML = '<li class="empty">کوئی اندراج موجود نہیں</li>'; return; }
+  ul.innerHTML = rows.map((r,i)=>
+    `<li><span class="tm">${r.kind==="rem"?"⏰":"🕌"} ${r.it.t||"—"}</span>`+
+    `<span class="tx">${r.it.x.replace(/[<>&]/g,"")}<br><small style="color:var(--ink-soft);font-size:.72rem">${fmtDateKey(r.k)}</small></span>`+
+    `<button class="del" data-row="${i}" aria-label="حذف کریں">🗑</button></li>`).join("");
+  ul.querySelectorAll(".del").forEach((b,i)=>b.addEventListener("click", ()=>{
+    const r = rows[i];
+    store[r.kind][r.k] = store[r.kind][r.k].filter(o=>o!==r.it);
+    if(!store[r.kind][r.k].length) delete store[r.kind][r.k];
+    saveStore();
+    renderToolList("rem","remList"); renderToolList("maj","majList"); renderAllList();
+  }));
+}
+/* اگر لوکل سٹوریج کام نہ کر رہی ہو تو خبردار کریں */
+function checkStoreWarn(){
+  let ok = false;
+  try{
+    localStorage.setItem("__noorSabaTest","1");
+    ok = localStorage.getItem("__noorSabaTest") === "1";
+    localStorage.removeItem("__noorSabaTest");
+  }catch(e){ ok = false; }
+  const w = $("storeWarn"); if(w) w.hidden = ok;
+}
+
+/* ─────────────── اعلانات (عمومی، منتظمِ ایپ کے کنٹرول سے) ───────────────
+   ایڈمن الگ admin.html میں announcements.json بناتا/اپڈیٹ کرتا ہے۔
+   یہ فائل اسی فولڈر میں index.html کے ساتھ رکھنی ہوتی ہے۔ */
+const ANN_DEFAULT = [];
+function dismissedAnnIds(){
+  try{ return JSON.parse(localStorage.getItem("noorSabaDismissedAnn") || "[]"); }catch(e){ return []; }
+}
+function dismissAnn(id){
+  const arr = dismissedAnnIds();
+  if(!arr.includes(id)){ arr.push(id); try{ localStorage.setItem("noorSabaDismissedAnn", JSON.stringify(arr)); }catch(e){} }
+}
+function annActive(a){
+  const todayIso = isoOf(new Date());
+  if(a.start && todayIso < a.start) return false;
+  if(a.end && todayIso > a.end) return false;
+  return true;
+}
+function renderAnnouncements(list){
+  const card = $("annCard");
+  const dismissed = dismissedAnnIds();
+  const items = (list || []).filter(a => annActive(a) && !dismissed.includes(a.id));
+  if(!items.length){ card.hidden = true; card.innerHTML = ""; return; }
+  card.hidden = false;
+  const ANN_ICON = { general:"📢", lecture:"🎓", donation:"🤲" };
+  card.innerHTML = items.map(a => `
+    <div class="ann-item type-${a.type||"general"}" data-id="${a.id}">
+      <span class="ann-ic" aria-hidden="true">${ANN_ICON[a.type] || ANN_ICON.general}</span>
+      <div class="ann-body">
+        <div class="ann-title">${(a.title||"").replace(/[<>&]/g,"")}</div>
+        <div class="ann-text">${(a.body||"").replace(/[<>&]/g,"")}</div>
+        ${a.link ? `<a class="ann-link" href="${a.link}" target="_blank" rel="noopener">مزید معلومات</a>` : ""}
+      </div>
+      <button class="ann-x" data-id="${a.id}" aria-label="بند کریں">✕</button>
+    </div>`).join("");
+  card.querySelectorAll(".ann-x").forEach(b => b.addEventListener("click", () => {
+    dismissAnn(b.dataset.id);
+    renderAnnouncements(list);
+  }));
+}
+async function loadAnnouncements(){
+  try{
+    const res = await fetch("./announcements.json", { cache: "no-store" });
+    if(!res.ok) throw new Error("no file");
+    const data = await res.json();
+    renderAnnouncements(Array.isArray(data) ? data : ANN_DEFAULT);
+  }catch(e){
+    renderAnnouncements(ANN_DEFAULT);
+  }
+}
+
+/* ─────────────── تبادلہ تاریخ (عیسوی ⇄ ہجری) ─────────────── */
+function hijriToGreg(hy, hm, hd){
+  const target = {y:hy, m:hm, d:hd};
+  const cmp = d => { const h = hijriOf(d); return (h.y-target.y) || (h.m-target.m) || (h.d-target.d); };
+  const deltaDays = Math.round((hy-ANCHOR_H.y)*354.36707 + (hm-ANCHOR_H.m)*29.53059 + (hd-ANCHOR_H.d));
+  const est = addDays(ANCHOR_G, deltaDays);
+  let lo = addDays(est,-25), hi = addDays(est,25), tries=0;
+  while(cmp(lo) > 0 && tries<20){ lo = addDays(lo,-40); tries++; }
+  tries=0;
+  while(cmp(hi) < 0 && tries<20){ hi = addDays(hi,40); tries++; }
+  for(let i=0; i<60 && lo.getTime()<=hi.getTime(); i++){
+    const mid = new Date(Math.floor((lo.getTime()+hi.getTime())/2));
+    mid.setHours(0,0,0,0);
+    const c = cmp(mid);
+    if(c===0) return mid;
+    if(c<0) lo = addDays(mid,1); else hi = addDays(mid,-1);
+  }
+  return cmp(lo)===0 ? lo : hi;
+}
+function initConverter(){
+  const selMon = $("convHMon");
+  selMon.innerHTML = HMON.map((n,i)=>`<option value="${i+1}">${n}</option>`).join("");
+  $("convGDate").value = isoOf(selDate);
+  const hjNow = hijriOf(selDate);
+  $("convHDay").value = hjNow.d; selMon.value = hjNow.m; $("convHYear").value = hjNow.y;
+
+  function setTab(g2h){
+    $("convTabG2H").classList.toggle("on", g2h);
+    $("convTabH2G").classList.toggle("on", !g2h);
+    $("convG2H").hidden = !g2h;
+    $("convH2G").hidden = g2h;
+    $("convResult").hidden = true;
+  }
+  $("convTabG2H").addEventListener("click", ()=>setTab(true));
+  $("convTabH2G").addEventListener("click", ()=>setTab(false));
+
+  $("convGo").addEventListener("click", ()=>{
+    const g2h = !$("convG2H").hidden;
+    const box = $("convResult");
+    if(g2h){
+      const v = $("convGDate").value;
+      if(!v){ box.hidden=false; box.textContent = "پہلے عیسوی تاریخ منتخب کریں"; return; }
+      const [y,m,d] = v.split("-").map(Number);
+      const dt = new Date(y, m-1, d);
+      const hj = hijriOf(dt);
+      box.hidden = false;
+      box.innerHTML = `${ud(hj.d)} ${HMON[hj.m-1]} ${ud(hj.y)}ھ<br>`+
+        `<span style="font-size:.78rem;font-weight:400;color:var(--ink-soft)">${WD[dt.getDay()]}، ${ud(d)} ${GMON[m-1]} ${ud(y)}ء</span>`;
+    } else {
+      const hd = parseInt($("convHDay").value), hm = parseInt($("convHMon").value), hy = parseInt($("convHYear").value);
+      if(!hd || !hm || !hy){ box.hidden=false; box.textContent = "دن، مہینہ، اور سال درج کریں"; return; }
+      const dt = hijriToGreg(hy, hm, hd);
+      box.hidden = false;
+      box.innerHTML = `${WD[dt.getDay()]}، ${ud(dt.getDate())} ${GMON[dt.getMonth()]} ${ud(dt.getFullYear())}ء<br>`+
+        `<span style="font-size:.78rem;font-weight:400;color:var(--ink-soft)">${ud(hd)} ${HMON[hm-1]} ${ud(hy)}ھ</span>`;
+    }
+  });
+}
+
+/* اعمالِ روز: اُسی دن کی مناسبتوں اور جمعہ/پہلی تاریخ سے */
+function renderAmal(){
+  const hj = hijriOf(selDate), out = [];
+  if(selDate.getDay()===5) out.push("جمعہ — غسل، دعائے ندبہ، صلوات، دعائے سمات، زیارتِ آلِ یاسین، سورۂ کہف");
+  if(hj.d===1)  out.push("پہلی قمری تاریخ — دعائے ماہِ نو، دو رکعت نمازِ اوّلِ ماہ");
+  if(hj.d===15) out.push("نصفِ ماہ — مستحب اعمال و دعائیں");
+  for(const o of occOf(selDate)){
+    const specific = o.sys==="h" ? AMAL_MAP[o.m+"-"+o.d] : null;
+    out.push(colorWords(o.t) + " — " + (specific || "مخصوص اعمال و زیارت"));
+  }
+  const html = out.length
+    ? out.map(t=>`<li><span class="tx">${t}</span></li>`).join("")
+    : '<li class="empty">اس دن کے لیے کوئی مخصوص عمل درج نہیں</li>';
+  $("amalList").innerHTML = html;
+  const eMain = $("amalListMain"); if(eMain) eMain.innerHTML = html;
+}
+function openTools(){
+  const hj = hijriOf(selDate);
+  $("shDay").textContent = WD[selDate.getDay()] + "، " + ud(selDate.getDate()) + " " + GMON[selDate.getMonth()] +
+    " " + ud(selDate.getFullYear()) + "ء · " + udh(hj.d) + " " + HMON_SHORT[hj.m-1] + " " + udh(hj.y) + "ھ";
+  renderToolList("rem","remList"); renderToolList("maj","majList"); renderAmal();
+  renderAllList(); checkStoreWarn();
+  const iso = isoOf(selDate);
+  $("remDate").value = iso; $("majDate").value = iso;
+  $("ovl").hidden = false;
+}
+$("openTools").addEventListener("click", openTools);
+$("shClose").addEventListener("click", ()=>{ $("ovl").hidden = true; });
+$("ovl").addEventListener("click", e=>{ if(e.target === $("ovl")) $("ovl").hidden = true; });
+
+/* درباره ما / ارتباط با ما — اِن ایپ شیٹس */
+function openSheet(id){ $(id).hidden = false; }
+function closeSheet(id){ $(id).hidden = true; }
+$("openAbout").addEventListener("click", ()=>openSheet("aboutOvl"));
+$("aboutClose").addEventListener("click", ()=>closeSheet("aboutOvl"));
+$("aboutOvl").addEventListener("click", e=>{ if(e.target === $("aboutOvl")) closeSheet("aboutOvl"); });
+$("openContact").addEventListener("click", ()=>openSheet("contactOvl"));
+$("contactClose").addEventListener("click", ()=>closeSheet("contactOvl"));
+$("contactOvl").addEventListener("click", e=>{ if(e.target === $("contactOvl")) closeSheet("contactOvl"); });
+
+/* دوسروں کو ایپ بھیجیں */
+function toast(msg){
+  let t = document.querySelector(".toast");
+  if(!t){ t = document.createElement("div"); t.className = "toast"; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._tid);
+  toast._tid = setTimeout(()=>t.classList.remove("show"), 2200);
+}
+$("shareApp").addEventListener("click", async ()=>{
+  const shareData = {
+    title: "نورِ صبا",
+    text: "نورِ صبا — اردو شیعہ کیلنڈر، نمازوں کے اوقات اور مناسبتوں کے ساتھ",
+    url: location.href
+  };
+  if(navigator.share){
+    try{ await navigator.share(shareData); }catch(e){ /* صارف نے منسوخ کر دیا */ }
+  } else if(navigator.clipboard){
+    try{ await navigator.clipboard.writeText(shareData.url); toast("لنک کاپی ہو گیا"); }
+    catch(e){ toast("کاپی نہیں ہو سکا"); }
+  } else {
+    toast("شیئرنگ اس براؤزر میں دستیاب نہیں");
+  }
+});
+$("remAdd").addEventListener("click", ()=>addItem("rem","remText","remDate","remTime","remList"));
+$("majAdd").addEventListener("click", ()=>addItem("maj","majText","majDate","majTime","majList"));
+$("jumpTimes").addEventListener("click", ()=>{
+  $("ovl").hidden = true;
+  document.getElementById("timesGrid").scrollIntoView({behavior:"smooth", block:"center"});
+});
+
+/* ─────────────── اذان ─────────────── */
+const DEFAULT_AZAN = "./azan-kazemzadeh.opus";
+let azanAudio = null, azanUrl = DEFAULT_AZAN, lastFired = "";
+let audioCtx = null;
+const azanEnabled = { fajr:false, zuhr:false, maghrib:false };
+const AZ_NAMES = { fajr:"نمازِ فجر", zuhr:"نمازِ ظہرین", maghrib:"نمازِ مغربین" };
+
+function unlockAudio(){ /* موبائل براؤزر میں آڈیو ان لاک */
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    audioCtx.resume();
+    if(azanUrl){ const a = new Audio(azanUrl); a.muted = true; a.play().then(()=>a.pause()).catch(()=>{}); }
+  }catch(e){}
+  /* پاپ اپ نوٹیفیکیشن کی اجازت مانگیں (صرف صارف کے ٹچ پر) */
+  try{
+    if("Notification" in window && Notification.permission === "default") Notification.requestPermission();
+  }catch(e){}
+}
+function notifyAzan(k){
+  try{
+    if(!("Notification" in window) || Notification.permission !== "granted") return;
+    new Notification("نورِ صبا", {
+      body: (AZ_NAMES[k] || "نماز") + " کا وقت ہو گیا",
+      icon: "./icon-192.png",
+      tag: "noor-saba-azan"
+    });
+  }catch(e){}
+}
+function playAzan(k){
+  stopAzan();
+  /* ہمیشہ کاظم زادہ کی آواز (یا صارف کے منتخب مؤذن کی فائل) — کوئی متبادل ٹون نہیں */
+  if(k) notifyAzan(k);
+  if(!azanUrl) return;
+  azanAudio = new Audio(azanUrl);
+  azanAudio.play().catch(()=>{});
+  azanAudio.addEventListener("ended", ()=>{ $("azanStop").hidden = true; });
+  $("azanStop").hidden = false;
+}
+function stopAzan(){
+  if(azanAudio){ azanAudio.pause(); azanAudio = null; }
+  $("azanStop").hidden = true;
+}
+$("azanTest").addEventListener("click", ()=>{ unlockAudio(); playAzan(); });
+$("azanStop").addEventListener("click", stopAzan);
+document.querySelectorAll(".chk").forEach(cb=>{
+  cb.addEventListener("change", ()=>{
+    const k = cb.dataset.az;
+    azanEnabled[k] = cb.checked;
+    const tile = $("tile-" + k); if(tile) tile.classList.toggle("on", cb.checked);
+    if(cb.checked) unlockAudio();
+    saveSettings();
+  });
+});
+/* ہر اذان کے سامنے آج کا وقت */
+function renderAzanTimes(){
+  const t = prayerTimes(new Date(), CITIES[cityIdx]);
+  for(const k of ["fajr","zuhr","maghrib"]){ const el = $("azT-" + k); if(el) el.textContent = fmtT(t[k]); }
+}
+renderAzanTimes();
+
+/* ─────────────── مؤذنین کی فہرست: کاظم زادہ (شامل) + مزید (اپلوڈ سے) ─────────────── */
+const MUEZZINS = [
+  { id:"kazemzadeh", name:"کاظم زادہ" },
+  { id:"ghaloush",   name:"راغب مصطفی غلوش" },
+  { id:"mansouri",   name:"کریم منصوری" },
+  { id:"toukhi",     name:"محمد طوخی" },
+  { id:"moazzinzade",name:"مؤذن زادہ" },
+];
+function loadMuezzinAudio(){
+  try{ return JSON.parse(localStorage.getItem("noorSabaMuezzinAudio") || "{}"); }catch(e){ return {}; }
+}
+function saveMuezzinAudio(map){
+  try{ localStorage.setItem("noorSabaMuezzinAudio", JSON.stringify(map)); }catch(e){ /* quota سے تجاوز — صرف اسی سیشن تک محدود رہے گا */ }
+}
+let muezzinAudioMap = loadMuezzinAudio();
+let selectedMuezzin = (function(){
+  try{ return localStorage.getItem("noorSabaMuezzinSel") || "kazemzadeh"; }catch(e){ return "kazemzadeh"; }
+})();
+function currentAzanUrl(){
+  if(selectedMuezzin === "kazemzadeh") return DEFAULT_AZAN;
+  return muezzinAudioMap[selectedMuezzin] || DEFAULT_AZAN;
+}
+function renderMuezzinList(){
+  const box = $("muezzinList"); if(!box) return;
+  box.innerHTML = MUEZZINS.map(m=>{
+    const has = m.id==="kazemzadeh" || !!muezzinAudioMap[m.id];
+    const sel = selectedMuezzin === m.id;
+    const uploadBtn = m.id==="kazemzadeh" ? "" :
+      `<label class="mz-up${has?" small":""}">${has?"بدلیں":"اپلوڈ"}<input type="file" accept="audio/*" data-upload="${m.id}" hidden></label>`;
+    return `<div class="mz-item${sel?" on":""}" data-id="${m.id}">
+      <button class="mz-radio" data-sel="${m.id}" aria-label="منتخب کریں">${sel?"●":"○"}</button>
+      <span class="mz-name">${m.name}</span>
+      ${has ? '<span class="mz-tag">✓</span>' : ""}
+      ${uploadBtn}
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-sel]").forEach(b=>b.addEventListener("click", ()=>{
+    const id = b.dataset.sel;
+    const has = id==="kazemzadeh" || !!muezzinAudioMap[id];
+    if(!has){ toast("پہلے اس مؤذن کی آواز اپلوڈ کریں"); return; }
+    selectedMuezzin = id;
+    try{ localStorage.setItem("noorSabaMuezzinSel", id); }catch(e){}
+    azanUrl = currentAzanUrl();
+    renderMuezzinList();
+  }));
+  box.querySelectorAll("[data-upload]").forEach(inp=>inp.addEventListener("change", e=>{
+    const id = inp.dataset.upload, f = e.target.files[0]; if(!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      muezzinAudioMap[id] = reader.result;
+      saveMuezzinAudio(muezzinAudioMap);
+      selectedMuezzin = id;
+      try{ localStorage.setItem("noorSabaMuezzinSel", id); }catch(e){}
+      azanUrl = currentAzanUrl();
+      renderMuezzinList();
+      toast("آواز محفوظ ہو گئی");
+    };
+    reader.readAsDataURL(f);
+  }));
+}
+azanUrl = currentAzanUrl();
+renderMuezzinList();
+/* ہر 20 سیکنڈ چیک: کیا کوئی منتخب وقتِ نماز داخل ہوا؟ */
+setInterval(()=>{
+  const city = CITIES[cityIdx];
+  const t = prayerTimes(new Date(), city);
+  const nowCity = fixH((Date.now()/3600000) % 24 + city.tz);
+  for(const k of ["fajr","zuhr","maghrib"]){
+    if(!azanEnabled[k] || t[k]===null) continue;
+    const diffMin = (nowCity - t[k]) * 60;
+    const key = new Date().toDateString() + "|" + k;
+    if(diffMin >= 0 && diffMin < 1 && lastFired !== key){ lastFired = key; playAzan(k); }
+  }
+}, 20000);
+
+/* ─────────────── ترتیبات محفوظ رکھنا ─────────────── */
+const SKEY = "noorSabaSettings";
+function saveSettings(){
+  try{ localStorage.setItem(SKEY, JSON.stringify({
+    city: CITIES[cityIdx].n, hilal: userAdj, adj: ADJ, azan: azanEnabled
+  })); }catch(e){}
+}
+function applySettings(){
+  let s = null;
+  try{ const raw = localStorage.getItem(SKEY); if(raw) s = JSON.parse(raw); }catch(e){}
+  if(!s) return;
+  if(s.city){ const i = CITIES.findIndex(c=>c.n === s.city); if(i >= 0){ cityIdx = i; sel.value = String(i); } }
+  if(typeof s.hilal === "number") userAdj = Math.max(-2, Math.min(2, s.hilal));
+  if(s.adj) for(const k in ADJ){ const v = s.adj[k]; if(typeof v === "number") ADJ[k] = Math.max(-15, Math.min(15, v)); }
+  if(s.azan) for(const k in azanEnabled){
+    if(!s.azan[k]) continue;
+    azanEnabled[k] = true;
+    const cb = document.querySelector('.chk[data-az="' + k + '"]'); if(cb) cb.checked = true;
+    const tile = $("tile-" + k); if(tile) tile.classList.add("on");
+  }
+}
+/* ─────────────── PWA: service worker + انسٹال ─────────────── */
+if("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("./sw.js").then(reg=>{
+      /* نیا نسخہ: صرف اُس صورت میں بتائیں جب پہلے سے کوئی ورژن ایکٹو تھا (پہلی بار انسٹال پر نہیں) */
+      const hadController = !!navigator.serviceWorker.controller;
+      reg.addEventListener("updatefound", ()=>{
+        const nw = reg.installing; if(!nw) return;
+        nw.addEventListener("statechange", ()=>{
+          if(nw.state === "activated" && hadController) showUpdateBanner();
+        });
+      });
+    }).catch(()=>{});
+  });
+}
+function showUpdateBanner(){
+  if($("updBtn")) return;
+  const b = document.createElement("button");
+  b.id = "updBtn"; b.className = "updbtn";
+  b.innerHTML = "🔄 نیا نسخہ دستیاب ہے — تازہ کریں";
+  b.addEventListener("click", ()=> location.reload());
+  document.body.appendChild(b);
+}
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", e=>{
+  e.preventDefault(); deferredPrompt = e;
+  let dismissed = false;
+  try{ dismissed = localStorage.getItem("noorSabaInsX") === "1"; }catch(err){}
+  if(!dismissed) $("insBar").hidden = false;
+});
+$("insBtn").addEventListener("click", async ()=>{
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  $("insBar").hidden = true;
+});
+$("insX").addEventListener("click", ()=>{
+  $("insBar").hidden = true;
+  try{ localStorage.setItem("noorSabaInsX","1"); }catch(err){}
+});
+window.addEventListener("appinstalled", ()=>{ $("insBar").hidden = true; });
+
+applySettings();
+
+renderAll();
+loadWeather();
+loadAnnouncements();
+initConverter();
+
+/* اشتہار: صرف اُس وقت دکھائیں جب آپ نے اپنا اصل publisher/slot نمبر بھر دیا ہو */
+(function(){
+  const box = $("adBanner");
+  const ins = box && box.querySelector("ins.adsbygoogle");
+  if(!ins) return;
+  const ready = ins.dataset.adClient && !ins.dataset.adClient.includes("XXXX")
+             && ins.dataset.adSlot  && !ins.dataset.adSlot.includes("0000000000");
+  if(!ready) return;
+  box.hidden = false;
+  try{ (window.adsbygoogle = window.adsbygoogle || []).push({}); }catch(e){}
+})();
+</script>
+</body>
+</html>

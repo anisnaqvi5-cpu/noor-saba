@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نورِ صبا — پینل مدیریتِ اعلانات</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{
+    --night1:#141F3C; --night2:#24406B;
+    --gold:#C9A227; --gold-soft:#E8D48A;
+    --red:#B93A32; --green:#1E7A46;
+    --paper:#F2F4F7; --card:#FFFFFF;
+    --ink:#1E2430; --ink-soft:#5A6478; --line:#E3E7EE;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Noto Naskh Arabic","Segoe UI",sans-serif;line-height:1.8}
+  header{background:linear-gradient(168deg, var(--night1), var(--night2));color:#fff;
+    padding:22px 20px 26px}
+  header h1{margin:0;font-size:1.25rem;font-weight:700}
+  header p{margin:6px 0 0;font-size:.82rem;color:var(--gold-soft)}
+  .wrap{max-width:720px;margin:0 auto;padding:0 16px 60px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    margin-top:-16px;padding:18px;box-shadow:0 4px 16px rgba(20,31,60,.08);position:relative;z-index:1}
+  .card + .card{margin-top:16px}
+  h2{font-size:1rem;margin:0 0 12px;color:var(--night2)}
+  label{display:block;font-size:.8rem;color:var(--ink-soft);margin:10px 0 4px}
+  input[type=text], textarea, input[type=date], input[type=url], select{
+    width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;
+    font-size:.92rem;font-family:inherit;background:#fbfcfe}
+  textarea{resize:vertical;min-height:64px}
+  .row2{display:flex;gap:10px}
+  .row2 > div{flex:1;min-width:0}
+  .btn{border:none;border-radius:10px;padding:10px 18px;font-size:.88rem;font-weight:700;
+    cursor:pointer;font-family:inherit}
+  .btn-main{background:var(--night2);color:#fff}
+  .btn-ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+  .btn-danger{background:#fff;color:var(--red);border:1px solid var(--red)}
+  .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .list{list-style:none;margin:0;padding:0}
+  .list li{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;
+    display:flex;gap:10px;align-items:flex-start}
+  .list .meta{flex:1;min-width:0}
+  .list .ttl{font-weight:700;color:var(--night2)}
+  .list .bd{font-size:.85rem;color:var(--ink-soft);margin-top:2px}
+  .list .dt{font-size:.74rem;color:var(--gold);margin-top:4px}
+  .list button{flex:0 0 auto;background:none;border:none;font-size:1rem;cursor:pointer;color:var(--ink-soft)}
+  .empty{color:var(--ink-soft);font-size:.86rem;text-align:center;padding:14px 0}
+  .hint{font-size:.76rem;color:var(--ink-soft);margin-top:10px;line-height:1.9}
+  .hint b{color:var(--night2)}
+  textarea#jsonOut{font-family:monospace;direction:ltr;text-align:left;font-size:.78rem;min-height:120px}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:var(--night2);color:#fff;padding:10px 18px;border-radius:999px;font-size:.85rem;
+    opacity:0;pointer-events:none;transition:opacity .25s}
+  .toast.show{opacity:1}
+  input[type=file]{display:none}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📢 پینل مدیریتِ اعلانات — نورِ صبا</h1>
+  <p>یہ صفحہ صرف آپ کے لیے ہے — عام صارفین تک اس کا لنک نہ بھیجیں</p>
+</header>
+
+<div class="wrap">
+
+  <section class="card">
+    <h2>نیا اعلان شامل کریں</h2>
+    <label>نوعِ اعلان</label>
+    <select id="fType">
+      <option value="general">📢 عمومی (رویداد، مجلس وغیرہ)</option>
+      <option value="lecture">🎓 درس / سخنرانی کا اعلان</option>
+      <option value="donation">🤲 نذورات / مالی تعاون کی اپیل</option>
+    </select>
+    <label>عنوان</label>
+    <input type="text" id="fTitle" placeholder="مثال: مجلسِ شامِ غریباں">
+    <label>تفصیل</label>
+    <textarea id="fBody" placeholder="مثال: بروز جمعہ، امام بارگاہ ... میں، رات ۸ بجے"></textarea>
+    <div class="row2">
+      <div><label>تاریخ شروع (اختیاری)</label><input type="date" id="fStart"></div>
+      <div><label>تاریخ ختم (اختیاری)</label><input type="date" id="fEnd"></div>
+    </div>
+    <label>لنک (اختیاری — مزید معلومات کے لیے)</label>
+    <input type="url" id="fLink" placeholder="https://…">
+    <div class="actions">
+      <button class="btn btn-main" id="addBtn">➕ فہرست میں شامل کریں</button>
+    </div>
+    <div class="hint">
+      اگر تاریخ شروع/ختم خالی چھوڑیں تو اعلان ہمیشہ نظر آئے گا (جب تک صارف خود بند نہ کرے)۔
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>موجودہ اعلانات <span id="cnt" style="color:var(--ink-soft);font-weight:400;font-size:.82rem"></span></h2>
+    <ul class="list" id="list"></ul>
+  </section>
+
+  <section class="card">
+    <h2>فائل لوڈ / محفوظ کریں</h2>
+    <div class="actions">
+      <button class="btn btn-ghost" id="loadFileBtn">📂 موجودہ announcements.json لوڈ کریں</button>
+      <input type="file" id="fileInput" accept="application/json">
+      <button class="btn btn-main" id="downloadBtn">⬇️ announcements.json ڈاؤن لوڈ کریں</button>
+      <button class="btn btn-ghost" id="copyBtn">📋 JSON کاپی کریں</button>
+    </div>
+    <textarea id="jsonOut" readonly></textarea>
+    <div class="hint">
+      <b>طریقہ کار:</b><br>
+      ۱) اوپر اعلانات شامل/ترمیم کریں۔<br>
+      ۲) «announcements.json ڈاؤن لوڈ کریں» دبائیں۔<br>
+      ۳) ڈاؤن لوڈ شدہ فائل کو اپنی ویب ہوسٹنگ پر <b>اسی جگہ</b> اپلوڈ کریں جہاں index.html موجود ہے (اسے پرانی فائل کی جگہ overwrite کریں)۔<br>
+      ۴) بس — ایپ خود بخود نئے اعلانات دکھانا شروع کر دے گی، صارفین کو کچھ نصب کرنے کی ضرورت نہیں۔
+    </div>
+  </section>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+let items = [];
+
+function uid(){ return "a" + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+function render(){
+  const TYPE_LBL = { general:"📢 عمومی", lecture:"🎓 درس/سخنرانی", donation:"🤲 نذورات" };
+  const ul = $("list");
+  $("cnt").textContent = items.length ? `(${items.length})` : "";
+  if(!items.length){ ul.innerHTML = '<li class="empty" style="display:block;border:none">کوئی اعلان موجود نہیں</li>'; syncJson(); return; }
+  ul.innerHTML = items.map(a => `
+    <li data-id="${a.id}">
+      <div class="meta">
+        <div class="ttl">${esc(a.title)} <span style="font-weight:400;color:var(--ink-soft);font-size:.74rem">— ${TYPE_LBL[a.type]||TYPE_LBL.general}</span></div>
+        <div class="bd">${esc(a.body)}</div>
+        ${(a.start||a.end) ? `<div class="dt">${a.start||"…"} → ${a.end||"…"}</div>` : ""}
+        ${a.link ? `<div class="dt">🔗 ${esc(a.link)}</div>` : ""}
+      </div>
+      <button data-del="${a.id}" title="حذف کریں">🗑</button>
+    </li>`).join("");
+  ul.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => {
+    items = items.filter(x => x.id !== b.dataset.del);
+    render();
+  }));
+  syncJson();
+}
+function esc(s){ return (s||"").replace(/[<>&]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;"}[c])); }
+
+function syncJson(){ $("jsonOut").value = JSON.stringify(items, null, 2); }
+
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1800);
+}
+
+$("addBtn").addEventListener("click", () => {
+  const title = $("fTitle").value.trim();
+  const body  = $("fBody").value.trim();
+  if(!title || !body){ toast("عنوان اور تفصیل ضروری ہیں"); return; }
+  items.push({
+    id: uid(),
+    type: $("fType").value,
+    title, body,
+    start: $("fStart").value || undefined,
+    end: $("fEnd").value || undefined,
+    link: $("fLink").value.trim() || undefined
+  });
+  $("fTitle").value = ""; $("fBody").value = ""; $("fStart").value = ""; $("fEnd").value = ""; $("fLink").value = ""; $("fType").value = "general";
+  render();
+  toast("شامل ہو گیا");
+});
+
+$("downloadBtn").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(items, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "announcements.json";
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  toast("فائل ڈاؤن لوڈ ہو گئی");
+});
+
+$("copyBtn").addEventListener("click", async () => {
+  try{ await navigator.clipboard.writeText(JSON.stringify(items, null, 2)); toast("کاپی ہو گیا"); }
+  catch(e){ toast("کاپی ناکام — دستی طور پر منتخب کریں"); }
+});
+
+$("loadFileBtn").addEventListener("click", () => $("fileInput").click());
+$("fileInput").addEventListener("change", e => {
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const data = JSON.parse(reader.result);
+      if(!Array.isArray(data)) throw new Error("bad format");
+      items = data.map(a => ({ id: a.id || uid(), ...a }));
+      render();
+      toast("لوڈ ہو گیا");
+    }catch(err){ toast("فائل درست نہیں"); }
+  };
+  reader.readAsText(file);
+});
+
+render();
+</script>
+</body>
+</html>
