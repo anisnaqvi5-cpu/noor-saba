@@ -514,6 +514,15 @@
     <button id="insX" class="ins-x" aria-label="بند کریں">✕</button>
   </div>
 
+  <div class="ins-bar" id="insBarIos" hidden>
+    <span class="ins-ic" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v13"/><path d="M8 6l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+    </span>
+    <span class="ins-tx">انسٹال کے لیے نیچے شیئر بٹن دبائیں، پھر "ہوم اسکرین پر شامل کریں" چنیں</span>
+    <button id="insXIos" class="ins-x" aria-label="بند کریں">✕</button>
+  </div>
+
 
   <header class="sky">
     <div class="masthead">
@@ -2230,6 +2239,23 @@ $("insX").addEventListener("click", ()=>{
   try{ localStorage.setItem("noorSabaInsX","1"); }catch(err){}
 });
 window.addEventListener("appinstalled", ()=>{ $("insBar").hidden = true; });
+
+/* iOS سفاری میں beforeinstallprompt کبھی فائر نہیں ہوتا — اس لیے دستی ہدایات دکھائیں */
+(function(){
+  const ua = navigator.userAgent;
+  const isIos = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  const isSafari = /^((?!chrome|android|crios|fxios|edgios).)*safari/i.test(ua);
+  const isStandalone = window.navigator.standalone === true ||
+    window.matchMedia("(display-mode: standalone)").matches;
+  if(!isIos || !isSafari || isStandalone) return;
+  let dismissed = false;
+  try{ dismissed = localStorage.getItem("noorSabaInsIosX") === "1"; }catch(err){}
+  if(!dismissed) $("insBarIos").hidden = false;
+  $("insXIos").addEventListener("click", ()=>{
+    $("insBarIos").hidden = true;
+    try{ localStorage.setItem("noorSabaInsIosX","1"); }catch(err){}
+  });
+})();
 
 applySettings();
 
