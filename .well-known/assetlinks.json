@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "pk.noorsaba.app",
+    "sha256_cert_fingerprints": [
+      "75:09:42:BB:2D:23:A4:FE:BF:12:9A:E0:EC:9B:27:4E:D9:26:69:34:11:7C:F6:69:70:8D:CA:EC:8A:F9:75:34"
+    ]
+  }
+}]
