@@ -188,6 +188,11 @@
     border:1px solid var(--gold);background:#FDFAF0;color:var(--night2);border-radius:999px;
     padding:9px 18px;font-size:.82rem;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;
     box-shadow:0 6px 18px rgba(20,31,60,.22);animation:todayPop .22s ease-out}
+  .ins-fab{position:fixed;left:16px;bottom:22px;z-index:60;display:flex;align-items:center;gap:6px;
+    border:1px solid var(--gold);background:var(--night2);color:#fff;border-radius:999px;
+    padding:10px 16px;font-size:.8rem;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;
+    box-shadow:0 6px 18px rgba(20,31,60,.28)}
+  .ins-fab:active{transform:scale(.96)}
   .todaybtn:active{background:#F6EDD2;transform:translateX(-50%) scale(.96)}
   @keyframes todayPop{from{opacity:0;transform:translate(-50%,10px) scale(.92)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
   @media (prefers-reduced-motion:reduce){ .todaybtn{animation:none} }
@@ -522,6 +527,12 @@
     <span class="ins-tx">انسٹال کے لیے نیچے شیئر بٹن دبائیں، پھر "ہوم اسکرین پر شامل کریں" چنیں</span>
     <button id="insXIos" class="ins-x" aria-label="بند کریں">✕</button>
   </div>
+
+  <button id="insFab" class="ins-fab" hidden>
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"
+         stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+    نصب
+  </button>
 
 
   <header class="sky">
@@ -2226,19 +2237,27 @@ window.addEventListener("beforeinstallprompt", e=>{
   let dismissed = false;
   try{ dismissed = localStorage.getItem("noorSabaInsX") === "1"; }catch(err){}
   if(!dismissed) $("insBar").hidden = false;
+  /* پاپ اپ بند بھی ہو جائے تب بھی یہ بٹن ہمیشہ نظر آتا رہے — کبھی خودکار غائب نہیں ہوتا */
+  $("insFab").hidden = false;
 });
-$("insBtn").addEventListener("click", async ()=>{
+async function doInstallPrompt(){
   if(!deferredPrompt) return;
   deferredPrompt.prompt();
   await deferredPrompt.userChoice;
   deferredPrompt = null;
   $("insBar").hidden = true;
+  $("insFab").hidden = true;
+}
+$("insBtn").addEventListener("click", doInstallPrompt);
+$("insFab").addEventListener("click", ()=>{
+  if(deferredPrompt) doInstallPrompt();
+  else $("insBarIos").hidden = false; /* iOS: کوئی خودکار طریقہ نہیں، ہدایات دکھا دیں */
 });
 $("insX").addEventListener("click", ()=>{
   $("insBar").hidden = true;
   try{ localStorage.setItem("noorSabaInsX","1"); }catch(err){}
 });
-window.addEventListener("appinstalled", ()=>{ $("insBar").hidden = true; });
+window.addEventListener("appinstalled", ()=>{ $("insBar").hidden = true; $("insFab").hidden = true; });
 
 /* iOS سفاری میں beforeinstallprompt کبھی فائر نہیں ہوتا — اس لیے دستی ہدایات دکھائیں */
 (function(){
@@ -2251,6 +2270,8 @@ window.addEventListener("appinstalled", ()=>{ $("insBar").hidden = true; });
   let dismissed = false;
   try{ dismissed = localStorage.getItem("noorSabaInsIosX") === "1"; }catch(err){}
   if(!dismissed) $("insBarIos").hidden = false;
+  /* پاپ اپ بند ہونے کے بعد بھی بٹن ہمیشہ نظر آتا رہے، تاکہ صارف جب چاہے دوبارہ ہدایات دیکھ سکے */
+  $("insFab").hidden = false;
   $("insXIos").addEventListener("click", ()=>{
     $("insBarIos").hidden = true;
     try{ localStorage.setItem("noorSabaInsIosX","1"); }catch(err){}
