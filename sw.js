@@ -7,7 +7,7 @@
    فون پر "نیا نسخہ دستیاب ہے" کا بینر دکھانے کا باعث بنتی ہے۔
    اگر یہ نمبر نہ بدلا تو براؤزر سمجھے گا کچھ نہیں بدلا، اور
    صارفین کو پرانا نسخہ ہی ملتا رہے گا۔ */
-const CACHE = "noor-saba-v1";
+const CACHE = "noor-saba-v2";
 
 const ASSETS = [
   "./",
@@ -36,6 +36,15 @@ self.addEventListener("activate", e => {
     const keys = await caches.keys();
     await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
     await self.clients.claim();
+  })());
+});
+
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  e.waitUntil((async () => {
+    const all = await clients.matchAll({ type: "window", includeUncontrolled: true });
+    for (const c of all) { if ("focus" in c) return c.focus(); }
+    if (clients.openWindow) return clients.openWindow("./");
   })());
 });
 
