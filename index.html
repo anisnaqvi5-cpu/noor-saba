@@ -2194,11 +2194,21 @@ function saveSettings(){
     city: CITIES[cityIdx].n, hilal: userAdj, adj: ADJ, azan: azanEnabled
   })); }catch(e){}
 }
+/* ?city=... — اینڈرائیڈ ویجٹ اپنا منتخب شہر اِسی طرح بھیجتا ہے (اُس کا اسٹوریج ایپ سے الگ ہے) */
+function cityFromUrl(){
+  try{
+    const q = new URLSearchParams(location.search).get("city");
+    if(!q) return -1;
+    return CITIES.findIndex(c => c.n === q);
+  }catch(e){ return -1; }
+}
 function applySettings(){
+  const urlCity = cityFromUrl();
   let s = null;
   try{ const raw = localStorage.getItem(SKEY); if(raw) s = JSON.parse(raw); }catch(e){}
+  if(urlCity >= 0){ cityIdx = urlCity; sel.value = String(urlCity); }
   if(!s) return;
-  if(s.city){ const i = CITIES.findIndex(c=>c.n === s.city); if(i >= 0){ cityIdx = i; sel.value = String(i); } }
+  if(s.city && urlCity < 0){ const i = CITIES.findIndex(c=>c.n === s.city); if(i >= 0){ cityIdx = i; sel.value = String(i); } }
   if(typeof s.hilal === "number") userAdj = Math.max(-2, Math.min(2, s.hilal));
   if(s.adj) for(const k in ADJ){ const v = s.adj[k]; if(typeof v === "number") ADJ[k] = Math.max(-15, Math.min(15, v)); }
   if(s.azan) for(const k in azanEnabled){
