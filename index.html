@@ -193,11 +193,6 @@
     border:1px solid var(--gold);background:#FDFAF0;color:var(--night2);border-radius:999px;
     padding:9px 18px;font-size:.82rem;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;
     box-shadow:0 6px 18px rgba(20,31,60,.22);animation:todayPop .22s ease-out}
-  .ins-fab{position:fixed;left:16px;bottom:22px;z-index:60;display:flex;align-items:center;gap:6px;
-    border:1px solid var(--gold);background:var(--night2);color:#fff;border-radius:999px;
-    padding:10px 16px;font-size:.8rem;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;
-    box-shadow:0 6px 18px rgba(20,31,60,.28)}
-  .ins-fab:active{transform:scale(.96)}
 
   /* ─── ہمیشہ نظر آنے والی انسٹال پٹی (سب سے نیچے) ───
      آئی فون پر ہوم اسکرین ویجٹ نہیں بنایا جا سکتا، اس لیے انسٹال کا راستہ کبھی چھپتا نہیں۔
@@ -219,7 +214,6 @@
   .instbar-go:active{transform:scale(.96)}
   body.has-instbar .wrap{padding-bottom:96px}
   body.has-instbar .todaybtn{bottom:88px}
-  body.has-instbar .ins-fab{bottom:88px}
   body.has-instbar .toast{bottom:86px}
 
   /* ─── شہر منتخب کرنے کی شیٹ: تلاش + لوکیشن + اردو/انگریزی ─── */
@@ -245,6 +239,22 @@
   .city-item .ur{font-size:.95rem;font-weight:700;color:var(--ink)}
   .city-item .en{font-size:.76rem;color:var(--ink-soft);direction:ltr;white-space:nowrap}
   .city-none{text-align:center;color:var(--ink-soft);font-size:.85rem;padding:20px 0}
+
+  /* ─── انتباہ: جہاں وقت اندازے سے نکالا گیا ہو ─── */
+  .est-note{margin-top:10px;padding:9px 12px;border-radius:12px;font-size:.75rem;line-height:1.9;
+    color:var(--ink);background:rgba(201,162,39,.10);border:1px solid rgba(201,162,39,.35)}
+  .est-note b{color:var(--night2)}
+
+  /* ─── حسابی معیار کا انتخاب ─── */
+  .prof-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+  .prof-lbl{font-size:.8rem;font-weight:700;color:var(--ink-soft);flex:0 0 auto}
+  .prof-seg{display:flex;gap:3px;padding:3px;border-radius:999px;background:var(--paper);
+    border:1px solid var(--line);flex:1;min-width:0}
+  .prof-seg button{flex:1;min-width:0;border:none;background:transparent;border-radius:999px;
+    padding:7px 6px;font-family:inherit;font-size:.78rem;font-weight:700;color:var(--ink-soft);
+    cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prof-seg button.on{background:var(--night2);color:#F4F1E6;box-shadow:0 2px 8px rgba(20,31,60,.2)}
+  .prof-note{margin-top:7px;font-size:.73rem;line-height:1.8;color:var(--ink-soft)}
 
   /* ─── راہنمائی ─── */
   .help-list{margin:0;padding:0;list-style:none}
@@ -686,6 +696,7 @@
       </button>
     </div>
     <table class="grid" id="gridTable"></table>
+    <div class="est-note" id="calNote" hidden></div>
   </section>
 
   <!-- مناسبتیں -->
@@ -699,6 +710,16 @@
   <section class="card" aria-label="اوقات شرعی">
     <h2>اوقاتِ شرعی فقہِ جعفری <span id="cityName" style="font-size:.8rem;color:var(--ink-soft)"></span></h2>
     <div class="times" id="timesGrid"></div>
+    <div class="est-note" id="estNote" hidden></div>
+    <div class="prof-row">
+      <span class="prof-lbl">حسابی معیار</span>
+      <div class="prof-seg" id="profSeg" role="group" aria-label="حسابی معیار">
+        <button type="button" data-prof="falaki" class="on">فلکیاتی</button>
+        <button type="button" data-prof="anjuman">انجمنِ حسینی</button>
+      </div>
+    </div>
+    <div class="prof-note" id="profNote"></div>
+
     <details class="adjbox">
       <summary>⚙ اوقات کی ایڈجسٹمنٹ (منٹ میں)</summary>
       <div id="adjRows"></div>
@@ -943,6 +964,9 @@
           <div class="info-sec-hd">🕰 اوقاتِ شرعی</div>
           <ul class="help-list">
             <li>اوقات فقہِ جعفری کے مطابق، آپ کے شہر کے عرض و طول سے <b>مقامی طور پر</b> شمار ہوتے ہیں — انٹرنیٹ کی ضرورت نہیں۔</li>
+            <li>اوقات کے کارڈ میں <b>حسابی معیار</b> کے دو انتخاب ہیں:
+              <b>فلکیاتی</b> — نمازِ مغرب زوالِ حمرۂ مشرقیہ کے زاویے سے، ہر شہر کے عرض البلد کے مطابق، اور رمضان کے لیے احتیاط شامل (فجر ذرا پہلے، مغرب ذرا بعد)۔
+              <b>انجمنِ حسینی</b> — کراچی کے چھپے ہوئے نقشے والا قاعدہ، مغرب غروب کے ۱۳ منٹ بعد۔ ایک ٹیپ سے بدل جاتا ہے اور محفوظ رہتا ہے۔</li>
             <li>اپنے علاقے کے نقشے (مثلاً انجمنِ حسینی) سے مکمل مطابقت کے لیے «⚙ اوقات کی ایڈجسٹمنٹ» کھول کر ہر وقت میں منٹ کم یا زیادہ کر لیں۔</li>
             <li>اگلا آنے والا وقت سنہری رنگ میں نمایاں ہوتا ہے۔</li>
           </ul>
@@ -1415,6 +1439,88 @@ const CITY_EN = {
 };
 function enOf(c){ return (c && CITY_EN[c.n]) || ""; }
 
+/* ہر شہر کا ٹائم زون — پہلے ہر شہر میں ایک جما ہوا نمبر تھا، جو سال کے آدھے حصے میں
+   غلط ہو جاتا تھا (لندن، ٹورنٹو، سڈنی وغیرہ میں گھڑی سال میں دو بار بدلتی ہے)۔
+   اب زون کا نام رکھا جاتا ہے اور فرق اُسی تاریخ کے حساب سے نکالا جاتا ہے۔
+   پاکستان اور بیرونِ ملک کے علاوہ (لوکیشن والا مقام) قریب ترین شہر کا زون لیتا ہے۔ */
+const CITY_ZONE = {
+  "دبئی":"Asia/Dubai",
+  "مسقط":"Asia/Muscat",
+  "نجفِ اشرف":"Asia/Baghdad",
+  "کربلائے معلیٰ":"Asia/Baghdad",
+  "مشہدِ مقدس":"Asia/Tehran",
+  "قم":"Asia/Tehran",
+  "مدینہ منورہ":"Asia/Riyadh",
+  "مکہ مکرمہ":"Asia/Riyadh",
+  "جدہ":"Asia/Riyadh",
+  "بغداد":"Asia/Baghdad",
+  "کاظمین":"Asia/Baghdad",
+  "سامرا":"Asia/Baghdad",
+  "تہران":"Asia/Tehran",
+  "نیشاپور":"Asia/Tehran",
+  "زاہدان":"Asia/Tehran",
+  "کرمان":"Asia/Tehran",
+  "کاشان":"Asia/Tehran",
+  "چابہار":"Asia/Tehran",
+  "لندن":"Europe/London",
+  "فرینکفرٹ":"Europe/Berlin",
+  "ٹورنٹو":"America/Toronto",
+  "نیویارک":"America/New_York",
+  "سڈنی":"Australia/Sydney",
+  "میلبورن":"Australia/Melbourne",
+  "ہیوسٹن":"America/Chicago",
+  "شکاگو":"America/Chicago",
+  "ڈیئربورن":"America/Detroit",
+  "لکھنؤ":"Asia/Kolkata",
+  "دہلی":"Asia/Kolkata",
+  "ممبئی":"Asia/Kolkata",
+  "حیدرآباد دکن":"Asia/Kolkata",
+  "سرینگر":"Asia/Kolkata",
+  "کرگل":"Asia/Kolkata",
+  "لیہ (لداخ)":"Asia/Kolkata",
+  "نوبرا (دسکت)":"Asia/Kolkata",
+  "زنسکار (پدم)":"Asia/Kolkata",
+  "احمد آباد":"Asia/Kolkata",
+  "اونا":"Asia/Kolkata",
+  "کوڈینار":"Asia/Kolkata",
+  "ڈھاکہ":"Asia/Dhaka",
+  "چٹاگانگ":"Asia/Dhaka",
+  "سلہٹ":"Asia/Dhaka",
+  "کھلنا":"Asia/Dhaka",
+  "راجشاہی":"Asia/Dhaka"
+};
+function zoneOf(city){
+  if(!city) return null;
+  if(city.z) return city.z;                                    /* لوکیشن سے شامل کیا گیا مقام */
+  return CITY_ZONE[city.n] || (city.g === "پاکستان" ? "Asia/Karachi" : null);
+}
+const TZ_FMT = {}, TZ_CACHE = {};
+/* اُس دن اُس شہر میں GMT سے فرق (گھنٹوں میں)۔ اگر براؤزر پرانا ہو تو پرانا جما ہوا نمبر ہی چلے گا۔ */
+function tzOf(city, date){
+  if(!city) return 0;
+  const zone = zoneOf(city);
+  if(!zone) return city.tz;
+  const d = date || new Date();
+  const key = zone + "|" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+  if(key in TZ_CACHE) return TZ_CACHE[key];
+  let off = city.tz;
+  try{
+    let f = TZ_FMT[zone];
+    if(!f) f = TZ_FMT[zone] = new Intl.DateTimeFormat("en-US", {timeZone:zone, timeZoneName:"longOffset"});
+    /* اُسی تاریخ کے دوپہر (UTC) پر پوچھتے ہیں تاکہ گھڑی بدلنے والے دن بھی درست رہے */
+    const probe = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 12));
+    const part = f.formatToParts(probe).find(p => p.type === "timeZoneName");
+    const v = part ? part.value : "";
+    if(/^(GMT|UTC)$/.test(v)) off = 0;
+    else {
+      const m = v.match(/(?:GMT|UTC)([+-])(\d{1,2})(?::(\d{2}))?/);
+      if(m) off = (m[1] === "-" ? -1 : 1) * (parseInt(m[2],10) + (m[3] ? parseInt(m[3],10) : 0)/60);
+    }
+  }catch(e){}
+  TZ_CACHE[key] = off;
+  return off;
+}
+
 /* مناسبتیں: قمری تاریخ سے — ماخذ: کیلنڈرِ انجمنِ حسینی کراچی 2026ء / 1447-1448ھ */
 const OCC_HIJRI = [
   /* محرم الحرام */
@@ -1636,34 +1742,92 @@ function hourAngle(depr, lat, decl){
   if(x < -1 || x > 1) return null;
   return deg(Math.acos(x))/15;
 }
-/* احتیاطی ایڈجسٹمنٹ (منٹ) — انجمنِ حسینی کے نقشے سے کیلیبریٹڈ؛ صارف اپ کے اندر سے بدل سکتا ہے */
-let ADJ = { fajr:2, sunrise:0, zuhr:2, sunset:0, maghrib:0, midnight:0 };
+/* ─── حسابی معیار: دو انتخاب ─────────────────────────────────────
+   صارف اوقات کے کارڈ سے جب چاہے بدل سکتا ہے۔
+
+   ۱) فلکیاتی — نمازِ مغرب زوالِ حمرۂ مشرقیہ کے زاویے پر، جما ہوا منٹ نہیں۔
+      ہر وقت احتیاط کی سمت جھکا ہوا ہے (رمضان کو سامنے رکھ کر):
+        • فجر اور نصفِ شب → سیکنڈ گرا کر، یعنی ذرا پہلے
+        • ظہر              → زوال کے ۷۶ سیکنڈ بعد، تاکہ زوال یقینی ہو چکا ہو
+        • مغرب             → ۴.۵۷۸ درجہ، یعنی ذرا بعد (افطار محتاط رہے)
+      زاویہ اور سیکنڈ دو مختلف شہروں (قم اور کراچی) کے شائع شدہ اوقات سے حل کیے گئے،
+      وہ بازہ نکالا گیا جو دونوں پر پورا اترے اور اُس کا وسط لیا گیا۔
+
+   ۲) انجمنِ حسینی — کراچی کے چھپے ہوئے نقشے والا پرانا قاعدہ: مغرب غروب کے ۱۳ منٹ بعد،
+      فجر اور ظہر میں ۲،۲ منٹ احتیاط، اور منٹ گول کر کے۔ عدد ثابت ہونے کی وجہ سے یہ
+      کراچی پر ٹھیک بیٹھتا ہے مگر شمال کی طرف جاتے ہی معیار سے ہٹنے لگتا ہے۔ */
+const ANG_FAJR = 17.7;      /* صبحِ صادق — دونوں معیاروں میں یکساں */
+const ANG_SUN  = 0.833;     /* طلوع و غروبِ آفتاب — عام انکسارِ نور */
+const PROFILES = {
+  falaki:  { nm:"فلکیاتی",       magAng:4.578, magOff:null, zuhrAdd:76/3600, fajrAdd:0,     floor:true  },
+  anjuman: { nm:"انجمنِ حسینی",  magAng:null,  magOff:13/60, zuhrAdd:2/60,   fajrAdd:2/60,  floor:false }
+};
+let profKey = "falaki";
+const PROF = () => PROFILES[profKey] || PROFILES.falaki;
+
+/* صارف کی اپنی ایڈجسٹمنٹ (منٹ) — صفر سے شروع، کیونکہ احتیاط معیار میں شامل ہے */
+let ADJ = { fajr:0, sunrise:0, zuhr:0, sunset:0, maghrib:0, midnight:0 };
+const PROFILE_VER = 2;      /* حساب بدلے تو پرانی محفوظ ایڈجسٹمنٹ نظرانداز ہو جائے */
 const ADJ_NAMES = { fajr:"نماز فجر", sunrise:"طلوعِ آفتاب", zuhr:"نماز ظہرین", sunset:"غروبِ آفتاب", maghrib:"نماز مغربین", midnight:"نصفِ شب" };
+
+/* ─── اقرب الایام ───────────────────────────────────────────────
+   لندن، فرینکفرٹ جیسے اونچے عرض البلد والے شہروں میں گرمیوں کے کچھ ہفتے سورج اتنا نیچے
+   جاتا ہی نہیں کہ ۱۷.۷ درجہ بنے — یعنی فجر کا فلکیاتی لمحہ سرے سے موجود نہیں ہوتا
+   (لندن میں ۵۶ دن، فرینکفرٹ میں ۳۹ دن)۔ پہلے اِن دنوں فجر، انتہائے سحر اور نصفِ شب کی
+   جگہ صرف «—» آتا تھا۔
+
+   اب قریب ترین دن کا قاعدہ چلتا ہے: جو سب سے نزدیک دن ایسا ملے جس میں فجر بنتی ہو،
+   اُس دن فجر اور طلوعِ آفتاب کے درمیان جتنا وقفہ تھا، وہی وقفہ آج کے طلوع سے پیچھے
+   ناپ لیا جاتا ہے۔ سرحدی دن پر یہ حساب خود بخود اصل وقت سے جا ملتا ہے، اس لیے
+   اوقات میں کوئی جھٹکا نہیں آتا۔ */
+function fajrGapNearestDay(date, city){
+  for(let d = 1; d <= 200; d++){
+    for(const side of [-d, d]){
+      const dt  = addDays(date, side);
+      const jd2 = julian(dt.getFullYear(), dt.getMonth()+1, dt.getDate()) + 0.5 - city.lng/(15*24);
+      const sp  = sunPos(jd2);
+      const hf2 = hourAngle(ANG_FAJR, city.lat, sp.decl);
+      const hs2 = hourAngle(ANG_SUN,  city.lat, sp.decl);
+      if(hf2 !== null && hs2 !== null) return hf2 - hs2;   /* طلوع سے کتنا پہلے */
+    }
+  }
+  return null;
+}
 
 function prayerTimes(date, city){
   const jd = julian(date.getFullYear(), date.getMonth()+1, date.getDate()) + 0.5 - city.lng/(15*24);
   const s  = sunPos(jd);
-  const noon = fixH(12 + city.tz - city.lng/15 - s.eqt);
+  const noon = fixH(12 + tzOf(city, date) - city.lng/15 - s.eqt);
   const H = a => hourAngle(a, city.lat, s.decl);
-  const hs = H(0.833), hf = H(17.7);
+  const p = PROF();
+  const hs = H(ANG_SUN), hf = H(ANG_FAJR);
 
   const t = {};
-  t.fajr    = hf!==null ? fixH(noon-hf) : null;
+  /* نصفِ شب ہمیشہ اصل (بغیر احتیاط) فجر سے ناپی جاتی ہے — دونوں معیاروں میں یہی */
+  let fajrRaw = hf!==null ? fixH(noon-hf) : null;
+  if(fajrRaw === null && hs !== null){
+    const gap = fajrGapNearestDay(date, city);
+    if(gap !== null){ fajrRaw = fixH(noon - hs - gap); t.fajrEst = true; }
+  }
+  t.fajr    = fajrRaw!==null ? fixH(fajrRaw + p.fajrAdd) : null;
   t.sunrise = hs!==null ? fixH(noon-hs) : null;
-  t.zuhr    = noon; /* نماز ظہرین */
+  t.zuhr    = fixH(noon + p.zuhrAdd); /* نماز ظہرین — زوال کے ذرا بعد */
   t.sunset  = hs!==null ? fixH(noon+hs) : null;
-  /* نماز مغربین: غروبِ آفتاب + 13 منٹ (انجمنِ حسینی کا قاعدہ) */
-  t.maghrib = t.sunset!==null ? fixH(t.sunset + 13/60) : null;
-  t.midnight = (t.sunset!==null && t.fajr!==null)
-    ? fixH(t.sunset + fixH(t.fajr + 24 - t.sunset)/2) : null;
+  /* نمازِ مغربین: یا تو زاویہ (فلکیاتی) یا غروب کے بعد جمے ہوئے منٹ (انجمن) */
+  if(p.magOff !== null) t.maghrib = t.sunset!==null ? fixH(t.sunset + p.magOff) : null;
+  else { const hm = H(p.magAng); t.maghrib = hm!==null ? fixH(noon+hm) : null; }
+  t.midnight = (t.sunset!==null && fajrRaw!==null)
+    ? fixH(t.sunset + fixH(fajrRaw + 24 - t.sunset)/2) : null;
   for(const k in ADJ) if(t[k]!==null && t[k]!==undefined) t[k] = fixH(t[k] + ADJ[k]/60);
   /* انتہائے سحر: نماز فجر سے 10 منٹ پہلے (انجمن کا قاعدہ) */
   t.sahar = t.fajr!==null ? fixH(t.fajr - 10/60) : null;
   return t;
 }
+/* فلکیاتی معیار میں سیکنڈ گرا دیے جاتے ہیں (گول نہیں کیے جاتے) — یہ احتیاط کی سمت ہے:
+   وقت کبھی اپنے اصل لمحے سے آگے نہیں دکھایا جاتا۔ انجمن والے معیار میں پہلے کی طرح گول۔ */
 const fmtT = h => {
   if(h===null) return "—";
-  let hh = Math.floor(h), mm = Math.round((h-hh)*60);
+  let hh = Math.floor(h), mm = PROF().floor ? Math.floor((h-hh)*60) : Math.round((h-hh)*60);
   if(mm===60){ mm=0; hh=(hh+1)%24; }
   return ud(hh) + ":" + ud(String(mm).padStart(2,"0"));
 };
@@ -1703,7 +1867,7 @@ function moonLon(jd){
 const inAqrab = jd => fixA(moonLon(jd) - 210) < 30;
 
 function aqrabInfo(date, city){
-  const jd0 = julian(date.getFullYear(), date.getMonth()+1, date.getDate()) - city.tz/24;
+  const jd0 = julian(date.getFullYear(), date.getMonth()+1, date.getDate()) - tzOf(city, date)/24;
   let start=null, end=null, any=false, prev=inAqrab(jd0);
   if(prev) any=true;
   for(let i=1;i<=1440;i++){
@@ -1717,7 +1881,7 @@ function aqrabInfo(date, city){
 }
 /* جدول کے خانوں کے لیے تیز چیک (3 نقطے) */
 function aqrabQuick(date, city){
-  const jd0 = julian(date.getFullYear(), date.getMonth()+1, date.getDate()) - city.tz/24;
+  const jd0 = julian(date.getFullYear(), date.getMonth()+1, date.getDate()) - tzOf(city, date)/24;
   return inAqrab(jd0) || inAqrab(jd0+0.5) || inAqrab(jd0+0.999);
 }
 
@@ -1749,7 +1913,7 @@ function saadNahs(hj){
 
 /* اس ماہ کے تمام ادوارِ قمر در عقرب — شروع و ختم کے اوقات کے ساتھ */
 function aqrabPeriods(y, m, city){
-  const jdStart = julian(y, m+1, 1) - city.tz/24;
+  const jdStart = julian(y, m+1, 1) - tzOf(city, new Date(y, m, 1))/24;
   const days = new Date(y, m+1, 0).getDate();
   const total = days*1440, STEP = 10;
   const at = min => inAqrab(jdStart + min/1440);
@@ -1840,6 +2004,17 @@ function renderGrid(){
   const first = new Date(viewY, viewM, 1);
   const daysIn = new Date(viewY, viewM+1, 0).getDate();
   const h1 = hijriOf(first), h2 = hijriOf(new Date(viewY, viewM, daysIn));
+  /* انجمن کے نقشے کی حد ختم ہو جائے تو ایپ خاموشی سے فلکیاتی حساب پر چلی جاتی تھی —
+     اب صارف کو صاف بتا دیا جاتا ہے، تاکہ ایک دن کے فرق پر حیران نہ ہو۔ */
+  const cn = $("calNote");
+  if(cn){
+    const last = new Date(viewY, viewM, daysIn);
+    const covered = anjHijri(addDays(last, userAdj)) !== null;
+    cn.hidden = covered;
+    if(!covered) cn.innerHTML = "<b>نوٹ:</b> اس مہینے کے بعض دن انجمنِ حسینی کے نقشے کی حد سے باہر ہیں، " +
+      "اِس لیے فلکیاتی حساب سے دکھائی جا رہی ہیں — مقامی رؤیتِ ہلال سے ایک دن کا فرق ممکن ہے۔ " +
+      "ہیڈر میں <b>− / +</b> سے ایک دن آگے پیچھے کر سکتے ہیں۔";
+  }
   $("gridTitle").textContent = GMON[viewM] + " " + ud(viewY);
   $("gridSub").textContent = HMON_SHORT[h1.m-1] + (h1.m!==h2.m ? " – " + HMON_SHORT[h2.m-1] : "") + " " + udh(h2.y) + "ھ";
 
@@ -1924,13 +2099,22 @@ function renderTimes(){
   /* اگلا وقت صرف آج کے دن نمایاں ہو */
   let nextName = null;
   if(sameDay(selDate, today)){
-    const nowCity = fixH((Date.now()/3600000) % 24 + city.tz);
+    const nowCity = fixH((Date.now()/3600000) % 24 + tzOf(city, new Date()));
     for(const [n,v] of rows){ if(v!==null && v>nowCity){ nextName=n; break; } }
     if(!nextName) nextName = "نماز فجر";
   }
   $("timesGrid").innerHTML = rows.map(([n,v]) =>
     `<div class="t ${n===nextName?"next":""} ${n==="نماز مغربین"?"mag":""} ${n==="انتہائے سحر"?"sahar":""}"><div class="n">${n}</div><div class="v">${fmtT(v)}</div></div>`
   ).join("");
+  /* اگر فجر اقرب الایام سے نکالی گئی ہو تو صارف کو صاف بتا دیں */
+  const en = $("estNote");
+  if(en){
+    en.hidden = !t.fajrEst;
+    if(t.fajrEst) en.innerHTML = "<b>نوٹ:</b> اِن دنوں " + city.n +
+      " میں سورج اتنا نیچے نہیں جاتا کہ فجر کا وقت فلکیاتی طور پر بن سکے۔ " +
+      "اِس لیے نمازِ فجر، انتہائے سحر اور نصفِ شب <b>اقربُ الایام</b> کے قاعدے سے دکھائے جا رہے ہیں — " +
+      "یعنی قریب ترین دن کے وقفے کے مطابق۔ اپنے عالمِ دین سے تصدیق کر لیں۔";
+  }
 }
 
 function renderAdj(){
@@ -1950,6 +2134,25 @@ function renderAdj(){
     });
   });
 }
+
+/* حسابی معیار بدلنا — دونوں بٹن، نوٹ، اور سارے اوقات ایک ساتھ تازہ ہو جاتے ہیں */
+const PROF_NOTE = {
+  falaki:  "نمازِ مغرب زوالِ حمرۂ مشرقیہ کے زاویے سے — ہر شہر کے عرض البلد کے مطابق خود کو ڈھال لیتا ہے، اور رمضان کے لیے احتیاط شامل ہے۔",
+  anjuman: "انجمنِ حسینی کراچی کے چھپے ہوئے نقشے والا قاعدہ — مغرب غروب کے ۱۳ منٹ بعد۔ پاکستان کے لیے، تاکہ اوقات آپ کے مقامی نقشے سے ملیں۔"
+};
+function renderProf(){
+  $("profSeg").querySelectorAll("button").forEach(b=>{
+    b.classList.toggle("on", b.dataset.prof === profKey);
+    b.setAttribute("aria-pressed", b.dataset.prof === profKey ? "true" : "false");
+  });
+  $("profNote").textContent = PROF_NOTE[profKey] || "";
+}
+$("profSeg").addEventListener("click", e=>{
+  const b = e.target.closest("button[data-prof]");
+  if(!b || b.dataset.prof === profKey) return;
+  profKey = b.dataset.prof;
+  renderProf(); renderTimes(); renderAzanTimes(); saveSettings();
+});
 
 function updateTodayBtn(){
   $("todayBtn").hidden = sameDay(selDate, today) && viewY===today.getFullYear() && viewM===today.getMonth();
@@ -2006,7 +2209,7 @@ function renderAqMonth(){
     </li>`;
   }).join("");
 }
-function renderAll(){ renderHeader(); renderGrid(); renderOccasions(); renderTimes(); renderInfo(); renderAqMonth(); renderAdj(); updateTodayBtn();
+function renderAll(){ renderHeader(); renderGrid(); renderOccasions(); renderTimes(); renderInfo(); renderAqMonth(); renderAdj(); renderProf(); updateTodayBtn();
   if(typeof renderAzanTimes==="function") renderAzanTimes(); }
 
 /* جدول میں کسی دن پر ٹیپ = وہ دن منتخب */
@@ -2138,11 +2341,14 @@ function registerCustomCity(obj){
    (فون کا زون کسی اور ملک پر سیٹ ہو تو اوقات پورے گھنٹے غلط ہو جاتے ہیں)۔
    اگر قریب ترین شہر بھی بہت دور نکلے تو مجبوراً فون کا اپنا زون استعمال ہوتا ہے۔ */
 function addCustomCity(lat, lng, nearIdx, nearKm){
-  const tz = (nearIdx >= 0 && nearKm <= 600) ? CITIES[nearIdx].tz
-                                             : -new Date().getTimezoneOffset() / 60;
+  const near = (nearIdx >= 0 && nearKm <= 600) ? CITIES[nearIdx] : null;
+  let zone = near ? zoneOf(near) : null;
+  if(!zone){ try{ zone = Intl.DateTimeFormat().resolvedOptions().timeZone || null; }catch(e){} }
   return registerCustomCity({
     n:"میرا مقام", lat:+lat.toFixed(4), lng:+lng.toFixed(4),
-    tz: tz, g:"میرا مقام", custom:true
+    z: zone,
+    tz: near ? near.tz : -new Date().getTimezoneOffset() / 60,   /* صرف پرانے براؤزر کے لیے */
+    g:"میرا مقام", custom:true
   });
 }
 function kmBetween(la1, lo1, la2, lo2){
@@ -2675,7 +2881,7 @@ renderMuezzinList();
 setInterval(()=>{
   const city = CITIES[cityIdx];
   const t = prayerTimes(new Date(), city);
-  const nowCity = fixH((Date.now()/3600000) % 24 + city.tz);
+  const nowCity = fixH((Date.now()/3600000) % 24 + tzOf(city, new Date()));
   for(const k of ["fajr","zuhr","maghrib"]){
     if(!azanEnabled[k] || t[k]===null) continue;
     const diffMin = (nowCity - t[k]) * 60;
@@ -2688,7 +2894,8 @@ setInterval(()=>{
 const SKEY = "noorSabaSettings";
 function saveSettings(){
   try{ localStorage.setItem(SKEY, JSON.stringify({
-    city: CITIES[cityIdx].n, hilal: userAdj, adj: ADJ, azan: azanEnabled,
+    city: CITIES[cityIdx].n, hilal: userAdj, adj: ADJ, profv: PROFILE_VER,
+    profile: profKey, azan: azanEnabled,
     /* لوکیشن سے شامل کیا گیا مقام — اگلی بار فہرست میں دوبارہ ڈالنے کے لیے */
     custom: customCity
   })); }catch(e){}
@@ -2712,7 +2919,12 @@ function applySettings(){
     registerCustomCity(s.custom);
   if(s.city && urlCity < 0){ const i = CITIES.findIndex(c=>c.n === s.city); if(i >= 0){ cityIdx = i; sel.value = String(i); } }
   if(typeof s.hilal === "number") userAdj = Math.max(-2, Math.min(2, s.hilal));
-  if(s.adj) for(const k in ADJ){ const v = s.adj[k]; if(typeof v === "number") ADJ[k] = Math.max(-15, Math.min(15, v)); }
+  /* پرانی محفوظ ایڈجسٹمنٹ صرف اُسی معیار کے ساتھ چلتی ہے جس کے لیے وہ رکھی گئی تھی۔
+     معیار بدل گیا تو اُسے نظرانداز کر کے نئے (صفر) سے شروع کرتے ہیں، ورنہ پرانے
+     +۲ منٹ نئے حساب کے اوپر دوبارہ لگ کر اوقات غلط کر دیتے۔ */
+  if(s.profile && PROFILES[s.profile]) profKey = s.profile;
+  if(s.adj && s.profv === PROFILE_VER)
+    for(const k in ADJ){ const v = s.adj[k]; if(typeof v === "number") ADJ[k] = Math.max(-15, Math.min(15, v)); }
   if(s.azan) for(const k in azanEnabled){
     if(!s.azan[k]) continue;
     azanEnabled[k] = true;
