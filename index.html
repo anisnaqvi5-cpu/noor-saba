@@ -107,12 +107,17 @@
     color:#F4F1E6;font-size:.82rem;font-weight:700;font-family:inherit;line-height:1.6;
     width:auto;max-width:82px;text-overflow:ellipsis;padding:0;margin:0;direction:rtl;height:26px}
   select.city option,select.city optgroup{color:var(--ink);background:#fff}
+  /* شہر کا بٹن — اب یہ ایک شیٹ کھولتا ہے (تلاش + لوکیشن)، پہلے سادہ select تھا */
+  button.citybox{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  button.citybox:active{transform:scale(.97)}
+  .city-lbl{color:#F4F1E6;font-size:.82rem;font-weight:700;line-height:1.6;max-width:86px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:rtl}
 
   .today{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;position:relative;z-index:1}
   .today .side{flex:1;min-width:0}
   .today .weekday{font-family:var(--nasta);font-size:1rem;font-weight:600;line-height:2.3;white-space:nowrap}
-  .today .hijri-line{font-size:clamp(.7rem,3.3vw,.84rem);color:var(--gold-soft);white-space:nowrap}
-  .today .greg-line{font-size:clamp(.68rem,3.2vw,.8rem);opacity:.9;white-space:nowrap}
+  .today .hijri-line{font-size:clamp(.86rem,4.1vw,1.02rem);font-weight:600;color:var(--gold-soft);white-space:nowrap}
+  .today .greg-line{font-size:clamp(.82rem,3.9vw,.97rem);font-weight:600;opacity:.92;white-space:nowrap}
   .today .side.left{text-align:left}
 
   .moon{width:80px;height:80px;flex:0 0 auto;border-radius:50%;
@@ -193,6 +198,61 @@
     padding:10px 16px;font-size:.8rem;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;
     box-shadow:0 6px 18px rgba(20,31,60,.28)}
   .ins-fab:active{transform:scale(.96)}
+
+  /* ─── ہمیشہ نظر آنے والی انسٹال پٹی (سب سے نیچے) ───
+     آئی فون پر ہوم اسکرین ویجٹ نہیں بنایا جا سکتا، اس لیے انسٹال کا راستہ کبھی چھپتا نہیں۔
+     ایپ کے اندر (standalone) چلنے پر یہ خود بخود غائب ہو جاتی ہے — تب انسٹال کی ضرورت نہیں رہتی۔ */
+  /* z-index شیٹ (50) سے کم رکھا ہے تاکہ کوئی شیٹ کھلی ہو تو یہ پٹی اُس کے نیچے چلی جائے */
+  .instbar{position:fixed;left:0;right:0;bottom:0;z-index:45;display:flex;align-items:center;gap:10px;
+    padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(180deg,#1B2A4A,#141F3C);border-top:1px solid rgba(232,212,138,.45);
+    box-shadow:0 -6px 22px rgba(10,16,32,.4)}
+  .instbar-ic{flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(180deg,rgba(232,212,138,.24),rgba(232,212,138,.10));
+    border:1px solid rgba(232,212,138,.45);color:var(--gold-soft)}
+  .instbar-tx{flex:1;min-width:0;color:#F4F1E6}
+  .instbar-tx b{display:block;font-family:var(--nasta);font-weight:600;font-size:.95rem;line-height:1.9;color:var(--gold-soft)}
+  .instbar-tx span{display:block;font-size:.72rem;opacity:.85;line-height:1.6}
+  .instbar-go{flex:0 0 auto;border:none;border-radius:999px;cursor:pointer;font-family:inherit;font-weight:800;
+    font-size:.82rem;padding:10px 18px;color:#141F3C;background:linear-gradient(180deg,#E8D48A,#C9A227);
+    box-shadow:0 4px 14px rgba(0,0,0,.32)}
+  .instbar-go:active{transform:scale(.96)}
+  body.has-instbar .wrap{padding-bottom:96px}
+  body.has-instbar .todaybtn{bottom:88px}
+  body.has-instbar .ins-fab{bottom:88px}
+  body.has-instbar .toast{bottom:86px}
+
+  /* ─── شہر منتخب کرنے کی شیٹ: تلاش + لوکیشن + اردو/انگریزی ─── */
+  .city-search{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--line);
+    border-radius:12px;background:#fff;margin-bottom:10px}
+  .city-search input{flex:1;min-width:0;border:none;outline:none;background:transparent;
+    font-family:inherit;font-size:.9rem;color:var(--ink)}
+  .city-search .ic{color:var(--ink-soft);display:flex;flex:0 0 auto}
+  .city-loc{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px;
+    border:1px solid var(--gold);background:var(--night2);color:#fff;border-radius:12px;padding:11px;
+    font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer}
+  .city-loc:active{transform:scale(.98)}
+  .city-loc[disabled]{opacity:.6}
+  .city-loc-msg{font-size:.78rem;line-height:1.8;color:var(--ink-soft);text-align:center;margin:0 0 10px}
+  .city-loc-msg.err{color:#B3261E}
+  .city-group{font-family:var(--nasta);font-size:.95rem;font-weight:700;color:var(--night2);
+    margin:14px 0 4px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+  .city-item{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;
+    padding:10px;border:none;background:transparent;border-radius:10px;font-family:inherit;
+    cursor:pointer;text-align:right}
+  .city-item:active{background:rgba(201,162,39,.14)}
+  .city-item.on{background:rgba(201,162,39,.20)}
+  .city-item .ur{font-size:.95rem;font-weight:700;color:var(--ink)}
+  .city-item .en{font-size:.76rem;color:var(--ink-soft);direction:ltr;white-space:nowrap}
+  .city-none{text-align:center;color:var(--ink-soft);font-size:.85rem;padding:20px 0}
+
+  /* ─── راہنمائی ─── */
+  .help-list{margin:0;padding:0;list-style:none}
+  .help-list li{position:relative;padding-right:16px;font-size:.86rem;line-height:2.1;color:var(--ink)}
+  .help-list li::before{content:"•";position:absolute;right:0;color:var(--gold);font-weight:900}
+  .help-list b{color:var(--night2)}
+  .help-note{margin-top:8px;padding:10px 12px;border-radius:12px;font-size:.82rem;line-height:1.95;
+    color:var(--ink);background:rgba(201,162,39,.10);border:1px solid rgba(201,162,39,.35)}
   .todaybtn:active{background:#F6EDD2;transform:translateX(-50%) scale(.96)}
   @keyframes todayPop{from{opacity:0;transform:translate(-50%,10px) scale(.92)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
   @media (prefers-reduced-motion:reduce){ .todaybtn{animation:none} }
@@ -528,11 +588,19 @@
     <button id="insXIos" class="ins-x" aria-label="بند کریں">✕</button>
   </div>
 
-  <button id="insFab" class="ins-fab" hidden>
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"
-         stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
-    Install
-  </button>
+  <!-- انسٹال کی مستقل پٹی — سب سے نیچے، بند کرنے کا بٹن نہیں۔
+       اوپر والی دونوں پٹیاں پہلے کی طرح اپنی جگہ موجود ہیں (وہ بند کی جا سکتی ہیں)۔ -->
+  <div class="instbar" id="instBar" hidden>
+    <span class="instbar-ic" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+    </span>
+    <span class="instbar-tx">
+      <b>نورِ صبا ایپ</b>
+      <span id="instBarSub">ہوم اسکرین پر شامل کریں — ایک ٹیپ پر کھلے گی</span>
+    </span>
+    <button class="instbar-go" id="instBarGo" type="button">انسٹال</button>
+  </div>
 
 
   <header class="sky">
@@ -554,17 +622,19 @@
           <span class="brand-txt">نورِ صبا</span>
         </span>
       </div>
-      <div class="citybox">
+      <button type="button" class="citybox" id="cityBox" aria-label="شہر منتخب کریں">
         <span class="pin" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"
                stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
         </span>
-        <select class="city" id="citySel" aria-label="شہر منتخب کریں"></select>
+        <span class="city-lbl" id="cityLbl">—</span>
         <span class="chev" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6"
                stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
         </span>
-      </div>
+      </button>
+      <!-- منتخب شہر اب بھی اِسی مخفی select میں رہتا ہے تاکہ باقی سارا کوڈ جوں کا توں چلتا رہے -->
+      <select class="city" id="citySel" hidden aria-hidden="true" tabindex="-1"></select>
     </div>
 
     <div class="today">
@@ -820,6 +890,106 @@
     </div>
   </div>
 
+  <!-- شہر منتخب کریں: تلاش + لوکیشن + اردو/انگریزی -->
+  <div class="ovl" id="cityOvl" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="cityTitle">
+      <div class="sheet-hd"><span id="cityTitle">شہر منتخب کریں</span><button id="cityClose" aria-label="بند کریں">✕</button></div>
+      <div class="sheet-bd">
+        <div class="city-search">
+          <span class="ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"
+                 stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.7-3.7"/></svg>
+          </span>
+          <input type="search" id="citySearch" placeholder="شہر کا نام لکھیں — اردو یا English" autocomplete="off">
+        </div>
+        <button type="button" class="city-loc" id="cityLoc">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+          میری لوکیشن سے شہر منتخب کریں
+        </button>
+        <p class="city-loc-msg" id="cityLocMsg">فون کی لوکیشن آن کریں — قریب ترین شہر خود منتخب ہو جائے گا</p>
+        <div id="cityList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- راہنمائی -->
+  <div class="ovl" id="helpOvl" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="sheet-hd"><span id="helpTitle">راہنمائی</span><button id="helpClose" aria-label="بند کریں">✕</button></div>
+      <div class="sheet-bd">
+
+        <div class="info-sec" id="helpInstall">
+          <div class="info-sec-hd">📲 ایپ کیسے انسٹال کریں</div>
+          <ul class="help-list">
+            <li><b>اینڈرائیڈ:</b> نیچے والی سنہری <b>«انسٹال»</b> پٹی دبائیں، پھر «Install / شامل کریں» پر ٹیپ کریں۔</li>
+            <li><b>آئی فون (Safari):</b> نیچے <b>شیئر</b> کا نشان <b>⬆️</b> دبائیں، فہرست میں نیچے جا کر <b>«Add to Home Screen»</b> چنیں، پھر «Add»۔</li>
+            <li>انسٹال کے بعد ایپ پورے اسکرین پر کھلے گی اور براؤزر کا ایڈریس بار نظر نہیں آئے گا۔</li>
+          </ul>
+          <div class="help-note">آئی فون پر ہوم اسکرین کا <b>ویجٹ</b> نہیں بنایا جا سکتا — یہ خود ایپل کی پابندی ہے۔ اسی لیے انسٹال کا بٹن ہمیشہ سب سے نیچے موجود رہتا ہے تاکہ ایپ ایک ہی ٹیپ پر کھل جائے۔</div>
+        </div>
+
+        <div class="info-sec">
+          <div class="info-sec-hd">🏙 شہر بدلنا</div>
+          <ul class="help-list">
+            <li>اوپر دائیں طرف شہر کے بٹن پر ٹیپ کریں۔</li>
+            <li>تلاش کے خانے میں نام لکھیں — <b>اردو یا انگریزی</b> دونوں چلتے ہیں (مثلاً «لاہور» یا «Lahore»)۔</li>
+            <li><b>«میری لوکیشن سے شہر منتخب کریں»</b> دبائیں تو فون کی لوکیشن سے قریب ترین شہر خود چن لیا جائے گا۔ اگر آپ کسی درج شدہ شہر سے دور ہوں تو «میرا مقام» کے نام سے آپ کا اپنا مقام فہرست میں شامل ہو جائے گا۔</li>
+            <li>منتخب شہر خود بخود محفوظ رہتا ہے — اگلی بار وہی کھلے گا۔</li>
+          </ul>
+        </div>
+
+        <div class="info-sec">
+          <div class="info-sec-hd">🕰 اوقاتِ شرعی</div>
+          <ul class="help-list">
+            <li>اوقات فقہِ جعفری کے مطابق، آپ کے شہر کے عرض و طول سے <b>مقامی طور پر</b> شمار ہوتے ہیں — انٹرنیٹ کی ضرورت نہیں۔</li>
+            <li>اپنے علاقے کے نقشے (مثلاً انجمنِ حسینی) سے مکمل مطابقت کے لیے «⚙ اوقات کی ایڈجسٹمنٹ» کھول کر ہر وقت میں منٹ کم یا زیادہ کر لیں۔</li>
+            <li>اگلا آنے والا وقت سنہری رنگ میں نمایاں ہوتا ہے۔</li>
+          </ul>
+        </div>
+
+        <div class="info-sec">
+          <div class="info-sec-hd">🌙 رؤیتِ ہلال ایڈجسٹمنٹ</div>
+          <ul class="help-list">
+            <li>اگر آپ کے شہر میں چاند ایک دن پہلے یا بعد نظر آیا ہو تو ہیڈر میں <b>−</b> / <b>+</b> سے پوری قمری تاریخ ایک دن آگے پیچھے کر سکتے ہیں۔</li>
+            <li>یہ تبدیلی جدول، مناسبتوں اور اعمال — سب پر لاگو ہوتی ہے اور محفوظ رہتی ہے۔</li>
+          </ul>
+        </div>
+
+        <div class="info-sec">
+          <div class="info-sec-hd">🔊 اذان</div>
+          <ul class="help-list">
+            <li>«اذان» والے حصے میں فجر، ظہرین اور مغربین کے سوئچ الگ الگ آن کریں۔</li>
+            <li>▶ کے بٹن سے اذان سن کر آواز جانچ لیں، مؤذن بھی بدل سکتے ہیں۔</li>
+            <li><b>اینڈرائیڈ ایپ</b> میں اذان فون بند ہونے پر بھی چلتی ہے۔ براؤزر میں ایپ کھلی ہونا ضروری ہے۔</li>
+          </ul>
+        </div>
+
+        <div class="info-sec">
+          <div class="info-sec-hd">📱 ہوم اسکرین ویجٹ (صرف اینڈرائیڈ)</div>
+          <ul class="help-list">
+            <li>ہوم اسکرین پر دبا کر رکھیں → «Widgets» → «نورِ صبا» کو ہوم اسکرین پر رکھ دیں۔</li>
+            <li>ویجٹ کا شہر اور اذان کے سوئچ <b>الگ</b> ہیں — ویجٹ کے ⚙ اور شہر کے نام پر ٹیپ کر کے مقرر کریں۔</li>
+          </ul>
+        </div>
+
+        <div class="info-sec">
+          <div class="info-sec-hd">📴 آف لائن اور اپ ڈیٹ</div>
+          <ul class="help-list">
+            <li>ایک بار کھلنے کے بعد ایپ انٹرنیٹ کے بغیر بھی چلتی ہے (صرف موسم کے لیے انٹرنیٹ چاہیے)۔</li>
+            <li>نیا نسخہ آنے پر اوپر «🔄 نیا نسخہ دستیاب ہے» کی پٹی آئے گی — اُسے دبا دیں۔</li>
+          </ul>
+        </div>
+
+        <div class="info-sec">
+          <div class="info-sec-hd">✉️ مدد چاہیے؟</div>
+          <p class="info-txt">کوئی مسئلہ ہو یا تجویز — «Contact Us» سے رابطہ کریں، ہم حاضر ہیں۔</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <!-- اذان -->
   <section class="card" aria-label="اذان">
     <h2><span>اذان</span></h2>
@@ -875,6 +1045,8 @@
   <footer>
     ابتدائی نمونہ · اوقات کا حساب مقامی طور پر ہوتا ہے، انٹرنیٹ درکار نہیں<br>
     <div class="footer-links">
+      <button id="openHelp" type="button">📘 راہنمائی</button>
+      <span aria-hidden="true">·</span>
       <button id="openAbout" type="button">ℹ️ About Us</button>
       <span aria-hidden="true">·</span>
       <button id="openContact" type="button">✉️ Contact Us</button>
@@ -1067,6 +1239,181 @@ const CITIES = [
   {n:"کھلنا",            lat:22.85, lng:89.54, tz:6,  g:"بیرونِ ملک"},
   {n:"راجشاہی",          lat:24.37, lng:88.60, tz:6,  g:"بیرونِ ملک"},
 ];
+
+/* شہروں کے انگریزی نام — تلاش اور دو زبانی فہرست کے لیے (کلید = اوپر والا اردو نام) */
+const CITY_EN = {
+  "کراچی":"Karachi",
+  "لاہور":"Lahore",
+  "اسلام آباد":"Islamabad",
+  "راولپنڈی":"Rawalpindi",
+  "فیصل آباد":"Faisalabad",
+  "ملتان":"Multan",
+  "پشاور":"Peshawar",
+  "کوئٹہ":"Quetta",
+  "جھنگ":"Jhang",
+  "سرگودھا":"Sargodha",
+  "گوجرانوالہ":"Gujranwala",
+  "سیالکوٹ":"Sialkot",
+  "بہاولپور":"Bahawalpur",
+  "ڈیرہ غازی خان":"Dera Ghazi Khan",
+  "جہلم":"Jhelum",
+  "گجرات":"Gujrat",
+  "ساہیوال":"Sahiwal",
+  "اوکاڑہ":"Okara",
+  "قصور":"Kasur",
+  "شیخوپورہ":"Sheikhupura",
+  "چنیوٹ":"Chiniot",
+  "وہاڑی":"Vehari",
+  "رحیم یار خان":"Rahim Yar Khan",
+  "مظفرگڑھ":"Muzaffargarh",
+  "لیہ":"Layyah",
+  "بھکر":"Bhakkar",
+  "میانوالی":"Mianwali",
+  "اٹک":"Attock",
+  "چکوال":"Chakwal",
+  "نارووال":"Narowal",
+  "حافظ آباد":"Hafizabad",
+  "ٹوبہ ٹیک سنگھ":"Toba Tek Singh",
+  "خانیوال":"Khanewal",
+  "پاکپتن":"Pakpattan",
+  "راجن پور":"Rajanpur",
+  "بہاولنگر":"Bahawalnagar",
+  "حیدرآباد":"Hyderabad",
+  "سکھر":"Sukkur",
+  "لاڑکانہ":"Larkana",
+  "خیرپور":"Khairpur",
+  "نوابشاہ":"Nawabshah",
+  "میرپور خاص":"Mirpur Khas",
+  "جیکب آباد":"Jacobabad",
+  "شکارپور":"Shikarpur",
+  "دادو":"Dadu",
+  "ٹھٹھہ":"Thatta",
+  "بدین":"Badin",
+  "ٹنڈو الہ یار":"Tando Allahyar",
+  "ٹنڈو آدم":"Tando Adam",
+  "عمرکوٹ":"Umerkot",
+  "گھوٹکی":"Ghotki",
+  "کشمور":"Kashmore",
+  "سانگھڑ":"Sanghar",
+  "نوشہرو فیروز":"Naushahro Feroze",
+  "مورو":"Moro",
+  "مٹیاری":"Matiari",
+  "جامشورو":"Jamshoro",
+  "کوٹری":"Kotri",
+  "رانی پور":"Ranipur",
+  "سیہون شریف":"Sehwan Sharif",
+  "ٹنڈو جام":"Tandojam",
+  "نوری آباد":"Nooriabad",
+  "روہڑی":"Rohri",
+  "حالہ":"Hala",
+  "پنوعاقل":"Pano Aqil",
+  "خضدار":"Khuzdar",
+  "سبی":"Sibi",
+  "ژوب":"Zhob",
+  "تربت":"Turbat",
+  "گوادر":"Gwadar",
+  "چمن":"Chaman",
+  "لورالائی":"Loralai",
+  "ڈیرہ بگٹی":"Dera Bugti",
+  "نوشکی":"Nushki",
+  "مستونگ":"Mastung",
+  "پشین":"Pishin",
+  "قلات":"Kalat",
+  "پنجگور":"Panjgur",
+  "حب":"Hub",
+  "خاران":"Kharan",
+  "بارکھان":"Barkhan",
+  "زیارت":"Ziarat",
+  "اوتھل":"Uthal",
+  "ڈیرہ مراد جمالی":"Dera Murad Jamali",
+  "کوہاٹ":"Kohat",
+  "پاراچنار":"Parachinar",
+  "ڈیرہ اسماعیل خان":"Dera Ismail Khan",
+  "ایبٹ آباد":"Abbottabad",
+  "مردان":"Mardan",
+  "سوات (مینگورہ)":"Swat (Mingora)",
+  "مانسہرہ":"Mansehra",
+  "صوابی":"Swabi",
+  "نوشہرہ":"Nowshera",
+  "چارسدہ":"Charsadda",
+  "بنوں":"Bannu",
+  "ٹانک":"Tank",
+  "لکی مروت":"Lakki Marwat",
+  "کرک":"Karak",
+  "ہنگو":"Hangu",
+  "باجوڑ (خار)":"Bajaur (Khar)",
+  "مالاکنڈ (بٹ خیلہ)":"Malakand (Batkhela)",
+  "بونیر (دگر)":"Buner (Daggar)",
+  "شانگلہ (الپوری)":"Shangla (Alpuri)",
+  "لوئر دیر (تیمرگرہ)":"Lower Dir (Timergara)",
+  "اپر دیر":"Upper Dir",
+  "ہری پور":"Haripur",
+  "چترال":"Chitral",
+  "مظفرآباد":"Muzaffarabad",
+  "میرپور":"Mirpur",
+  "کوٹلی":"Kotli",
+  "باغ":"Bagh",
+  "راولاکوٹ":"Rawalakot",
+  "بھمبر":"Bhimber",
+  "ہٹیاں بالا":"Hattian Bala",
+  "ایتھمقام (نیلم)":"Athmuqam (Neelum)",
+  "پلندری":"Palandri",
+  "گلگت":"Gilgit",
+  "اسکردو":"Skardu",
+  "ہنزہ (کریم آباد)":"Hunza (Karimabad)",
+  "کھپلو (غانچے)":"Khaplu (Ghanche)",
+  "شگر":"Shigar",
+  "استور":"Astore",
+  "چلاس (دیامیر)":"Chilas (Diamer)",
+  "گاہکوچ (غذر)":"Gahkuch (Ghizer)",
+  "نگر خاص":"Nagar Khas",
+  "خرمنگ":"Kharmang",
+  "دبئی":"Dubai",
+  "مسقط":"Muscat",
+  "نجفِ اشرف":"Najaf",
+  "کربلائے معلیٰ":"Karbala",
+  "مشہدِ مقدس":"Mashhad",
+  "قم":"Qom",
+  "مدینہ منورہ":"Madinah",
+  "مکہ مکرمہ":"Makkah",
+  "جدہ":"Jeddah",
+  "بغداد":"Baghdad",
+  "کاظمین":"Kadhimiya",
+  "سامرا":"Samarra",
+  "تہران":"Tehran",
+  "نیشاپور":"Nishapur",
+  "زاہدان":"Zahedan",
+  "کرمان":"Kerman",
+  "کاشان":"Kashan",
+  "چابہار":"Chabahar",
+  "لندن":"London",
+  "فرینکفرٹ":"Frankfurt",
+  "ٹورنٹو":"Toronto",
+  "نیویارک":"New York",
+  "سڈنی":"Sydney",
+  "میلبورن":"Melbourne",
+  "ہیوسٹن":"Houston",
+  "شکاگو":"Chicago",
+  "ڈیئربورن":"Dearborn",
+  "لکھنؤ":"Lucknow",
+  "دہلی":"Delhi",
+  "ممبئی":"Mumbai",
+  "حیدرآباد دکن":"Hyderabad Deccan",
+  "سرینگر":"Srinagar",
+  "کرگل":"Kargil",
+  "لیہ (لداخ)":"Leh (Ladakh)",
+  "نوبرا (دسکت)":"Nubra (Diskit)",
+  "زنسکار (پدم)":"Zanskar (Padum)",
+  "احمد آباد":"Ahmedabad",
+  "اونا":"Una",
+  "کوڈینار":"Kodinar",
+  "ڈھاکہ":"Dhaka",
+  "چٹاگانگ":"Chittagong",
+  "سلہٹ":"Sylhet",
+  "کھلنا":"Khulna",
+  "راجشاہی":"Rajshahi"
+};
+function enOf(c){ return (c && CITY_EN[c.n]) || ""; }
 
 /* مناسبتیں: قمری تاریخ سے — ماخذ: کیلنڈرِ انجمنِ حسینی کراچی 2026ء / 1447-1448ھ */
 const OCC_HIJRI = [
@@ -1565,6 +1912,8 @@ function renderOccasions(){
 function renderTimes(){
   const city = CITIES[cityIdx];
   $("cityName").textContent = "· " + city.n;
+  /* ہیڈر کا شہر بٹن — ہر بار اِسی جگہ سے تازہ ہوتا ہے (پہلی بار، لوکیشن، یا دستی انتخاب سب پر) */
+  const cl = $("cityLbl"); if(cl) cl.textContent = city.n;
   const t = prayerTimes(selDate, city);
   const rows = [
     ["نماز فجر",t.fajr],["طلوعِ آفتاب",t.sunrise],["نماز ظہرین",t.zuhr],
@@ -1694,6 +2043,151 @@ const sel = $("citySel");
   addGroup("بیرونِ ملک", CITIES.map((c,i)=>i).filter(i=>CITIES[i].g==="بیرونِ ملک"));
 })();
 sel.addEventListener("change", e=>{ cityIdx=+e.target.value; renderTimes(); renderInfo(); renderGrid(); renderAqMonth(); renderAzanTimes(); loadWeather(); saveSettings(); });
+
+/* ─────────────── شہر کی شیٹ: تلاش + اردو/انگریزی + لوکیشن ───────────────
+   ہیڈر کا شہر بٹن اب یہ شیٹ کھولتا ہے۔ اصل انتخاب پھر بھی اوپر والے مخفی select
+   میں رکھا جاتا ہے، اِس لیے باقی سارا کوڈ (محفوظ کاری، ?city= وغیرہ) ویسا ہی چلتا ہے۔ */
+const cityOvlEl = $("cityOvl"), cityListEl = $("cityList"), citySearchEl = $("citySearch");
+const CITY_GROUPS = ["میرا مقام","اہم شہر","پنجاب","سندھ","خیبر پختونخوا","بلوچستان",
+                     "آزاد کشمیر","گلگت بلتستان","بیرونِ ملک"];
+const LOC_HINT = "فون کی لوکیشن آن کریں — قریب ترین شہر خود منتخب ہو جائے گا";
+
+/* تلاش کے لیے سادہ کاری: اعراب ہٹا کر عربی/اردو کے ملتے جلتے حروف ایک جیسے کر دیتے ہیں،
+   تاکہ "کوئٹہ/کوئٹه" یا "علی پور/علیپور" جیسے فرق تلاش کو ناکام نہ کریں */
+function normUr(s){
+  return String(s == null ? "" : s).toLowerCase()
+    .replace(/[ً-ْٰ]/g, "")                 /* اعراب */
+    .replace(/[يىئ]/g, "ی")            /* ي ى ئ → ی */
+    .replace(/ك/g, "ک")                          /* ك → ک */
+    .replace(/[هةۀۂ]/g, "ہ")      /* ه ة ۀ ۂ → ہ */
+    .replace(/[أإآ]/g, "ا")            /* أ إ آ → ا */
+    .replace(/ؤ/g, "و")                          /* ؤ → و */
+    .replace(/[^؀-ۿa-z0-9]+/g, " ").trim();      /* باقی سب (خالی جگہ، قوسین) ایک جیسا */
+}
+function cityGroupOf(c){
+  return c.custom ? "میرا مقام" : (c.imp ? "اہم شہر" : (c.prov || "بیرونِ ملک"));
+}
+function renderCityList(){
+  const raw = citySearchEl.value.trim();
+  const qUr = normUr(raw), qEn = raw.toLowerCase();
+  const buckets = {};
+  CITIES.forEach((c, i)=>{
+    if(raw){
+      const hayUr = normUr(c.n) + " " + normUr(c.prov || "");
+      const hayEn = (enOf(c) + " " + (c.prov || "")).toLowerCase();
+      if(!(qUr && hayUr.indexOf(qUr) >= 0) && !(qEn && hayEn.indexOf(qEn) >= 0)) return;
+    }
+    const g = cityGroupOf(c);
+    (buckets[g] = buckets[g] || []).push(i);
+  });
+  let html = "";
+  for(const g of CITY_GROUPS){
+    const idxs = buckets[g];
+    if(!idxs || !idxs.length) continue;
+    /* اہم شہر، میرا مقام اور بیرونِ ملک کی ترتیب جان بوجھ کر اصل جیسی رکھی ہے */
+    if(g !== "اہم شہر" && g !== "میرا مقام" && g !== "بیرونِ ملک")
+      idxs.sort((a,b)=>CITIES[a].n.localeCompare(CITIES[b].n, "ur"));
+    html += '<div class="city-group">' + g + '</div>';
+    for(const i of idxs){
+      html += '<button type="button" class="city-item' + (i === cityIdx ? " on" : "") + '" data-i="' + i + '">' +
+                '<span class="ur">' + CITIES[i].n + '</span>' +
+                '<span class="en">' + enOf(CITIES[i]) + '</span>' +
+              '</button>';
+    }
+  }
+  cityListEl.innerHTML = html || '<div class="city-none">کوئی شہر نہیں ملا — املا بدل کر دیکھیں</div>';
+}
+function pickCity(i, close){
+  if(!(i >= 0 && i < CITIES.length)) return;
+  sel.value = String(i);
+  sel.dispatchEvent(new Event("change"));   /* باقی سب کچھ اِسی سے تازہ ہو جاتا ہے */
+  renderCityList();
+  if(close !== false) closeSheet("cityOvl");
+}
+function openCitySheet(){
+  citySearchEl.value = "";
+  const msg = $("cityLocMsg"); msg.className = "city-loc-msg"; msg.textContent = LOC_HINT;
+  renderCityList();
+  openSheet("cityOvl");
+}
+$("cityBox").addEventListener("click", openCitySheet);
+$("cityClose").addEventListener("click", ()=>closeSheet("cityOvl"));
+cityOvlEl.addEventListener("click", e=>{ if(e.target === cityOvlEl) closeSheet("cityOvl"); });
+citySearchEl.addEventListener("input", renderCityList);
+cityListEl.addEventListener("click", e=>{
+  const b = e.target.closest(".city-item");
+  if(b) pickCity(+b.dataset.i);
+});
+
+/* ── لوکیشن سے شہر ──
+   قریب ترین درج شدہ شہر 35 کلومیٹر کے اندر ہو تو وہی چن لیتے ہیں (اُس کا ٹائم زون درست ہے)۔
+   اُس سے دور ہوں تو صارف کا اپنا مقام "میرا مقام" کے نام سے فہرست میں شامل کر دیتے ہیں۔ */
+let customCity = null;
+function registerCustomCity(obj){
+  customCity = obj;
+  let i = CITIES.findIndex(c=>c.custom);
+  if(i >= 0){ CITIES[i] = obj; }
+  else {
+    CITIES.push(obj); i = CITIES.length - 1;
+    const o = document.createElement("option");
+    o.value = String(i); o.textContent = obj.n; sel.appendChild(o);
+  }
+  return i;
+}
+/* ٹائم زون: قریب ترین درج شدہ شہر کا لیتے ہیں — یہ فون کی گھڑی سے زیادہ بھروسے مند ہے
+   (فون کا زون کسی اور ملک پر سیٹ ہو تو اوقات پورے گھنٹے غلط ہو جاتے ہیں)۔
+   اگر قریب ترین شہر بھی بہت دور نکلے تو مجبوراً فون کا اپنا زون استعمال ہوتا ہے۔ */
+function addCustomCity(lat, lng, nearIdx, nearKm){
+  const tz = (nearIdx >= 0 && nearKm <= 600) ? CITIES[nearIdx].tz
+                                             : -new Date().getTimezoneOffset() / 60;
+  return registerCustomCity({
+    n:"میرا مقام", lat:+lat.toFixed(4), lng:+lng.toFixed(4),
+    tz: tz, g:"میرا مقام", custom:true
+  });
+}
+function kmBetween(la1, lo1, la2, lo2){
+  const R = 6371, r = Math.PI / 180;
+  const dLa = (la2 - la1) * r, dLo = (lo2 - lo1) * r;
+  const h = Math.sin(dLa/2) * Math.sin(dLa/2) +
+            Math.cos(la1*r) * Math.cos(la2*r) * Math.sin(dLo/2) * Math.sin(dLo/2);
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+$("cityLoc").addEventListener("click", ()=>{
+  const btn = $("cityLoc"), msg = $("cityLocMsg");
+  if(!navigator.geolocation){
+    msg.className = "city-loc-msg err";
+    msg.textContent = "اس براؤزر میں لوکیشن دستیاب نہیں";
+    return;
+  }
+  btn.disabled = true;
+  msg.className = "city-loc-msg";
+  msg.textContent = "لوکیشن لی جا رہی ہے…";
+  navigator.geolocation.getCurrentPosition(pos=>{
+    btn.disabled = false;
+    const la = pos.coords.latitude, ln = pos.coords.longitude;
+    let best = -1, bestKm = Infinity;
+    CITIES.forEach((c, i)=>{
+      if(c.custom) return;
+      const d = kmBetween(la, ln, c.lat, c.lng);
+      if(d < bestKm){ bestKm = d; best = i; }
+    });
+    if(best >= 0 && bestKm <= 35){
+      msg.textContent = "قریب ترین شہر: " + CITIES[best].n + " — تقریباً " + ud(Math.round(bestKm)) + " کلومیٹر";
+      pickCity(best, false);
+    } else {
+      const i = addCustomCity(la, ln, best, bestKm);
+      msg.textContent = "آپ کا اپنا مقام «میرا مقام» کے نام سے شامل کر دیا گیا";
+      pickCity(i, false);
+    }
+    setTimeout(()=>closeSheet("cityOvl"), 1300);
+  }, err=>{
+    btn.disabled = false;
+    msg.className = "city-loc-msg err";
+    msg.textContent = err.code === 1 ? "لوکیشن کی اجازت نہیں دی گئی — فون/براؤزر کی ترتیبات میں اجازت دیں"
+                    : err.code === 3 ? "لوکیشن لینے میں دیر ہو گئی — دوبارہ کوشش کریں"
+                    : "لوکیشن حاصل نہ ہو سکی";
+  }, {enableHighAccuracy:true, timeout:12000, maximumAge:600000});
+});
 
 $("adjMinus").addEventListener("click", ()=>{ if(userAdj>-2){ userAdj--; renderAll(); saveSettings(); } });
 $("adjPlus").addEventListener("click",  ()=>{ if(userAdj< 2){ userAdj++; renderAll(); saveSettings(); } });
@@ -2009,6 +2503,9 @@ $("ovl").addEventListener("click", e=>{ if(e.target === $("ovl")) $("ovl").hidde
 /* درباره ما / ارتباط با ما — اِن ایپ شیٹس */
 function openSheet(id){ $(id).hidden = false; }
 function closeSheet(id){ $(id).hidden = true; }
+$("openHelp").addEventListener("click", ()=>openSheet("helpOvl"));
+$("helpClose").addEventListener("click", ()=>closeSheet("helpOvl"));
+$("helpOvl").addEventListener("click", e=>{ if(e.target === $("helpOvl")) closeSheet("helpOvl"); });
 $("openAbout").addEventListener("click", ()=>openSheet("aboutOvl"));
 $("aboutClose").addEventListener("click", ()=>closeSheet("aboutOvl"));
 $("aboutOvl").addEventListener("click", e=>{ if(e.target === $("aboutOvl")) closeSheet("aboutOvl"); });
@@ -2191,7 +2688,9 @@ setInterval(()=>{
 const SKEY = "noorSabaSettings";
 function saveSettings(){
   try{ localStorage.setItem(SKEY, JSON.stringify({
-    city: CITIES[cityIdx].n, hilal: userAdj, adj: ADJ, azan: azanEnabled
+    city: CITIES[cityIdx].n, hilal: userAdj, adj: ADJ, azan: azanEnabled,
+    /* لوکیشن سے شامل کیا گیا مقام — اگلی بار فہرست میں دوبارہ ڈالنے کے لیے */
+    custom: customCity
   })); }catch(e){}
 }
 /* ?city=... — اینڈرائیڈ ویجٹ اپنا منتخب شہر اِسی طرح بھیجتا ہے (اُس کا اسٹوریج ایپ سے الگ ہے) */
@@ -2208,6 +2707,9 @@ function applySettings(){
   try{ const raw = localStorage.getItem(SKEY); if(raw) s = JSON.parse(raw); }catch(e){}
   if(urlCity >= 0){ cityIdx = urlCity; sel.value = String(urlCity); }
   if(!s) return;
+  /* لوکیشن سے بنایا گیا مقام پہلے واپس فہرست میں ڈالیں، پھر نیچے نام سے تلاش کریں */
+  if(s.custom && typeof s.custom.lat === "number" && typeof s.custom.lng === "number")
+    registerCustomCity(s.custom);
   if(s.city && urlCity < 0){ const i = CITIES.findIndex(c=>c.n === s.city); if(i >= 0){ cityIdx = i; sel.value = String(i); } }
   if(typeof s.hilal === "number") userAdj = Math.max(-2, Math.min(2, s.hilal));
   if(s.adj) for(const k in ADJ){ const v = s.adj[k]; if(typeof v === "number") ADJ[k] = Math.max(-15, Math.min(15, v)); }
@@ -2241,52 +2743,77 @@ function showUpdateBanner(){
   b.addEventListener("click", ()=> location.reload());
   document.body.appendChild(b);
 }
+/* انسٹال کے تین راستے، تینوں پہلے کی طرح موجود:
+   ۱) اوپر والی سنہری پٹی (کروم) — ✕ سے بند ہو جاتی ہے اور یاد رکھا جاتا ہے
+   ۲) آئی فون کی ہدایات والی پٹی — ✕ سے بند ہو جاتی ہے
+   ۳) نیچے والی مستقل پٹی — کبھی نہیں چھپتی، کیونکہ آئی فون پر ویجٹ نہیں بنایا جا سکتا
+      اس لیے ایپ کو ہوم اسکرین پر لانے کا راستہ ہر وقت سامنے رہنا چاہیے۔
+   تینوں ایپ کے اندر (standalone) چلنے پر خود بخود غائب ہو جاتی ہیں۔ */
 let deferredPrompt = null;
-window.addEventListener("beforeinstallprompt", e=>{
-  e.preventDefault(); deferredPrompt = e;
-  let dismissed = false;
-  try{ dismissed = localStorage.getItem("noorSabaInsX") === "1"; }catch(err){}
-  if(!dismissed) $("insBar").hidden = false;
-  /* پاپ اپ بند بھی ہو جائے تب بھی یہ بٹن ہمیشہ نظر آتا رہے — کبھی خودکار غائب نہیں ہوتا */
-  $("insFab").hidden = false;
-});
+const isIosDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+function isStandalone(){
+  return window.navigator.standalone === true ||
+         window.matchMedia("(display-mode: standalone)").matches;
+}
+function showInstBar(){
+  if(isStandalone()) return;   /* پہلے ہی انسٹال ہے — پٹی دکھانے کا کوئی فائدہ نہیں */
+  $("instBar").hidden = false;
+  document.body.classList.add("has-instbar");
+}
+function hideInstBar(){
+  $("instBar").hidden = true;
+  document.body.classList.remove("has-instbar");
+}
 async function doInstallPrompt(){
   if(!deferredPrompt) return;
   deferredPrompt.prompt();
   await deferredPrompt.userChoice;
   deferredPrompt = null;
   $("insBar").hidden = true;
-  $("insFab").hidden = true;
 }
-$("insBtn").addEventListener("click", doInstallPrompt);
-$("insFab").addEventListener("click", ()=>{
-  if(deferredPrompt) doInstallPrompt();
-  else $("insBarIos").hidden = false; /* iOS: کوئی خودکار طریقہ نہیں، ہدایات دکھا دیں */
+window.addEventListener("beforeinstallprompt", e=>{
+  e.preventDefault(); deferredPrompt = e;
+  let dismissed = false;
+  try{ dismissed = localStorage.getItem("noorSabaInsX") === "1"; }catch(err){}
+  if(!dismissed && !isStandalone()) $("insBar").hidden = false;
+  showInstBar();
 });
+window.addEventListener("appinstalled", ()=>{
+  deferredPrompt = null;
+  $("insBar").hidden = true;
+  $("insBarIos").hidden = true;
+  hideInstBar();
+});
+$("insBtn").addEventListener("click", doInstallPrompt);
 $("insX").addEventListener("click", ()=>{
   $("insBar").hidden = true;
   try{ localStorage.setItem("noorSabaInsX","1"); }catch(err){}
 });
-window.addEventListener("appinstalled", ()=>{ $("insBar").hidden = true; $("insFab").hidden = true; });
+$("instBarGo").addEventListener("click", async ()=>{
+  if(deferredPrompt){ await doInstallPrompt(); return; }
+  /* آئی فون اور جہاں خودکار انسٹال دستیاب نہیں — راہنمائی کا انسٹال والا حصہ کھول دیں */
+  openSheet("helpOvl");
+  const t = $("helpInstall"); if(t) t.scrollIntoView({block:"start"});
+});
+if(isIosDevice){
+  $("instBarSub").textContent = "شیئر ⬆️ → «Add to Home Screen» — طریقہ دیکھیں";
+  $("instBarGo").textContent = "طریقہ";
+}
 
 /* iOS سفاری میں beforeinstallprompt کبھی فائر نہیں ہوتا — اس لیے دستی ہدایات دکھائیں */
 (function(){
-  const ua = navigator.userAgent;
-  const isIos = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-  const isSafari = /^((?!chrome|android|crios|fxios|edgios).)*safari/i.test(ua);
-  const isStandalone = window.navigator.standalone === true ||
-    window.matchMedia("(display-mode: standalone)").matches;
-  if(!isIos || !isSafari || isStandalone) return;
+  const isSafari = /^((?!chrome|android|crios|fxios|edgios).)*safari/i.test(navigator.userAgent);
+  if(!isIosDevice || !isSafari || isStandalone()) return;
   let dismissed = false;
   try{ dismissed = localStorage.getItem("noorSabaInsIosX") === "1"; }catch(err){}
   if(!dismissed) $("insBarIos").hidden = false;
-  /* پاپ اپ بند ہونے کے بعد بھی بٹن ہمیشہ نظر آتا رہے، تاکہ صارف جب چاہے دوبارہ ہدایات دیکھ سکے */
-  $("insFab").hidden = false;
   $("insXIos").addEventListener("click", ()=>{
     $("insBarIos").hidden = true;
     try{ localStorage.setItem("noorSabaInsIosX","1"); }catch(err){}
   });
 })();
+
+showInstBar();
 
 applySettings();
 
