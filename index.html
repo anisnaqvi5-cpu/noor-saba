@@ -19,6 +19,10 @@
     --night1:#141F3C; --night2:#24406B;      /* آسمانِ شب */
     --gold:#C9A227; --gold-soft:#E8D48A;     /* زری / عَلَم */
     --red:#B93A32;                            /* مناسبتِ عزا و تعطیل */
+    /* دنوں کے ناموں والی پٹی کا فیروزی — ویجٹ کے #2EC4B6 کا ہلکا درجہ، تاکہ اُس پر
+       سرمئی نام (کنٹراسٹ ۱۳.۴) اور اتوار کا سرخ (۴.۶) دونوں صاف پڑھے جائیں */
+    --turq-soft:#D6EDE9;
+    --turq-line:#BCDDD6;
     --paper:#F2F4F7; --card:#FFFFFF;
     --ink:#1E2430; --ink-soft:#5A6478; --line:#E3E7EE;
     --nasta:'Noto Nastaliq Urdu', serif;
@@ -114,11 +118,12 @@
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:rtl}
 
   .today{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;position:relative;z-index:1}
-  .today .side{flex:1;min-width:0}
-  .today .weekday{font-family:var(--nasta);font-size:1rem;font-weight:600;line-height:2.3;white-space:nowrap}
-  .today .hijri-line{font-size:clamp(.86rem,4.1vw,1.02rem);font-weight:600;color:var(--gold-soft);white-space:nowrap}
-  .today .greg-line{font-size:clamp(.82rem,3.9vw,.97rem);font-weight:600;opacity:.92;white-space:nowrap}
-  .today .side.left{text-align:left}
+  /* چاند کے دونوں طرف کے بلاک بالکل ہم وزن: برابر چوڑائی، وسط میں سیدھ، اور دونوں
+     سطریں ایک ہی فونٹ اور ایک ہی رنگ میں — پہلے نیچے والی سطر الگ فونٹ اور سنہری تھی */
+  .today .side{flex:1 1 0;min-width:0;text-align:center}
+  .today .weekday,
+  .today .hijri-line{font-family:var(--nasta);font-size:clamp(.9rem,4.1vw,1.02rem);
+    font-weight:600;line-height:2.1;white-space:nowrap;color:inherit}
 
   .moon{width:80px;height:80px;flex:0 0 auto;border-radius:50%;
     background:radial-gradient(circle at 34% 30%, #3D5A8C, #1B2A4A 68%);
@@ -286,18 +291,30 @@
   .mnav-arrow:active{transform:scale(.90);background:#E7EDF8;box-shadow:0 1px 3px rgba(20,31,60,.12)}
   .mnav-arrow svg{pointer-events:none}
   table.grid{width:100%;border-collapse:collapse;table-layout:fixed}
-  .grid th{font-size:.72rem;font-weight:500;color:var(--ink-soft);padding:6px 0}
+  /* دنوں کے نام: سادہ لکیر کے بجائے ایک ہلکی پٹی، تاکہ جدول کا سر الگ نظر آئے
+     اور اتوار اپنی سرخ رنگت کے ساتھ نمایاں رہے */
+  .grid th{font-family:var(--nasta);font-size:.8rem;font-weight:600;color:var(--night2);
+    padding:8px 0 7px;background:var(--turq-soft);line-height:1.9;
+    border-block-end:1px solid var(--turq-line)}
+  .grid thead th:first-child{border-start-start-radius:11px;border-end-start-radius:11px}
+  .grid thead th:last-child{border-start-end-radius:11px;border-end-end-radius:11px}
+  /* اتوار: پٹی وہی فیروزی رہتی ہے، صرف نام سرخ — فیروزی پر سرخ دور سے نظر آ جاتا ہے */
   .grid th.sun{color:var(--red)}
   .grid td{text-align:center;padding:3px 0}
-  .cell{width:44px;height:58px;margin:0 auto;border-radius:13px;display:flex;flex-direction:column;
+  .cell{width:44px;height:64px;margin:0 auto;border-radius:13px;display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:2px;cursor:pointer;position:relative}
   /* عیسوی عدد */
   .cell .g{font-size:1.02rem;font-weight:700;line-height:1.15;color:var(--ink)}
+  /* اتوار فیروزی، اور مناسبتِ عزا/تعطیل سرخ — پہلے دونوں سرخ تھے اِس لیے ایک دوسرے
+     میں گڈمڈ ہو جاتے تھے۔ اگر اتوار خود تعطیل ہو تو سرخ جیتتا ہے (یہ اصول نیچے کی
+     ترتیب سے خود بخود لاگو ہوتا ہے)۔ */
   .cell.sun .g{color:var(--red)}
   .cell.hol .g{color:var(--red)}
-  /* قمری عدد — اپنی گولی میں */
-  .cell .h{font-size:.63rem;font-weight:700;color:#5A6478;background:#EDF0F5;border-radius:7px;
-    padding:0 5px;min-width:19px;text-align:center;line-height:1.6;box-shadow:inset 0 0 0 1px #E1E6EE}
+  /* قمری عدد — اپنی گولی میں۔ یہی اس ایپ کی اصل تاریخ ہے، اِس لیے اِسے پڑھنے کے قابل
+     ہونا چاہیے: نسخ فونٹ (اردو ہندسے اِسی میں صاف بنتے ہیں) اور بڑا سائز۔ */
+  .cell .h{font-family:var(--naskh);font-size:.82rem;font-weight:700;color:#48536B;
+    background:#EDF0F5;border-radius:9px;padding:1px 6px;min-width:25px;text-align:center;
+    line-height:1.5;box-shadow:inset 0 0 0 1px #E1E6EE}
   .cell.mstart .h{background:#FBF2D6;color:#7A5A00;box-shadow:inset 0 0 0 1px var(--gold)}
   /* نشانات کی قطار — ہر خانے میں جگہ محفوظ تاکہ اونچائی نہ بدلے */
   .cell .mk{height:6px;display:flex;align-items:center;gap:3px}
@@ -354,7 +371,10 @@
   .t.next{background:var(--night2);border-color:var(--night2)}
   .t.next .n{color:var(--gold-soft)}
   .t.next .v{color:#fff}
-  .t.mag{border-color:var(--gold-soft);background:#FDFAF0}
+  /* مغرب: صرف سنہری قاب، اندر کا رنگ باقی خانوں جیسا۔ کوئی گلابی جھلک نہیں —
+     اس ایپ میں گلابی/سرخ خبردار کرنے کا رنگ ہے (عزا، تعطیل، انتباہ)، اِس لیے
+     مغرب پر اُس کی ہلکی سی جھلک بھی غلط اشارہ دیتی ہے۔ */
+  .t.mag{border-color:var(--gold-soft)}
   .t.sahar{border-color:#1E7A46;background:#F1FAF4}
   .t.sahar .v{color:#1E7A46}
 
@@ -584,7 +604,7 @@
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
            stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
     </span>
-    <span class="ins-tx">نورِ صبا کو ہوم اسکرین پر شامل کریں</span>
+    <span class="ins-tx">نورِ صبا کو ہوم اسکرین پر شامل کریں  ·  Add to Home Screen</span>
     <button id="insBtn" class="ins-go">Install</button>
     <button id="insX" class="ins-x" aria-label="بند کریں">✕</button>
   </div>
@@ -607,9 +627,9 @@
     </span>
     <span class="instbar-tx">
       <b>نورِ صبا ایپ</b>
-      <span id="instBarSub">ہوم اسکرین پر شامل کریں — ایک ٹیپ پر کھلے گی</span>
+      <span id="instBarSub">ہوم اسکرین پر شامل کریں  ·  Add to Home Screen</span>
     </span>
-    <button class="instbar-go" id="instBarGo" type="button">انسٹال</button>
+    <button class="instbar-go" id="instBarGo" type="button">Install</button>
   </div>
 
 
@@ -656,7 +676,9 @@
         <div class="num" id="moonDay">—</div>
       </div>
       <div class="side left">
-        <div class="greg-line" id="tGreg">—</div>
+        <!-- دائیں طرف کی طرح دو سطریں: اوپر سال (جیسے دوسری طرف دن کا نام)، نیچے تاریخ -->
+        <div class="weekday" id="tGregY">—</div>
+        <div class="hijri-line" id="tGreg">—</div>
       </div>
     </div>
 
@@ -737,13 +759,6 @@
     <div class="wx-src" id="wxSrc"></div>
   </section>
 
-  <!-- سہولیات: اپنا الگ فریم -->
-  <button id="openTools" class="tools-card">
-    <span class="tools-ic" aria-hidden="true">⋮</span>
-    <span class="tools-tx">سہولیاتِ روز</span>
-    <span class="tools-arrow" aria-hidden="true">‹</span>
-  </button>
-
   <!-- دن کی معلومات -->
   <section class="card" id="infoCard" aria-label="دن کی معلومات">
     <h2>دن کی معلومات</h2>
@@ -780,6 +795,13 @@
     <h2><span class="aq-warn" aria-hidden="true">🦂</span> <span>قمر در عقرب</span> <span id="aqMonth" style="font-size:.8rem;color:var(--ink-soft)"></span></h2>
     <ul class="aq-list" id="aqList"></ul>
   </section>
+
+  <!-- سہولیات: اپنا الگ فریم -->
+  <button id="openTools" class="tools-card">
+    <span class="tools-ic" aria-hidden="true">⋮</span>
+    <span class="tools-tx">سہولیاتِ روز</span>
+    <span class="tools-arrow" aria-hidden="true">‹</span>
+  </button>
 
   <!-- تبادلہ تاریخ -->
   <section class="card" aria-label="تاریخ کا تبادلہ">
@@ -1038,8 +1060,8 @@
     </div>
 
     <div class="az-actions">
-      <button id="azanTest" class="az-play" aria-label="اذان سنیں">▶</button>
-      <button id="azanStop" class="az-play stop" hidden aria-label="روکیں">⏹</button>
+      <button id="azanTest" class="az-play" aria-label="اذان سنیں · Play azan" title="اذان سنیں · Play azan">▶</button>
+      <button id="azanStop" class="az-play stop" hidden aria-label="روکیں · Stop" title="روکیں · Stop">⏹</button>
     </div>
 
     <div class="muezzin-sec">
@@ -1988,7 +2010,8 @@ function renderHeader(){
   const h = hijriOf(selDate);
   $("tWeekday").textContent = WD[selDate.getDay()];
   $("tHijri").textContent = ud(selDate.getDate()) + " " + GMON[selDate.getMonth()] + " " + ud(selDate.getFullYear()) + "ء";
-  $("tGreg").textContent = udh(h.d) + " " + HMON[h.m-1] + " " + udh(h.y) + "ھ";
+  $("tGreg").textContent  = udh(h.d) + " " + HMON[h.m-1];
+  $("tGregY").textContent = udh(h.y) + "ھ";
   $("moonDay").textContent = ud(selDate.getDate());
   $("adjVal").textContent = (userAdj>0?"+":"") + ud(userAdj) + " دن";
   const oc = occOf(selDate), chip = $("hdrChip");
@@ -2079,7 +2102,7 @@ function renderOccasions(){
     const prefix = st==="today" ? '<span class="occ-today-badge">آج</span>' : st==="past" ? '<span class="occ-chk" aria-hidden="true">✓</span>' : "";
     return `<li class="${st} ${o.hol?"holiday":""}">
       <span class="what">${prefix}${colorWords(o.t)}</span>
-      <span class="when">${WD[dt.getDay()]}، ${ud(dt.getDate())} ${GMON[dt.getMonth()]} · ${udh(h.d)} ${HMON_SHORT[h.m-1]}</span>
+      <span class="when">${WD[dt.getDay()]}، ${ud(dt.getDate())} ${GMON[dt.getMonth()]} – ${udh(h.d)} ${HMON_SHORT[h.m-1]}</span>
     </li>`;
   }).join("") || "<li><span class='what' style='color:var(--ink-soft)'>اس مہینے کوئی مناسبت درج نہیں</span></li>";
 }
@@ -2325,6 +2348,17 @@ cityListEl.addEventListener("click", e=>{
 /* ── لوکیشن سے شہر ──
    قریب ترین درج شدہ شہر 35 کلومیٹر کے اندر ہو تو وہی چن لیتے ہیں (اُس کا ٹائم زون درست ہے)۔
    اُس سے دور ہوں تو صارف کا اپنا مقام "میرا مقام" کے نام سے فہرست میں شامل کر دیتے ہیں۔ */
+/* قریب ترین درج شدہ شہر تلاش کریں — سائٹ اور ویجٹ دونوں یہی استعمال کرتے ہیں،
+   اِس لیے ایک ہی جگہ رکھا ہے (ویجٹ کے پاس شہروں کے عرض و طول موجود ہی نہیں)۔ */
+function nearestCityTo(lat, lng){
+  let idx = -1, km = Infinity;
+  CITIES.forEach((c, i)=>{
+    if(c.custom) return;
+    const d = kmBetween(lat, lng, c.lat, c.lng);
+    if(d < km){ km = d; idx = i; }
+  });
+  return { idx, km };
+}
 let customCity = null;
 function registerCustomCity(obj){
   customCity = obj;
@@ -2371,12 +2405,7 @@ $("cityLoc").addEventListener("click", ()=>{
   navigator.geolocation.getCurrentPosition(pos=>{
     btn.disabled = false;
     const la = pos.coords.latitude, ln = pos.coords.longitude;
-    let best = -1, bestKm = Infinity;
-    CITIES.forEach((c, i)=>{
-      if(c.custom) return;
-      const d = kmBetween(la, ln, c.lat, c.lng);
-      if(d < bestKm){ bestKm = d; best = i; }
-    });
+    const { idx:best, km:bestKm } = nearestCityTo(la, ln);
     if(best >= 0 && bestKm <= 35){
       msg.textContent = "قریب ترین شہر: " + CITIES[best].n + " — تقریباً " + ud(Math.round(bestKm)) + " کلومیٹر";
       pickCity(best, false);
@@ -2823,13 +2852,75 @@ const MUEZZINS = [
   { id:"toukhi",     name:"محمد طوخی" },
   { id:"moazzinzade",name:"مؤذن زادہ" },
 ];
-function loadMuezzinAudio(){
-  try{ return JSON.parse(localStorage.getItem("noorSabaMuezzinAudio") || "{}"); }catch(e){ return {}; }
+/* ─── اپلوڈ کی ہوئی آوازیں: IndexedDB میں ────────────────────────────────
+   پہلے یہ فائلیں localStorage میں data-URL بنا کر رکھی جاتی تھیں۔ localStorage کی حد
+   تقریباً ۵ میگابائٹ ہے اور data-URL اصل فائل سے تقریباً ایک تہائی بڑا ہوتا ہے — اذان کی
+   ایک ہی MP3 اُس حد کو چھو لیتی تھی۔ محفوظ کرنا خاموشی سے ناکام ہوتا، صارف کو کچھ پتہ نہ
+   چلتا، اور ایپ دوبارہ کھولنے پر اُس کی منتخب آواز غائب ہوتی۔
+   اب فائل جوں کی توں (Blob) IndexedDB میں جاتی ہے — نہ بیس۶۴ کا پھیلاؤ، نہ وہ تنگی۔ */
+const ADB_NAME = "noorSabaAudio", ADB_STORE = "muezzin";
+function adbOpen(){
+  return new Promise((resolve, reject)=>{
+    if(!("indexedDB" in window)) return reject(new Error("no-indexeddb"));
+    const rq = indexedDB.open(ADB_NAME, 1);
+    rq.onupgradeneeded = ()=>{
+      const db = rq.result;
+      if(!db.objectStoreNames.contains(ADB_STORE)) db.createObjectStore(ADB_STORE);
+    };
+    rq.onsuccess = ()=> resolve(rq.result);
+    rq.onerror   = ()=> reject(rq.error);
+  });
 }
-function saveMuezzinAudio(map){
-  try{ localStorage.setItem("noorSabaMuezzinAudio", JSON.stringify(map)); }catch(e){ /* quota سے تجاوز — صرف اسی سیشن تک محدود رہے گا */ }
+function adbPut(id, blob){
+  return adbOpen().then(db => new Promise((resolve, reject)=>{
+    const tx = db.transaction(ADB_STORE, "readwrite");
+    tx.objectStore(ADB_STORE).put(blob, id);
+    tx.oncomplete = ()=>{ db.close(); resolve(true); };
+    tx.onerror    = ()=>{ db.close(); reject(tx.error); };
+  }));
 }
-let muezzinAudioMap = loadMuezzinAudio();
+function adbLoadAll(){
+  return adbOpen().then(db => new Promise((resolve, reject)=>{
+    const tx = db.transaction(ADB_STORE, "readonly");
+    const out = {};
+    const rq = tx.objectStore(ADB_STORE).openCursor();
+    rq.onsuccess = ()=>{ const c = rq.result; if(c){ out[c.key] = c.value; c.continue(); } };
+    tx.oncomplete = ()=>{ db.close(); resolve(out); };
+    tx.onerror    = ()=>{ db.close(); reject(tx.error); };
+  }));
+}
+
+let muezzinAudioMap = {};   /* id → چلانے کے قابل URL */
+function setMuezzinUrl(id, blob){
+  const old = muezzinAudioMap[id];
+  muezzinAudioMap[id] = URL.createObjectURL(blob);
+  if(old && old.indexOf("blob:") === 0){ try{ URL.revokeObjectURL(old); }catch(e){} }
+}
+/* پرانے نسخے کی data-URL آوازیں IndexedDB میں منتقل کر کے localStorage خالی کر دیں */
+function migrateOldAudio(){
+  let old = null;
+  try{ old = JSON.parse(localStorage.getItem("noorSabaMuezzinAudio") || "null"); }catch(e){}
+  if(!old || typeof old !== "object") return Promise.resolve();
+  const jobs = Object.keys(old).map(id=>{
+    const du = old[id];
+    if(typeof du !== "string" || du.slice(0,5) !== "data:") return Promise.resolve();
+    return fetch(du).then(r=>r.blob()).then(b=>adbPut(id, b)).catch(()=>{});
+  });
+  return Promise.all(jobs).then(()=>{ try{ localStorage.removeItem("noorSabaMuezzinAudio"); }catch(e){} });
+}
+/* شروع میں محفوظ آوازیں واپس لوڈ کریں — یہ کام غیر ہم وقت ہے، اِس لیے تب تک
+   شامل شدہ اذان چلتی رہتی ہے اور لوڈ ہوتے ہی فہرست خود کو تازہ کر لیتی ہے۔ */
+function initMuezzinAudio(){
+  migrateOldAudio()
+    .catch(()=>{})
+    .then(adbLoadAll)
+    .then(map=>{
+      let found = false;
+      for(const id in map){ if(map[id]){ setMuezzinUrl(id, map[id]); found = true; } }
+      if(found){ azanUrl = currentAzanUrl(); renderMuezzinList(); }
+    })
+    .catch(()=>{ /* IndexedDB بند ہے (مثلاً پرائیویٹ موڈ) — آوازیں صرف اِسی سیشن تک */ });
+}
 let selectedMuezzin = (function(){
   try{ return localStorage.getItem("noorSabaMuezzinSel") || "kazemzadeh"; }catch(e){ return "kazemzadeh"; }
 })();
@@ -2862,21 +2953,20 @@ function renderMuezzinList(){
   }));
   box.querySelectorAll("[data-upload]").forEach(inp=>inp.addEventListener("change", e=>{
     const id = inp.dataset.upload, f = e.target.files[0]; if(!f) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      muezzinAudioMap[id] = reader.result;
-      saveMuezzinAudio(muezzinAudioMap);
-      selectedMuezzin = id;
-      try{ localStorage.setItem("noorSabaMuezzinSel", id); }catch(e){}
-      azanUrl = currentAzanUrl();
-      renderMuezzinList();
-      toast("آواز محفوظ ہو گئی");
-    };
-    reader.readAsDataURL(f);
+    /* پہلے فوراً چلانے کے قابل بنائیں، محفوظ کاری اُس کے بعد پس منظر میں */
+    setMuezzinUrl(id, f);
+    selectedMuezzin = id;
+    try{ localStorage.setItem("noorSabaMuezzinSel", id); }catch(e){}
+    azanUrl = currentAzanUrl();
+    renderMuezzinList();
+    adbPut(id, f)
+      .then(()=> toast("آواز محفوظ ہو گئی — اگلی بار بھی یہی چلے گی"))
+      .catch(()=> toast("آواز اِس بار چلے گی، مگر محفوظ نہ ہو سکی"));
   }));
 }
 azanUrl = currentAzanUrl();
 renderMuezzinList();
+initMuezzinAudio();
 /* ہر 20 سیکنڈ چیک: کیا کوئی منتخب وقتِ نماز داخل ہوا؟ */
 setInterval(()=>{
   const city = CITIES[cityIdx];
@@ -2901,11 +2991,25 @@ function saveSettings(){
   })); }catch(e){}
 }
 /* ?city=... — اینڈرائیڈ ویجٹ اپنا منتخب شہر اِسی طرح بھیجتا ہے (اُس کا اسٹوریج ایپ سے الگ ہے) */
+/* ویجٹ اپنا شہر اِسی راستے سے بھیجتا ہے (اُس کا اسٹوریج ایپ سے الگ ہے):
+     ?city=کراچی            — نام سے
+     ?lat=..&lng=..         — سیدھا مقام سے (ویجٹ کے پاس شہروں کے عرض و طول نہیں،
+                              اِس لیے قریب ترین شہر یہیں نکالا جاتا ہے) */
 function cityFromUrl(){
   try{
-    const q = new URLSearchParams(location.search).get("city");
-    if(!q) return -1;
-    return CITIES.findIndex(c => c.n === q);
+    const p = new URLSearchParams(location.search);
+    const q = p.get("city");
+    if(q){
+      const i = CITIES.findIndex(c => c.n === q);
+      if(i >= 0) return i;
+    }
+    const la = parseFloat(p.get("lat")), ln = parseFloat(p.get("lng"));
+    if(isFinite(la) && isFinite(ln)){
+      const { idx, km } = nearestCityTo(la, ln);
+      if(idx >= 0 && km <= 35) return idx;
+      return addCustomCity(la, ln, idx, km);
+    }
+    return -1;
   }catch(e){ return -1; }
 }
 function applySettings(){
@@ -3008,8 +3112,8 @@ $("instBarGo").addEventListener("click", async ()=>{
   const t = $("helpInstall"); if(t) t.scrollIntoView({block:"start"});
 });
 if(isIosDevice){
-  $("instBarSub").textContent = "شیئر ⬆️ → «Add to Home Screen» — طریقہ دیکھیں";
-  $("instBarGo").textContent = "طریقہ";
+  $("instBarSub").textContent = "شیئر ⬆️ → Add to Home Screen  ·  طریقہ دیکھیں";
+  $("instBarGo").textContent = "How";
 }
 
 /* iOS سفاری میں beforeinstallprompt کبھی فائر نہیں ہوتا — اس لیے دستی ہدایات دکھائیں */
@@ -3026,6 +3130,28 @@ if(isIosDevice){
 })();
 
 showInstBar();
+
+/* ─── ہوم اسکرین ویجٹ کے لیے کھڑکی ──────────────────────────────────────
+   ویجٹ اب تک صفحے کے HTML میں سے اوقات کھرچ کر نکالتا تھا۔ اِس کا مطلب یہ تھا کہ
+   یہاں کی معمولی سی ڈیزائن تبدیلی بھی ویجٹ توڑ سکتی تھی۔ اب ایک صاف معاہدہ ہے:
+   ویجٹ صرف یہ فنکشن پکارتا ہے اور اُسے سب کچھ تیار مل جاتا ہے — شہر کا اردو اور
+   انگریزی نام، ٹائم زون (تاکہ گھڑی اُسی شہر کا وقت دکھائے، فون کا نہیں)، اور اوقات۔ */
+window.noorSabaWidget = function(){
+  const city = CITIES[cityIdx], t = prayerTimes(selDate, city), hj = hijriOf(selDate);
+  const row = (n, v) => ({ n: n, v: fmtT(v) });
+  return {
+    city   : city.n,
+    cityEn : enOf(city) || "",
+    zone   : zoneOf(city) || "",
+    date   : udh(hj.d) + " " + HMON[hj.m-1] + " " + udh(hj.y) + "ھ",
+    greg   : ud(selDate.getDate()) + " " + GMON[selDate.getMonth()] + " " + ud(selDate.getFullYear()) + "ء",
+    times  : [
+      row("نماز فجر",    t.fajr),   row("طلوعِ آفتاب", t.sunrise),
+      row("نماز ظہرین",  t.zuhr),   row("غروبِ آفتاب", t.sunset),
+      row("نماز مغربین", t.maghrib), row("نصفِ شب",    t.midnight)
+    ]
+  };
+};
 
 applySettings();
 
