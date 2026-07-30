@@ -7,7 +7,7 @@
    فون پر "نیا نسخہ دستیاب ہے" کا بینر دکھانے کا باعث بنتی ہے۔
    اگر یہ نمبر نہ بدلا تو براؤزر سمجھے گا کچھ نہیں بدلا، اور
    صارفین کو پرانا نسخہ ہی ملتا رہے گا۔ */
-const CACHE = "noor-saba-v8";
+const CACHE = "noor-saba-v9";
 
 const ASSETS = [
   "./",
@@ -56,6 +56,10 @@ self.addEventListener("fetch", e => {
 
   // موسم: صرف نیٹ ورک (ایپ خود localStorage میں کیش کرتی ہے)
   if (url.hostname === "api.open-meteo.com") return;
+
+  // ایپ کے تازہ ترین نسخے کی فائل: ہمیشہ نیٹ ورک سے۔ اگر یہ کیش ہو گئی تو نمبر
+  // وہیں جم جائے گا اور نئے نسخے کی اطلاع کبھی نہیں پہنچے گی۔
+  if (url.pathname.endsWith("/apk-version.json")) return;
 
   // اعلانات: نیٹ ورک پہلے (تازہ ترین اعلانات فوراً نظر آئیں)، ناکامی پر کیش
   if (url.pathname.endsWith("/announcements.json")) {

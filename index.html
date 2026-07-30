@@ -276,6 +276,9 @@
     padding:9px 18px;font-size:.8rem;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;
     box-shadow:0 6px 18px rgba(20,31,60,.3);display:flex;align-items:center;gap:7px;animation:todayPop .22s ease-out}
   .updbtn:active{transform:translateX(-50%) scale(.96)}
+  /* ایپ کے نئے نسخے کی پٹی نیچے رہتی ہے، تاکہ اوپر والی سائٹ کی اپ ڈیٹ پٹی سے نہ ٹکرائے */
+  .updbtn.apk{top:auto;bottom:20px;text-decoration:none;border-color:var(--gold);
+    background:var(--gold);color:var(--night2)}
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:80;
     background:var(--night2);color:#fff;padding:10px 18px;border-radius:999px;font-size:.82rem;
     font-family:inherit;box-shadow:0 6px 18px rgba(20,31,60,.3);opacity:0;pointer-events:none;
@@ -1061,7 +1064,7 @@
 
     <div class="az-actions">
       <button id="azanTest" class="az-play" aria-label="اذان سنیں · Play azan" title="اذان سنیں · Play azan">▶</button>
-      <button id="azanStop" class="az-play stop" hidden aria-label="روکیں · Stop" title="روکیں · Stop">⏹</button>
+      <button id="azanStop" class="az-play stop" hidden aria-label="Stop" title="Stop">⏹</button>
     </div>
 
     <div class="muezzin-sec">
@@ -3055,7 +3058,7 @@ function showUpdateBanner(){
   if($("updBtn")) return;
   const b = document.createElement("button");
   b.id = "updBtn"; b.className = "updbtn";
-  b.innerHTML = "🔄 نیا نسخہ دستیاب ہے — تازہ کریں";
+  b.innerHTML = "🔄 New version — Refresh";
   b.addEventListener("click", ()=> location.reload());
   document.body.appendChild(b);
 }
@@ -3065,6 +3068,39 @@ function showUpdateBanner(){
    ۳) نیچے والی مستقل پٹی — کبھی نہیں چھپتی، کیونکہ آئی فون پر ویجٹ نہیں بنایا جا سکتا
       اس لیے ایپ کو ہوم اسکرین پر لانے کا راستہ ہر وقت سامنے رہنا چاہیے۔
    تینوں ایپ کے اندر (standalone) چلنے پر خود بخود غائب ہو جاتی ہیں۔ */
+/* ─── سائٹ سے نصب کی گئی اینڈرائیڈ ایپ کے لیے اپ ڈیٹ کی اطلاع ─────────────
+   ایسی ایپ خود بخود اپ ڈیٹ نہیں ہوتی۔ اِس لیے ایپ کھلتے وقت اپنا نسخہ ساتھ بھیجتی
+   ہے (?v=1.2)، اور یہاں apk-version.json سے موازنہ ہو جاتا ہے۔ نیا نسخہ ہو تو نیچے
+   ایک پٹی آ جاتی ہے جو سیدھا نئی APK ڈاؤن لوڈ کرا دیتی ہے۔
+   نیا APK دیتے وقت صرف دو فائلیں بدلنی ہوتی ہیں: noor-saba.apk اور apk-version.json */
+(function apkUpdateNotice(){
+  let mine = null;
+  try{ mine = new URLSearchParams(location.search).get("v"); }catch(e){}
+  if(!mine) return;                       /* براؤزر میں کھلی ہے، ایپ سے نہیں */
+
+  const newer = (a, b) => {               /* "1.10" > "1.9" درست نکلے، اِس لیے عدد سے موازنہ */
+    const x = String(a).split("."), y = String(b).split(".");
+    for(let i = 0; i < Math.max(x.length, y.length); i++){
+      const p = parseInt(x[i] || "0", 10), q = parseInt(y[i] || "0", 10);
+      if(p !== q) return p > q;
+    }
+    return false;
+  };
+
+  fetch("./apk-version.json?t=" + Date.now(), {cache:"no-store"})
+    .then(r => r.ok ? r.json() : null)
+    .then(j => {
+      if(!j || !j.version || !newer(j.version, mine)) return;
+      const a = document.createElement("a");
+      a.className = "updbtn apk";
+      a.href = "./" + (j.file || "noor-saba.apk");
+      a.setAttribute("download", "");
+      a.textContent = "⬇ New version " + j.version + " — Download";
+      document.body.appendChild(a);
+    })
+    .catch(()=>{ /* آف لائن — اگلی بار سہی */ });
+})();
+
 let deferredPrompt = null;
 const isIosDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 function isStandalone(){
