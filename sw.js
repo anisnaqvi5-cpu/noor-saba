@@ -7,7 +7,7 @@
    فون پر "نیا نسخہ دستیاب ہے" کا بینر دکھانے کا باعث بنتی ہے۔
    اگر یہ نمبر نہ بدلا تو براؤزر سمجھے گا کچھ نہیں بدلا، اور
    صارفین کو پرانا نسخہ ہی ملتا رہے گا۔ */
-const CACHE = "noor-saba-v9";
+const CACHE = "noor-saba-v10";
 
 const ASSETS = [
   "./",
@@ -77,8 +77,12 @@ self.addEventListener("fetch", e => {
     return;
   }
 
-  // نیویگیشن: پہلے کیش، پھر نیٹ ورک
+  // نیویگیشن: صرف ایپ کا اپنا صفحہ کیش سے دیا جاتا ہے۔
+  // باقی سب — noor-saba.apk، admin.html، اور غلط پتے — سیدھے سرور تک جاتے ہیں۔
+  // ورنہ APK کا ڈاؤن لوڈ لنک بھی فائل کے بجائے صفحہ اول دکھانے لگتا ہے۔
   if (req.mode === "navigate") {
+    const isAppPage = url.pathname.endsWith("/") || url.pathname.endsWith("/index.html");
+    if (!isAppPage) return;                 // سرور خود جواب دے
     e.respondWith((async () => {
       const cached = await caches.match("./index.html");
       if (cached) return cached;
