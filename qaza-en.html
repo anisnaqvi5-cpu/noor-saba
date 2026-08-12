@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Missed Prayers — Noor Saba</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12261f;--paper:#f6f4ec;--card:#fff;--line:#dcd8c8;
+  --green:#0f7b84;--green-soft:#e0f1f2;--red:#a8402f;--red-soft:#f6e6e2;
+  --muted:#7b8079;--today:#f3e9c8;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body.dark{
+  --ink:#e9e7e0;--paper:#121719;--card:#1b2226;--line:#2d363b;
+  --green:#3fa8b2;--green-soft:#153538;--red:#e08069;--red-soft:#3a2420;
+  --muted:#94a09a;--today:#3b3520;
+}
+body.dark header{background:#123b3f}
+body.dark .picker-btn{background:var(--green-soft);color:#8fd6dd}
+.langBtn{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;font-size:14px;cursor:pointer;padding:2px 10px;border-radius:8px;text-decoration:none}
+.themeBtn{background:none;border:0;color:#cfe9ec;font-size:18px;cursor:pointer;padding:0 4px;font-family:"Inter",sans-serif}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Inter",system-ui,sans-serif;line-height:1.6;padding-bottom:40px}
+.num{font-family:"Inter",sans-serif;font-variant-numeric:tabular-nums;line-height:1.4}
+header{background:var(--green);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:20}
+header h1{font-size:20px;margin:0;font-weight:400}
+header a#homeLink{font-size:24px;line-height:1;padding:0 4px}
+header a,header button.back{color:#cfe9ec;text-decoration:none;font-size:14px;background:none;border:0;font-family:inherit;cursor:pointer}
+.wrap{max-width:600px;margin:0 auto;padding:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
+.card h2{font-size:17px;margin:0 0 6px;font-weight:400}
+.hint{font-size:13px;color:var(--muted);line-height:1.9}
+.total{font-size:14px;color:var(--muted);margin-top:6px}
+
+/* chooser */
+.choice{
+  display:flex;align-items:baseline;gap:8px;width:100%;text-align:right;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;padding:8px 14px;margin-bottom:8px;
+  font-family:inherit;font-size:17px;color:var(--ink);cursor:pointer;line-height:1.9;
+  white-space:nowrap;overflow:hidden
+}
+.choice small{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.tabbar{display:flex;gap:6px;margin:12px 0}
+.tb{
+  flex:1;padding:7px 2px;border:1px solid var(--line);border-radius:10px;
+  background:var(--card);color:var(--ink);font-family:inherit;font-size:15px;cursor:pointer;
+  white-space:nowrap
+}
+.tb.on{background:var(--green);color:#fff;border-color:var(--green)}
+.choice:active{background:var(--green-soft)}
+
+/* day view */
+.daynav,.mnav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.daynav button,.mnav button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:6px 16px;font-size:18px;font-family:"Inter",sans-serif;cursor:pointer}
+.daynav .date{text-align:center;font-size:16px}
+.daynav .date small{display:block;font-size:12px;color:var(--muted)}
+.mnav .t{font-size:17px}
+.picker-btn{
+  width:100%;padding:10px;margin-bottom:10px;border:1px solid var(--line);border-radius:12px;
+  background:var(--green-soft);color:var(--green);font-family:inherit;font-size:18px;cursor:pointer
+}
+.picker{border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:12px;background:var(--paper)}
+.picker .yr{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:10px}
+.picker .yr span{font-size:18px;font-weight:600}
+.picker .yr button{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:4px 14px;font-size:17px;font-family:"Inter",sans-serif;cursor:pointer}
+.months{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mo{
+  border:1px solid var(--line);border-radius:11px;background:var(--card);
+  padding:8px 4px;font-family:inherit;font-size:15px;cursor:pointer;line-height:1.7;text-align:center
+}
+.mo small{display:block;font-family:"Inter",sans-serif;font-size:11px;color:var(--muted)}
+.mo.on{background:var(--green);color:#fff;border-color:var(--green)}
+.mo.on small{color:#cfe9ec}
+.mo.has{border-color:var(--red)}
+.mo.has small{color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(5,46px);gap:8px;justify-content:center;text-align:center}
+.grid .lbl{font-size:12px}
+
+/* month table */
+table{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0 4px}
+td.c,th:not(.d){width:48px}
+th{font-size:11px;letter-spacing:-.2px;font-weight:400;color:var(--muted);padding-bottom:4px;position:sticky;top:52px;background:var(--paper);z-index:5}
+th.d{text-align:left;padding-left:6px}
+td.d{width:64px;font-size:13px;color:var(--muted);white-space:nowrap;text-align:left;padding-left:6px}
+td.d b{font-family:"Inter",sans-serif;font-size:15px;color:var(--ink);font-weight:600}
+tr.today td.d b{background:var(--today);border-radius:6px;padding:0 5px}
+td.c{text-align:center}
+tr.future .sq{opacity:.45}
+
+.sq{
+  width:44px;height:44px;margin:0 auto;
+  border:2px solid var(--line);border-radius:10px;background:var(--card);
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Inter",sans-serif;font-size:20px;font-weight:700;color:var(--muted);
+  cursor:pointer;user-select:none;transition:transform .08s ease
+}
+.grid .sq{width:44px;height:44px}
+.sq:active{transform:scale(.9)}
+.sq[data-s="1"]{border-color:var(--green);background:var(--green-soft);color:var(--green)}
+.sq[data-s="2"]{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.sq:focus-visible{outline:3px solid #000;outline-offset:2px}
+.legend{display:flex;gap:14px;justify-content:center;font-size:13px;margin-top:12px;color:var(--muted)}
+.legend b{font-family:"Inter",sans-serif}
+
+.row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .name{flex:1;font-size:16px}
+.row .val{width:64px;text-align:center;font-size:18px;font-weight:700}
+.row button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--paper);font-size:20px;font-family:"Inter",sans-serif;cursor:pointer}
+.row button.plus{color:var(--red)}
+.row button.minus{color:var(--green)}
+.row .val{cursor:pointer;border-bottom:1px dashed var(--line)}
+.row button.pay{width:auto;padding:0 12px;color:#fff;background:var(--green);border-color:var(--green);font-family:inherit;font-size:14px}
+.calcrow{display:flex;align-items:center;gap:10px;padding:6px 0}
+.calcrow .name{flex:1;font-size:16px}
+.calcrow input{width:100px;padding:6px;border:1px solid var(--line);border-radius:8px;text-align:center;background:var(--card);color:var(--ink)}
+.wide{width:100%;margin-top:10px;padding:9px;line-height:1.6;white-space:normal;border-radius:10px;border:1px solid var(--line);background:var(--paper);font-family:inherit;font-size:14px;cursor:pointer}
+.logrow{display:flex;justify-content:space-between;font-size:14px;padding:5px 0;border-bottom:1px solid var(--line)}
+.logrow:last-child{border-bottom:0}
+#advice p{margin:0 0 8px;font-size:15px}
+#advice .big{font-size:17px;color:var(--green)}
+#advice ul{margin:0;padding-inline-start:22px;font-size:15px}
+#advice li{margin-bottom:4px}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--green);width:0}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.tools button{flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-family:inherit;font-size:14px;cursor:pointer}
+.tools button.danger{color:var(--red)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  body{background:#fff;color:#000;padding:0}
+  header,.langBtn,.tabbar,.picker-btn,.picker,#print,#img,#back,#homeLink,.themeBtn,.hint,.legend{display:none!important}
+  .card{border:0;padding:0;margin:0 0 10px;box-shadow:none;background:#fff}
+  #printHead{display:block!important;text-align:center;font-size:18px;margin-bottom:10px}
+  table{page-break-inside:auto}
+  tr{page-break-inside:avoid}
+  .sq{border:1px solid #666;color:#000;background:#fff!important;width:34px;height:34px;font-size:16px}
+  .sq[data-s="1"]{border-color:#000}
+  .sq[data-s="2"]{border-color:#000}
+  td.d,th{color:#000}
+  #adviceCard{page-break-before:auto}
+  @page{margin:14mm}
+}
+#printHead{display:none}
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="title">Missed Prayers</h1>
+  <a class="langBtn" href="qaza.html">اردو</a>
+  <button class="themeBtn" id="theme" aria-label="Switch theme">☾</button>
+  <a id="homeLink" href="index.html" aria-label="Back" title="Back">→</a>
+</header>
+
+<div class="wrap">
+
+  <nav class="tabbar" id="tabbar">
+    <button class="tb" data-go="month">Month</button>
+    <button class="tb" data-go="daily">Daily</button>
+    <button class="tb" data-go="old">Backlog</button>
+    <button class="tb" data-go="backup">Backup</button>
+  </nav>
+
+  <!-- Daily -->
+  <section id="daily" hidden>
+    <div class="card">
+      <div class="daynav">
+        <button id="dPrev" aria-label="Previous day">‹</button>
+        <div class="date"><span id="dLabel" class="num"></span><small id="dSub"></small></div>
+        <button id="dNext" aria-label="Next day">›</button>
+      </div>
+      <div class="grid" id="dGrid">
+        <div class="lbl">Fajr</div><div class="lbl">Dhuhr</div><div class="lbl">Asr</div><div class="lbl">Maghrib</div><div class="lbl">Isha</div>
+        <div class="sq" tabindex="0" data-p="0" data-s="0"></div>
+        <div class="sq" tabindex="0" data-p="1" data-s="0"></div>
+        <div class="sq" tabindex="0" data-p="2" data-s="0"></div>
+        <div class="sq" tabindex="0" data-p="3" data-s="0"></div>
+        <div class="sq" tabindex="0" data-p="4" data-s="0"></div>
+      </div>
+      <div class="legend"><span><b>✓</b> Prayed</span><span><b>✗</b> Missed</span><span><b>—</b> Blank</span></div>
+      <p class="total num" id="dStat">—</p>
+      <p class="hint">Tap a box once for ✓, again for ✗, a third time to clear it.</p>
+    </div>
+  </section>
+
+  <!-- Month -->
+  <section id="month" hidden>
+    <div id="printHead"></div>
+    <div class="card">
+      <button id="mOpen" class="picker-btn"><span id="mLabel"></span> ▾</button>
+      <div id="picker" class="picker" hidden>
+        <div class="yr">
+          <button id="yPrev" aria-label="Previous year">‹</button>
+          <span id="yLabel" class="num"></span>
+          <button id="yNext" aria-label="Next year">›</button>
+        </div>
+        <div class="months" id="months"></div>
+      </div>
+      <table>
+        <thead><tr><th class="d">Date</th><th>Fajr</th><th>Dhuhr</th><th>Asr</th><th>Mgrb</th><th>Isha</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div class="legend"><span><b>✓</b> Prayed</span><span><b>✗</b> Missed</span><span><b>—</b> Blank</span></div>
+      <p class="total num" id="mStat">—</p>
+      <button id="print" class="wide">Print / Save as PDF</button>
+      <button id="img" class="wide">Save as image (PNG)</button>
+    </div>
+    <div class="card" id="adviceCard">
+      <h2>Advice for this month</h2>
+      <div id="advice"></div>
+    </div>
+  </section>
+
+  <!-- Backlog -->
+  <section id="old" hidden>
+    <div class="card">
+      <h2>Outstanding prayers</h2>
+      <div id="counters"></div>
+      <div class="bar"><i id="bar"></i></div>
+      <p class="total num" id="oldStat">—</p>
+      <p class="hint">The <b>Paid</b> button marks one prayer as made up and logs today's date.<br>
+      Tap the number to type a corrected count — that's also how you undo a wrong entry.</p>
+      <button id="undo" class="wide" hidden></button>
+    </div>
+
+    <div class="card">
+      <h2>Make-up log</h2>
+      <p class="total num" id="todayPaid">—</p>
+      <div id="paidLog"></div>
+      <p class="hint">Shows how many missed prayers you made up on each day.</p>
+    </div>
+    <div class="card">
+      <h2>Estimate from a time period</h2>
+      <div class="calcrow">
+        <span class="name">Years</span>
+        <input id="yrs" class="num" type="number" min="0" value="0">
+      </div>
+      <button id="calc" class="wide">Add to every prayer</button>
+      <p class="hint">Example: 3 years adds 1,095 to each prayer.</p>
+    </div>
+    <div class="card">
+      <h2>Grand total (calendar included)</h2>
+      <div id="combined"></div>
+      <p class="hint">Any ✗ in the calendar is counted here automatically. Change it to ✓ and it drops off this list.</p>
+    </div>
+  </section>
+
+  <!-- Backup -->
+  <section id="backup" hidden>
+    <div class="card">
+      <h2>Backup</h2>
+      <div class="tools">
+        <button id="exp">Save to file</button>
+        <button id="imp">Restore from file</button>
+        <button id="clr" class="danger">Erase everything</button>
+      </div>
+      <p class="hint">Your record is stored on this device only. Save a file before switching phones.</p>
+      <input id="file" type="file" accept="application/json" hidden>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const PRAYERS=["Fajr","Dhuhr","Asr","Maghrib","Isha"];
+const KEY="noorsaba_qaza_v1";
+const WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const MN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const TITLES={daily:"Daily",month:"Full month",old:"Backlog",backup:"Backup"};
+
+let db=load();
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||fresh();}catch(e){return fresh();}}
+function fresh(){return {days:{},old:[0,0,0,0,0],done:[0,0,0,0,0],paid:{},lastAdd:null};}
+function save(){localStorage.setItem(KEY,JSON.stringify(db));}
+const pad=n=>String(n).padStart(2,"0");
+const key=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const todayKey=key(new Date());
+
+/* ---------- view switching ---------- */
+function show(id){
+  ["daily","month","old","backup"].forEach(s=>document.getElementById(s).hidden = s!==id);
+  document.querySelectorAll(".tb").forEach(b=>b.classList.toggle("on", b.dataset.go===id));
+  document.getElementById("title").textContent=TITLES[id];
+  window.scrollTo(0,0);
+  if(id==="daily") renderDay();
+  if(id==="month") renderMonth();
+  if(id==="old") renderOld();  // picks up new calendar marks immediately
+}
+document.querySelectorAll(".tb").forEach(b=>b.onclick=()=>show(b.dataset.go));
+
+
+/* ---------- daily ---------- */
+let cur=new Date();
+function renderDay(){
+  const k=key(cur);
+  document.getElementById("dLabel").textContent=cur.getDate()+" "+MN[cur.getMonth()]+" "+cur.getFullYear();
+  document.getElementById("dSub").textContent=WD[cur.getDay()];
+  const rec=db.days[k]||[0,0,0,0,0];
+  document.querySelectorAll("#dGrid .sq").forEach(sq=>{
+    const s=rec[+sq.dataset.p];
+    sq.dataset.s=s; sq.textContent=s===1?"✓":s===2?"✗":"";
+    sq.setAttribute("aria-label",PRAYERS[+sq.dataset.p]+" — "+(s===1?"prayed":s===2?"missed":"blank"));
+  });
+  document.getElementById("dStat").textContent=monthCount(cur);
+}
+function bump(k,i){
+  if(!db.days[k]) db.days[k]=[0,0,0,0,0];
+  db.days[k][i]=(db.days[k][i]+1)%3;
+  const s=db.days[k][i];
+  if(db.days[k].every(v=>v===0)) delete db.days[k];
+  save(); return s;
+}
+document.querySelectorAll("#dGrid .sq").forEach(sq=>{
+  const act=()=>{bump(key(cur),+sq.dataset.p);renderDay();};
+  sq.addEventListener("click",act);
+  sq.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act();}});
+});
+document.getElementById("dPrev").onclick=()=>{cur.setDate(cur.getDate()-1);renderDay();};
+document.getElementById("dNext").onclick=()=>{cur.setDate(cur.getDate()+1);renderDay();};
+
+function monthCount(d){
+  const p=d.getFullYear()+"-"+pad(d.getMonth()+1);
+  let ok=0,qz=0;
+  for(const k in db.days) if(k.startsWith(p)) db.days[k].forEach(v=>{if(v===1)ok++;if(v===2)qz++;});
+  return "This month — prayed: "+ok+"   •   missed: "+qz;
+}
+
+/* ---------- month ---------- */
+let view=new Date(); view.setDate(1);
+function renderMonth(){
+  const y=view.getFullYear(),m=view.getMonth();
+  document.getElementById("mLabel").textContent=MN[m]+" "+y;
+  const days=new Date(y,m+1,0).getDate();
+  const tb=document.getElementById("rows"); tb.innerHTML="";
+  for(let d=1;d<=days;d++){
+    const k=y+"-"+pad(m+1)+"-"+pad(d);
+    const rec=db.days[k]||[0,0,0,0,0];
+    const tr=document.createElement("tr");
+    if(k===todayKey) tr.className="today"; else if(k>todayKey) tr.className="future";
+    let html='<td class="d"><b>'+d+'</b> '+WD[new Date(y,m,d).getDay()]+'</td>';
+    for(let i=0;i<5;i++){
+      const s=rec[i];
+      html+='<td class="c"><div class="sq" tabindex="0" data-k="'+k+'" data-p="'+i+'" data-s="'+s+'" aria-label="'+d+' '+PRAYERS[i]+'">'+(s===1?"✓":s===2?"✗":"")+'</div></td>';
+    }
+    tr.innerHTML=html; tb.appendChild(tr);
+  }
+  tb.querySelectorAll(".sq").forEach(sq=>{
+    const act=()=>{const s=bump(sq.dataset.k,+sq.dataset.p);sq.dataset.s=s;sq.textContent=s===1?"✓":s===2?"✗":"";document.getElementById("mStat").textContent=monthCount(view);renderAdvice();};
+    sq.addEventListener("click",act);
+    sq.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act();}});
+  });
+  document.getElementById("mStat").textContent=monthCount(view);
+  if(!document.getElementById("picker").hidden) renderPicker(view.getFullYear());
+  renderAdvice();
+}
+document.getElementById("mOpen").onclick=()=>{
+  const p=document.getElementById("picker");
+  p.hidden=!p.hidden;
+  if(!p.hidden) renderPicker(view.getFullYear());
+};
+let pickYear=null;
+function renderPicker(y){
+  pickYear=y;
+  document.getElementById("yLabel").textContent=y;
+  const box=document.getElementById("months"); box.innerHTML="";
+  MN.forEach((n,i)=>{
+    let qz=0; const p=y+"-"+pad(i+1);
+    for(const k in db.days) if(k.startsWith(p)) db.days[k].forEach(v=>{if(v===2)qz++;});
+    const b=document.createElement("button");
+    b.className="mo"+(y===view.getFullYear()&&i===view.getMonth()?" on":"")+(qz?" has":"");
+    b.innerHTML=n.slice(0,3)+'<small>'+(qz?"missed "+qz:"—")+'</small>';
+    b.onclick=()=>{
+      view=new Date(y,i,1);
+      document.getElementById("picker").hidden=true;
+      renderMonth();
+    };
+    box.appendChild(b);
+  });
+}
+document.getElementById("yPrev").onclick=()=>renderPicker(pickYear-1);
+document.getElementById("yNext").onclick=()=>renderPicker(pickYear+1);
+
+
+document.getElementById("print").onclick=()=>{
+  document.getElementById("printHead").textContent="Missed prayer record — "+MN[view.getMonth()]+" "+view.getFullYear();
+  window.print();
+};
+
+/* ---------- save as image ---------- */
+document.getElementById("img").onclick=()=>{
+  const y=view.getFullYear(), m=view.getMonth();
+  const days=new Date(y,m+1,0).getDate();
+  const dark=document.body.classList.contains("dark");
+  const C={bg:dark?"#121719":"#f6f4ec",card:dark?"#1b2226":"#ffffff",
+           line:dark?"#2d363b":"#dcd8c8",ink:dark?"#e9e7e0":"#12261f",
+           muted:dark?"#94a09a":"#7b8079",ok:"#0f7b84",no:"#a8402f"};
+  const S=2, W=520, RH=40, TOP=110, BOT=54;
+  const H=TOP+days*RH+BOT;
+  const cv=document.createElement("canvas");
+  cv.width=W*S; cv.height=H*S;
+  const x=cv.getContext("2d"); x.scale(S,S);
+  x.fillStyle=C.bg; x.fillRect(0,0,W,H);
+
+  // سرخی
+  x.fillStyle=C.ok; x.fillRect(0,0,W,58);
+  x.fillStyle="#fff"; x.textAlign="center"; x.direction="ltr";
+  x.font='20px Inter, sans-serif';
+  x.fillText("Missed Prayers — "+MN[m]+" "+y, W/2, 32);
+  x.font='13px Inter, sans-serif';
+  const t=monthCount(view).replace("This month — ","");
+  x.fillText(t, W/2, 50);
+
+  const cols=[300,260,220,180,140,100];       // تاریخ + پانچ نمازیں (دائیں سے)
+  x.textAlign="center";
+  x.font='13px Inter, sans-serif'; x.fillStyle=C.muted;
+  x.fillText("Date", 400, TOP-16);
+  PRAYERS.forEach((n,i)=>x.fillText(n.slice(0,3), cols[i+1]+20, TOP-16));
+
+  for(let d=1;d<=days;d++){
+    const k=y+"-"+pad(m+1)+"-"+pad(d);
+    const rec=db.days[k]||[0,0,0,0,0];
+    const ty=TOP+(d-1)*RH;
+    x.fillStyle=C.card; x.fillRect(20,ty,W-40,RH-6);
+    x.strokeStyle=C.line; x.lineWidth=1; x.strokeRect(20,ty,W-40,RH-6);
+    x.fillStyle=C.ink; x.textAlign="right";
+    x.font='14px Inter, sans-serif';
+    x.fillText(d+"  "+WD[new Date(y,m,d).getDay()], W-34, ty+23);
+    for(let i=0;i<5;i++){
+      const s2=rec[i], cx=cols[i+1], cy=ty+3, sz=RH-12;
+      x.strokeStyle = s2===1?C.ok : s2===2?C.no : C.line;
+      x.lineWidth=2; x.strokeRect(cx,cy,sz,sz);
+      if(s2){
+        x.fillStyle = s2===1?C.ok:C.no;
+        x.textAlign="center"; x.font='bold 17px Inter, sans-serif';
+        x.fillText(s2===1?"✓":"✗", cx+sz/2, cy+sz/2+6);
+      }
+      x.textAlign="right";
+    }
+  }
+  x.fillStyle=C.muted; x.textAlign="center";
+  x.font='11px Inter, sans-serif';
+  x.fillText("Noor Saba — missed prayer record", W/2, H-20);
+
+  const a=document.createElement("a");
+  a.download="missed-prayers-"+y+"-"+pad(m+1)+".png";
+  a.href=cv.toDataURL("image/png"); a.click();
+};
+
+
+/* ---------- monthly advice ---------- */
+function renderAdvice(){
+  const y=view.getFullYear(), m=view.getMonth(), p=y+"-"+pad(m+1);
+  const per=[0,0,0,0,0]; let qz=0, ok=0, marked=0;
+  for(const k in db.days) if(k.startsWith(p)) db.days[k].forEach((v,i)=>{
+    if(v===2){qz++;per[i]++;} if(v===1)ok++; if(v)marked++;
+  });
+  const box=document.getElementById("advice"); box.innerHTML="";
+  const out=[];
+  if(!marked){
+    out.push('<p>Nothing marked for this month yet. Spend one minute each night filling in that day\'s five boxes — that single habit does most of the work.</p>');
+  } else if(!qz){
+    out.push('<p class="big">No missed prayers this month — may they be accepted.</p>');
+    out.push('<p>Keep the same routine going. If you still have an older backlog, add one or two make-up prayers to each day.</p>');
+  } else {
+    const worst=per.indexOf(Math.max(...per));
+    const days=Math.ceil(qz/2);
+    out.push('<p>This month you missed <b class="num">'+qz+'</b> prayers and prayed <b class="num">'+ok+'</b> on time.</p>');
+    out.push('<p><b>'+PRAYERS[worst]+'</b> was missed most often ('+per[worst]+'). '+
+      (worst===0 ? 'Going to bed earlier and setting an alarm for the adhan fixes this faster than anything else.'
+       : worst===1||worst===2 ? 'Fix one clock time for it and keep that same time at work or while travelling.'
+       : 'These two usually slip away in the evening rush — pray first when you get home, then everything else.')+'</p>');
+    out.push('<p><b>A plan that works:</b></p><ul>'+
+      '<li>After each daily prayer, make up <b>one</b> missed prayer of the same kind — five a day.</li>'+
+      '<li>At that pace this month\'s backlog clears in about <b class="num">'+days+'</b> days.</li>'+
+      '<li>Change each ✗ to ✓ as you go, so the count drops on its own.</li>'+
+      '<li>Fill in the days still left blank, or the total stays incomplete.</li></ul>');
+  }
+  box.innerHTML=out.join("");
+}
+
+/* ---------- backlog ---------- */
+const cont=document.getElementById("counters");
+function renderOld(){
+  if(!db.paid) db.paid={};
+  cont.innerHTML="";
+  PRAYERS.forEach((n,i)=>{
+    const r=document.createElement("div"); r.className="row";
+    r.innerHTML='<span class="name">'+n+'</span>'+
+      '<button class="minus" aria-label="One less">−</button>'+
+      '<span class="val num" title="Tap to correct the count">'+db.old[i]+'</span>'+
+      '<button class="plus" aria-label="One more">+</button>'+
+      '<button class="pay">Paid</button>';
+    r.querySelector(".val").onclick=()=>{
+      const v=prompt("Outstanding "+n+" prayers:",db.old[i]);
+      if(v===null) return;
+      const num=parseInt(v);
+      if(isNaN(num)||num<0){alert("Please enter a valid number.");return;}
+      db.old[i]=num; save(); renderOld();
+    };
+    r.querySelector(".minus").onclick=()=>{if(db.old[i]>0)db.old[i]--;save();renderOld();};
+    r.querySelector(".plus").onclick=()=>{db.old[i]++;save();renderOld();};
+    r.querySelector(".pay").onclick=()=>{
+      if(db.old[i]<=0){alert("Nothing outstanding for this prayer.");return;}
+      db.old[i]--; db.done[i]++;
+      if(!db.paid[todayKey]) db.paid[todayKey]=[0,0,0,0,0];
+      db.paid[todayKey][i]++;
+      save(); renderOld();
+    };
+    cont.appendChild(r);
+  });
+  const left=db.old.reduce((a,b)=>a+b,0),done=db.done.reduce((a,b)=>a+b,0);
+  document.getElementById("bar").style.width=(done+left?Math.round(done*100/(done+left)):0)+"%";
+  document.getElementById("oldStat").textContent="Outstanding: "+left+"   •   made up: "+done;
+  const u=document.getElementById("undo");
+  if(db.lastAdd){
+    u.hidden=false;
+    u.textContent="Undo last addition ("+db.lastAdd.years+" yr = "+db.lastAdd.n+" per prayer)";
+    u.onclick=()=>{
+      for(let i=0;i<5;i++) db.old[i]=Math.max(0,db.old[i]-db.lastAdd.n);
+      db.lastAdd=null; save(); renderOld();
+    };
+  } else u.hidden=true;
+  renderPaid();
+  renderCombined();
+}
+function renderPaid(){
+  const box=document.getElementById("paidLog"); box.innerHTML="";
+  const keys=Object.keys(db.paid||{}).sort().reverse().slice(0,10);
+  const t=db.paid[todayKey]?db.paid[todayKey].reduce((a,b)=>a+b,0):0;
+  document.getElementById("todayPaid").textContent="Made up today: "+t;
+  if(!keys.length){box.innerHTML='<p class="hint">No entries yet.</p>';return;}
+  keys.forEach(k=>{
+    const a=db.paid[k], sum=a.reduce((x,y)=>x+y,0);
+    const parts=PRAYERS.map((n,i)=>a[i]?n+" "+a[i]:null).filter(Boolean).join(", ");
+    const d=document.createElement("div"); d.className="logrow";
+    d.innerHTML='<span class="num">'+k+'</span><span>'+parts+' — total '+sum+'</span>';
+    box.appendChild(d);
+  });
+}
+function calQaza(){
+  const c=[0,0,0,0,0];
+  for(const k in db.days) db.days[k].forEach((v,i)=>{if(v===2)c[i]++;});
+  return c;
+}
+function renderCombined(){
+  const cal=calQaza(), box=document.getElementById("combined");
+  box.innerHTML="";
+  let tot=0;
+  PRAYERS.forEach((n,i)=>{
+    const sum=db.old[i]+cal[i]; tot+=sum;
+    const r=document.createElement("div"); r.className="row";
+    r.innerHTML='<span class="name">'+n+'</span>'+
+      '<span class="hint num" style="width:120px;text-align:center">backlog '+db.old[i]+' + calendar '+cal[i]+'</span>'+
+      '<span class="val num">'+sum+'</span>';
+    box.appendChild(r);
+  });
+  const t=document.createElement("p"); t.className="total num";
+  t.textContent="Total outstanding prayers: "+tot;
+  box.appendChild(t);
+}
+document.getElementById("calc").onclick=()=>{
+  const y=Math.max(0,parseInt(document.getElementById("yrs").value)||0);
+  if(!y) return;
+  const d=Math.round(y*365.25);
+  for(let i=0;i<5;i++) db.old[i]+=d;
+  db.lastAdd={years:y,n:d};
+  save(); renderOld();
+};
+
+/* ---------- backup ---------- */
+document.getElementById("exp").onclick=()=>{
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:"application/json"}));
+  a.download="missed-prayers-backup-"+todayKey+".json"; a.click();
+};
+document.getElementById("imp").onclick=()=>document.getElementById("file").click();
+document.getElementById("file").onchange=e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{try{db=JSON.parse(r.result);save();show("month");}catch(err){alert("Could not read that file. Please pick a valid backup file.");}};
+  r.readAsText(f);
+};
+document.getElementById("clr").onclick=()=>{
+  if(confirm("This will erase the entire record. Continue?")){db=fresh();save();show("month");}
+};
+
+/* ---------- theme ---------- */
+const TKEY="noorsaba_qaza_theme";
+function applyTheme(t){
+  document.body.classList.toggle("dark", t==="dark");
+  document.getElementById("theme").textContent = t==="dark" ? "☀" : "☾";
+  localStorage.setItem(TKEY,t);
+}
+applyTheme(localStorage.getItem(TKEY)==="dark" ? "dark" : "light");
+document.getElementById("theme").onclick=()=>
+  applyTheme(document.body.classList.contains("dark") ? "light" : "dark");
+
+show("month");
+</script>
+</body>
+</html>
