@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#04161C">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Qibla Compass — Noor Saba</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root{
+    --ink:#04161C;
+    --ink-2:rgba(32,214,199,.07);
+    --brass:#3FE0D0;
+    --brass-dim:#1B7C74;
+    --jade:#7CF5B0;
+    --paper:#E4F7F5;
+    --muted:#7FA8A8;
+    --glass:rgba(63,224,208,.10);
+    --glass-line:rgba(63,224,208,.28);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(120% 80% at 50% 0%, #0B3B44 0%, var(--ink) 62%, #020C10 100%);
+    color:var(--paper);
+    font-family:"Space Grotesk", system-ui, sans-serif;
+    min-height:100dvh;
+    display:flex; flex-direction:column; align-items:center;
+    padding:24px 18px 40px;
+    overflow-x:hidden;
+  }
+  .num{font-family:"Space Grotesk",monospace; font-feature-settings:"tnum"}
+
+  h1{font-size:22px; font-weight:600; line-height:1.4; letter-spacing:.5px}
+  .sub{color:var(--muted); font-size:13px; line-height:1.6; margin-bottom:18px}
+
+  /* ---------- dial ---------- */
+  .dial-wrap{position:relative; width:min(86vw,340px); aspect-ratio:1; margin:6px 0 8px}
+  .dial{
+    position:absolute; inset:0; border-radius:50%;
+    background:
+      radial-gradient(circle at 50% 35%, rgba(63,224,208,.16) 0%, rgba(6,38,45,.55) 68%);
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    border:1px solid var(--glass-line);
+    box-shadow:0 0 0 8px rgba(63,224,208,.05), 0 18px 50px rgba(0,0,0,.55),
+               inset 0 0 45px rgba(63,224,208,.08);
+    transition:transform .12s linear;
+  }
+  .ticks{position:absolute; inset:0}
+  .tick{position:absolute; left:50%; top:6px; width:1px; height:10px;
+        background:rgba(232,226,210,.35);}
+  .card-label{
+    position:absolute; left:50%; top:16px; transform-origin:50% 0;
+    font-family:"Space Grotesk"; font-size:13px; font-weight:700; color:var(--brass);
+  }
+  .card-label span{display:block; transform:translateX(-50%)}
+
+  /* qibla marker rides on the dial */
+  .qibla-mark{
+    position:absolute; left:50%; top:0; height:50%; width:2px;
+    transform-origin:50% 100%;
+    background:linear-gradient(to bottom, var(--brass), rgba(63,224,208,0));
+  }
+  .kaaba{
+    position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+    width:26px; height:26px; border-radius:5px;
+    background:rgba(4,22,28,.85); border:1.5px solid var(--brass);
+    box-shadow:0 0 12px rgba(63,224,208,.5);
+    display:grid; place-items:center;
+  }
+  .kaaba::after{content:""; width:16px; height:3px; background:var(--brass); border-radius:1px}
+
+  /* fixed pointer at top of device */
+  .pointer{
+    position:absolute; left:50%; top:-14px; transform:translateX(-50%);
+    width:0;height:0; border-left:9px solid transparent; border-right:9px solid transparent;
+    border-bottom:16px solid var(--paper);
+  }
+  .center{
+    position:absolute; inset:0; display:grid; place-items:center; text-align:center;
+  }
+  .center .big{font-family:"Space Grotesk"; font-size:44px; font-weight:700; color:var(--paper); line-height:1}
+  .center .lbl{font-size:12px; color:var(--muted); line-height:1.5}
+
+  .aligned .dial{border-color:var(--jade); box-shadow:0 0 0 8px rgba(124,245,176,.14), 0 18px 50px rgba(0,0,0,.6)}
+  .aligned .center .big{color:var(--jade)}
+
+  /* ---------- readouts ---------- */
+  .rows{width:min(86vw,340px); margin-top:14px; display:grid; gap:1px;
+        background:var(--glass-line); border-radius:14px; overflow:hidden;
+        border:1px solid var(--glass-line)}
+  .row{display:flex; justify-content:space-between; align-items:center;
+       background:rgba(6,38,45,.72); backdrop-filter:blur(8px);
+       -webkit-backdrop-filter:blur(8px); padding:11px 14px; font-size:13px}
+  .row b{font-family:"Space Grotesk"; font-weight:500; color:var(--brass); font-size:14px}
+
+  .note{width:min(86vw,340px); margin-top:16px; font-size:12.5px; line-height:1.7;
+        color:var(--muted); text-align:center; padding:0 6px;
+        overflow-wrap:break-word}
+  .warn{color:#E0A33E}
+
+  button{
+    font-family:"Space Grotesk",system-ui,sans-serif; font-size:15px; line-height:1.5;
+    background:var(--brass); color:#04161C; border:0; border-radius:12px;
+    padding:10px 26px; margin-top:16px; cursor:pointer; font-weight:600;
+  }
+  button.ghost{background:transparent; color:var(--brass); border:1px solid var(--glass-line)}
+  button:focus-visible{outline:2px solid var(--paper); outline-offset:3px}
+  @media (prefers-reduced-motion:reduce){ .dial{transition:none} }
+
+  /* ---------- figure-8 calibration demo ---------- */
+  .calib{width:min(86vw,340px); margin-top:22px; padding:14px 16px 14px;
+         border:1px solid var(--glass-line); border-radius:16px;
+         background:var(--glass); backdrop-filter:blur(8px);
+         -webkit-backdrop-filter:blur(8px)}
+  .calib-title{font-size:13px; color:var(--brass); text-align:center; line-height:1.6;
+               padding-bottom:2px}
+  .fig8{width:auto; height:200px; margin:0 auto; display:block; overflow:visible}
+  .fig8-track{fill:none; stroke:var(--brass); stroke-width:1.5;
+              stroke-dasharray:5 7; opacity:.45}
+  .phone rect{fill:rgba(4,22,28,.9); stroke:var(--brass); stroke-width:1.5}
+  .phone .screen{fill:rgba(63,224,208,.35); stroke:none}
+  .calib .note{width:100%; margin-top:6px; padding:0; line-height:1.7}
+  @media (prefers-reduced-motion:reduce){
+    .phone animateMotion{display:none}
+    .fig8-track{stroke-dasharray:none}
+  }
+
+  /* ---------- tabs ---------- */
+  .tabs{display:flex; gap:6px; background:var(--glass); padding:4px;
+        border:1px solid var(--glass-line); backdrop-filter:blur(8px);
+        -webkit-backdrop-filter:blur(8px);
+        border-radius:12px; margin-bottom:16px}
+  .tabs button{margin:0; padding:7px 22px; font-size:14px; border-radius:9px;
+               background:transparent; color:var(--muted); font-weight:400}
+  .tabs button.on{background:var(--brass); color:#04161C; font-weight:600}
+  .view{display:none; flex-direction:column; align-items:center; width:100%}
+  .view.on{display:flex}
+
+  /* ---------- map ---------- */
+  #map{width:min(92vw,420px); height:min(60vh,420px); border-radius:16px;
+       border:1px solid var(--glass-line);
+       box-shadow:0 0 0 6px rgba(63,224,208,.05), 0 18px 50px rgba(0,0,0,.55)}
+  .leaflet-container{background:#062A31; font-family:"Space Grotesk",sans-serif}
+  .pin{display:grid; place-items:center; font-size:11px; font-weight:700;
+       color:#04161C; background:var(--brass); border-radius:50%;
+       width:22px; height:22px; box-shadow:0 0 0 4px rgba(63,224,208,.25)}
+  .legend{width:min(92vw,420px); margin-top:14px; display:flex; flex-wrap:wrap;
+          justify-content:center; gap:8px}
+  .legend .lg{display:flex; align-items:center; gap:7px; font-size:12.5px;
+              line-height:1.6; color:var(--paper);
+              background:var(--glass); border:1px solid var(--glass-line);
+              border-radius:999px; padding:3px 12px;
+              backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px)}
+  .legend .dot{width:14px; height:14px; border-radius:50%; flex:none;
+               display:grid; place-items:center; font-size:9px; font-weight:700;
+               color:#04161C; font-family:"Space Grotesk",sans-serif; font-style:normal}
+  .legend .dot.me{background:var(--jade)}
+  .legend .kb-mini{width:15px; height:17px; flex:none; display:block}
+  .legend .kb-mini svg{width:100%; height:100%; display:block}
+  .legend .dash{width:20px; height:0; flex:none;
+                border-top:2px dashed var(--brass)}
+  .map-hint{display:none; width:min(92vw,420px); margin-top:12px; text-align:center;
+            font-size:13px; line-height:1.6; color:#04161C; background:var(--brass);
+            border-radius:12px; padding:6px 14px; font-weight:600}
+  .map-note{color:var(--paper); opacity:.75}
+
+  .kaaba-pin{width:40px; height:44px;
+             filter:drop-shadow(0 0 8px rgba(63,224,208,.55))
+                    drop-shadow(0 3px 5px rgba(0,0,0,.6))}
+  .kaaba-pin svg{width:100%; height:100%; display:block}
+  .pin.me{background:var(--jade); box-shadow:0 0 0 4px rgba(124,245,176,.25)}
+</style>
+</head>
+<body>
+
+  <h1>Qibla Compass</h1>
+  <div class="sub" id="status">Finding your location…</div>
+
+  <div class="tabs">
+    <button id="tabCompass" class="on">Compass</button>
+    <button id="tabMap">Map</button>
+  </div>
+
+  <div class="view on" id="viewCompass">
+  <div class="dial-wrap" id="wrap">
+    <div class="dial" id="dial">
+      <div class="ticks" id="ticks"></div>
+      <div class="qibla-mark" id="qmark"><div class="kaaba"></div></div>
+    </div>
+    <div class="pointer"></div>
+    <div class="center">
+      <div>
+        <div class="big num" id="degText">--°</div>
+        <div class="lbl" id="degLbl">Qibla direction</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rows">
+    <div class="row"><span>Qibla bearing (from N)</span><b class="num" id="bearing">--</b></div>
+    <div class="row"><span>Distance to Makkah</span><b class="num" id="dist">--</b></div>
+    <div class="row"><span>Your location</span><b class="num" id="coords">--</b></div>
+  </div>
+
+  <button id="startBtn">Start compass</button>
+  <div class="calib">
+    <div class="calib-title">Compass calibration</div>
+    <svg viewBox="0 0 120 240" class="fig8" aria-hidden="true">
+      <path id="lemniscate" class="fig8-track" d="M60.0,220.0 L64.2,219.7 L68.4,218.8 L72.4,217.3 L76.2,215.4 L79.6,212.9 L82.8,210.0 L85.5,206.8 L87.8,203.3 L89.7,199.6 L91.3,195.8 L92.4,191.9 L93.1,188.0 L93.5,184.0 L93.6,180.1 L93.3,176.3 L92.8,172.6 L92.1,168.9 L91.2,165.4 L90.0,162.0 L88.7,158.7 L87.3,155.5 L85.7,152.5 L84.1,149.5 L82.3,146.7 L80.5,143.9 L78.6,141.3 L76.7,138.7 L74.7,136.2 L72.6,133.8 L70.6,131.4 L68.5,129.1 L66.4,126.8 L64.3,124.5 L62.1,122.2 L60.0,120.0 L57.9,117.8 L55.7,115.5 L53.6,113.2 L51.5,110.9 L49.4,108.6 L47.4,106.2 L45.3,103.8 L43.3,101.3 L41.4,98.7 L39.5,96.1 L37.7,93.3 L35.9,90.5 L34.3,87.5 L32.7,84.5 L31.3,81.3 L30.0,78.0 L28.8,74.6 L27.9,71.1 L27.2,67.4 L26.7,63.7 L26.4,59.9 L26.5,56.0 L26.9,52.0 L27.6,48.1 L28.7,44.2 L30.3,40.4 L32.2,36.7 L34.5,33.2 L37.2,30.0 L40.4,27.1 L43.8,24.6 L47.6,22.7 L51.6,21.2 L55.8,20.3 L60.0,20.0 L64.2,20.3 L68.4,21.2 L72.4,22.7 L76.2,24.6 L79.6,27.1 L82.8,30.0 L85.5,33.2 L87.8,36.7 L89.7,40.4 L91.3,44.2 L92.4,48.1 L93.1,52.0 L93.5,56.0 L93.6,59.9 L93.3,63.7 L92.8,67.4 L92.1,71.1 L91.2,74.6 L90.0,78.0 L88.7,81.3 L87.3,84.5 L85.7,87.5 L84.1,90.5 L82.3,93.3 L80.5,96.1 L78.6,98.7 L76.7,101.3 L74.7,103.8 L72.6,106.2 L70.6,108.6 L68.5,110.9 L66.4,113.2 L64.3,115.5 L62.1,117.8 L60.0,120.0 L57.9,122.2 L55.7,124.5 L53.6,126.8 L51.5,129.1 L49.4,131.4 L47.4,133.8 L45.3,136.2 L43.3,138.7 L41.4,141.3 L39.5,143.9 L37.7,146.7 L35.9,149.5 L34.3,152.5 L32.7,155.5 L31.3,158.7 L30.0,162.0 L28.8,165.4 L27.9,168.9 L27.2,172.6 L26.7,176.3 L26.4,180.1 L26.5,184.0 L26.9,188.0 L27.6,191.9 L28.7,195.8 L30.3,199.6 L32.2,203.3 L34.5,206.8 L37.2,210.0 L40.4,212.9 L43.8,215.4 L47.6,217.3 L51.6,218.8 L55.8,219.7 L60.0,220.0"/>
+      <g class="phone">
+        <rect x="-9" y="-15" width="18" height="30" rx="4"/>
+        <rect x="-5" y="-11" width="10" height="18" rx="1.5" class="screen"/>
+        <animateMotion dur="3.2s" repeatCount="indefinite" rotate="auto">
+          <mpath href="#lemniscate"/>
+        </animateMotion>
+      </g>
+    </svg>
+    <div class="note">Hold the phone and move it in a figure-8 three times. This lets the sensor recalibrate itself. Keep away from metal, magnets and magnetic phone cases.</div>
+  </div>
+  </div><!-- /viewCompass -->
+
+  <div class="view" id="viewMap">
+    <div id="map"></div>
+    <div id="mapHint" class="map-hint">Location unavailable — tap your city on the map</div>
+    <div class="legend">
+      <div class="lg"><i class="dot me"></i><span>Your location</span></div>
+      <div class="lg"><i class="kb-mini"><svg viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"> <!-- kiswa cube --> <path d="M20 4 L36 11 L36 34 L20 41 L4 34 L4 11 Z" fill="#0A1A1F" stroke="#3FE0D0" stroke-width="1.6" stroke-linejoin="round"/> <path d="M20 4 L36 11 L20 18 L4 11 Z" fill="#15343B" stroke="#3FE0D0" stroke-width="1.2" stroke-linejoin="round"/> <path d="M20 18 L20 41" stroke="#3FE0D0" stroke-width="1" opacity=".6"/> <!-- hizam: the gold embroidered belt --> <path d="M4 22 L20 29 L36 22" fill="none" stroke="#E9D08A" stroke-width="2.4" stroke-linejoin="round"/> <!-- door --> <rect x="24.5" y="24" width="6" height="10" rx="1" fill="#E9D08A" opacity=".85" transform="skewY(-12)"/></svg></i><span>The Kaaba</span></div>
+      <div class="lg"><i class="dash"></i><span>Qibla direction</span></div>
+    </div>
+    <div class="note map-note">Tap anywhere on the map to see the qibla from another location.</div>
+    <button class="ghost" id="resetMap">Back to my location</button>
+  </div>
+
+<script>
+const KAABA = { lat: 21.4225, lng: 39.8262 };
+const rad = d => d * Math.PI / 180;
+const deg = r => r * 180 / Math.PI;
+
+let qiblaBearing = null;   // degrees from true north
+let heading = null;        // device heading, degrees from north
+let sensorOK = false;
+
+/* ---- 1. build the dial ticks ---- */
+const ticks = document.getElementById('ticks');
+for (let i = 0; i < 72; i++){
+  const t = document.createElement('div');
+  t.className = 'tick';
+  const major = i % 6 === 0;
+  t.style.height = major ? '16px' : '8px';
+  t.style.opacity = major ? .8 : .35;
+  t.style.transform = `translateX(-50%) rotate(${i*5}deg)`;
+  t.style.transformOrigin = '50% calc(50% * 0 + 0px)';
+  ticks.appendChild(t);
+}
+/* position ticks around circle properly */
+function layoutTicks(){
+  const size = ticks.clientWidth;
+  ticks.querySelectorAll('.tick').forEach((t,i)=>{
+    t.style.transformOrigin = `50% ${size/2 - 6}px`;
+    t.style.transform = `translateX(-50%) rotate(${i*5}deg)`;
+  });
+}
+window.addEventListener('resize', layoutTicks);
+
+/* cardinal letters */
+const cards = [['N',0],['E',90],['S',180],['W',270]];
+cards.forEach(([label,angle])=>{
+  const el = document.createElement('div');
+  el.className='card-label';
+  el.innerHTML = `<span>${label}</span>`;
+  el.dataset.angle = angle;
+  ticks.appendChild(el);
+});
+function layoutCards(){
+  const size = ticks.clientWidth;
+  document.querySelectorAll('.card-label').forEach(el=>{
+    const a = +el.dataset.angle;
+    el.style.transform = `rotate(${a}deg)`;
+    el.style.transformOrigin = `50% ${size/2 - 16}px`;
+    el.querySelector('span').style.transform = `translateX(-50%) rotate(${-a}deg)`;
+  });
+}
+window.addEventListener('resize', layoutCards);
+setTimeout(()=>{layoutTicks();layoutCards();},50);
+
+/* ---- 2. qibla bearing + distance (great circle) ---- */
+function bearingTo(lat1,lng1,lat2,lng2){
+  const φ1=rad(lat1), φ2=rad(lat2), Δλ=rad(lng2-lng1);
+  const y = Math.sin(Δλ)*Math.cos(φ2);
+  const x = Math.cos(φ1)*Math.sin(φ2) - Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ);
+  return (deg(Math.atan2(y,x)) + 360) % 360;
+}
+function distanceTo(lat1,lng1,lat2,lng2){
+  const Rk=6371, φ1=rad(lat1), φ2=rad(lat2);
+  const Δφ=rad(lat2-lat1), Δλ=rad(lng2-lng1);
+  const a=Math.sin(Δφ/2)**2 + Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)**2;
+  return Rk * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+/* ---- 3. location ---- */
+function getLocation(){
+  if(!navigator.geolocation){ setStatus('Geolocation is not supported in this browser.', true); return; }
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const {latitude:lat, longitude:lng} = pos.coords;
+    qiblaBearing = bearingTo(lat,lng,KAABA.lat,KAABA.lng);
+    document.getElementById('bearing').textContent = qiblaBearing.toFixed(1) + '°';
+    document.getElementById('dist').textContent = Math.round(distanceTo(lat,lng,KAABA.lat,KAABA.lng)).toLocaleString('en') + ' km';
+    document.getElementById('coords').textContent = lat.toFixed(3)+', '+lng.toFixed(3);
+    setQiblaMark(qiblaBearing);
+    setStatus('Location found — now start the compass.');
+    myPos = {lat, lng};
+    if (map) drawQiblaLine(lat, lng, true);
+    render();
+  }, err=>{
+    setStatus('Could not get your location. Enable Location permission in your browser.', true);
+  }, {enableHighAccuracy:true, timeout:12000, maximumAge:60000});
+}
+
+/* ---- 4. compass ---- */
+function onOrientation(e){
+  let h = null;
+  if (typeof e.webkitCompassHeading === 'number'){      // iOS
+    h = e.webkitCompassHeading;
+  } else if (e.absolute === true && typeof e.alpha === 'number'){ // Android
+    h = 360 - e.alpha;
+  }
+  if (h === null) return;
+  const screenAngle = (screen.orientation && screen.orientation.angle) || 0;
+  heading = (h + screenAngle + 360) % 360;
+  sensorOK = true;
+  render();
+}
+
+async function startCompass(){
+  getLocation();
+  try{
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function'){
+      const res = await DeviceOrientationEvent.requestPermission();  // iOS 13+
+      if (res !== 'granted'){ setStatus('Compass permission was denied.', true); return; }
+    }
+    window.addEventListener('deviceorientationabsolute', onOrientation, true);
+    window.addEventListener('deviceorientation', onOrientation, true);
+    setTimeout(()=>{
+      if(!sensorOK) setStatus('No compass sensor on this device — use the bearing below to face the qibla manually.', true);
+    }, 2500);
+  }catch(err){
+    setStatus('Could not start the compass.', true);
+  }
+  document.getElementById('startBtn').textContent = 'Recalibrate';
+  document.getElementById('startBtn').classList.add('ghost');
+}
+
+/* ---- 5. render ---- */
+function render(){
+  const dial = document.getElementById('dial');
+  const degText = document.getElementById('degText');
+  const wrap = document.getElementById('wrap');
+
+  if (heading !== null) dial.style.transform = `rotate(${-heading}deg)`;
+
+  if (qiblaBearing === null) return;
+  if (heading === null){
+    degText.textContent = qiblaBearing.toFixed(0) + '°';
+    document.getElementById('degLbl').textContent = 'Bearing from north';
+    return;
+  }
+  let diff = ((qiblaBearing - heading + 540) % 360) - 180; // -180..180
+  degText.textContent = Math.abs(diff).toFixed(0) + '°';
+  const aligned = Math.abs(diff) <= 4;
+  wrap.classList.toggle('aligned', aligned);
+  document.getElementById('degLbl').textContent =
+    aligned ? 'Qibla is ahead of you' : (diff > 0 ? 'Turn right' : 'Turn left');
+}
+
+function setQiblaMark(bearing){
+  document.getElementById('qmark').style.transform = `rotate(${bearing}deg)`;
+  document.querySelector('.kaaba').style.transform =
+    `translateX(-50%) rotate(${-bearing}deg)`;
+}
+
+function setStatus(msg, warn){
+  const s = document.getElementById('status');
+  s.textContent = msg;
+  s.classList.toggle('warn', !!warn);
+}
+
+document.getElementById('startBtn').addEventListener('click', startCompass);
+
+/* ---- 6. map ---- */
+let map = null, myPos = null, meMarker = null, qLine = null, qGlow = null;
+
+function icon(cls, label){
+  return L.divIcon({className:'', html:`<div class="pin ${cls}">${label}</div>`,
+                    iconSize:[22,22], iconAnchor:[11,11]});
+}
+
+/* great-circle points so the line is geodesically correct, not a straight rhumb */
+function greatCircle(lat1,lng1,lat2,lng2,n=128){
+  const φ1=rad(lat1),λ1=rad(lng1),φ2=rad(lat2),λ2=rad(lng2);
+  const d = 2*Math.asin(Math.sqrt(Math.sin((φ2-φ1)/2)**2 +
+            Math.cos(φ1)*Math.cos(φ2)*Math.sin((λ2-λ1)/2)**2));
+  const pts=[];
+  for(let i=0;i<=n;i++){
+    const f=i/n;
+    const A=Math.sin((1-f)*d)/Math.sin(d), B=Math.sin(f*d)/Math.sin(d);
+    const x=A*Math.cos(φ1)*Math.cos(λ1)+B*Math.cos(φ2)*Math.cos(λ2);
+    const y=A*Math.cos(φ1)*Math.sin(λ1)+B*Math.cos(φ2)*Math.sin(λ2);
+    const z=A*Math.sin(φ1)+B*Math.sin(φ2);
+    pts.push([deg(Math.atan2(z,Math.sqrt(x*x+y*y))), deg(Math.atan2(y,x))]);
+  }
+  return pts;
+}
+
+function loadLeaflet(){
+  if (window.L) return Promise.resolve();
+  if (window._leafletPromise) return window._leafletPromise;
+  const urls = [
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
+    'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
+  ];
+  window._leafletPromise = new Promise((resolve, reject) => {
+    (function tryNext(i){
+      if (i >= urls.length) return reject(new Error('leaflet-unavailable'));
+      const s = document.createElement('script');
+      s.src = urls[i];
+      s.onload = () => window.L ? resolve() : tryNext(i+1);
+      s.onerror = () => tryNext(i+1);
+      document.head.appendChild(s);
+    })(0);
+  });
+  return window._leafletPromise;
+}
+
+function initMap(){
+  const start = myPos || {lat:30, lng:45};
+  map = L.map('map', {zoomControl:false}).setView([start.lat,start.lng], myPos?9:4);
+  L.control.zoom({position:'topleft'}).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    maxZoom:19, attribution:'&copy; OpenStreetMap, &copy; CARTO'
+  }).addTo(map);
+
+  const kaabaIcon = L.divIcon({className:'', iconSize:[40,44], iconAnchor:[20,40],
+    html:'<div class="kaaba-pin"><svg viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"> <!-- kiswa cube --> <path d="M20 4 L36 11 L36 34 L20 41 L4 34 L4 11 Z" fill="#0A1A1F" stroke="#3FE0D0" stroke-width="1.6" stroke-linejoin="round"/> <path d="M20 4 L36 11 L20 18 L4 11 Z" fill="#15343B" stroke="#3FE0D0" stroke-width="1.2" stroke-linejoin="round"/> <path d="M20 18 L20 41" stroke="#3FE0D0" stroke-width="1" opacity=".6"/> <!-- hizam: the gold embroidered belt --> <path d="M4 22 L20 29 L36 22" fill="none" stroke="#E9D08A" stroke-width="2.4" stroke-linejoin="round"/> <!-- door --> <rect x="24.5" y="24" width="6" height="10" rx="1" fill="#E9D08A" opacity=".85" transform="skewY(-12)"/></svg></div>'});
+  L.marker([KAABA.lat,KAABA.lng],{icon:kaabaIcon, zIndexOffset:1000}).addTo(map)
+   .bindPopup('The Kaaba — Makkah al-Mukarramah');
+
+  map.on('click', e => drawQiblaLine(e.latlng.lat, e.latlng.lng, false));
+  if (myPos) drawQiblaLine(myPos.lat, myPos.lng, true);
+  else document.getElementById('mapHint').style.display = 'block';
+}
+
+function drawQiblaLine(lat, lng, isMe){
+  if(!map) return;
+  const hint = document.getElementById('mapHint');
+  if (hint) hint.style.display = 'none';
+  const b = bearingTo(lat,lng,KAABA.lat,KAABA.lng);
+  const km = distanceTo(lat,lng,KAABA.lat,KAABA.lng);
+  if (qLine) qLine.remove();
+  if (qGlow) qGlow.remove();
+  const path = greatCircle(lat,lng,KAABA.lat,KAABA.lng);
+  qGlow = L.polyline(path, {color:'#3FE0D0', weight:9, opacity:.20}).addTo(map);
+  qLine = L.polyline(path, {color:'#7CF5B0', weight:3.5, opacity:1,
+                            dashArray:'10 7', lineCap:'round'}).addTo(map);
+  if (meMarker) meMarker.remove();
+  qiblaBearing = b;
+  document.getElementById('bearing').textContent = b.toFixed(1) + '°';
+  document.getElementById('dist').textContent =
+    Math.round(km).toLocaleString('en') + ' km';
+  document.getElementById('coords').textContent =
+    lat.toFixed(3) + ', ' + lng.toFixed(3) + (isMe ? '' : ' (selected)');
+  setQiblaMark(b);
+  render();
+
+  meMarker = L.marker([lat,lng],{icon:icon('me','')}).addTo(map)
+    .bindPopup(`Qibla: <b>${b.toFixed(1)}°</b><br>Distance: <b>${Math.round(km).toLocaleString('en')} km</b>`)
+    .openPopup();
+  if (isMe) map.fitBounds(qLine.getBounds(), {padding:[40,40]});
+}
+
+/* ---- 7. tabs ---- */
+function show(which){
+  const c = which === 'compass';
+  document.getElementById('viewCompass').classList.toggle('on', c);
+  document.getElementById('viewMap').classList.toggle('on', !c);
+  document.getElementById('tabCompass').classList.toggle('on', c);
+  document.getElementById('tabMap').classList.toggle('on', !c);
+  if (!c){
+    if (!map){
+      loadLeaflet().then(()=>{
+        initMap();
+        setTimeout(()=>map.invalidateSize(), 60);
+      }).catch(()=>{
+        document.getElementById('map').innerHTML =
+          '<div style="display:grid;place-items:center;height:100%;padding:20px;'+
+          'text-align:center;font-size:13px;line-height:2;color:#E0A33E">'+
+          'Map could not load — check your internet connection, then refresh the page.</div>';
+      });
+    } else {
+      setTimeout(()=>map.invalidateSize(), 60);
+    }
+  }
+}
+document.getElementById('tabCompass').addEventListener('click', ()=>show('compass'));
+document.getElementById('tabMap').addEventListener('click', ()=>show('map'));
+document.getElementById('resetMap').addEventListener('click', ()=>{
+  if (myPos) drawQiblaLine(myPos.lat, myPos.lng, true);
+  else getLocation();
+});
+
+getLocation();
+</script>
+</body>
+</html>
