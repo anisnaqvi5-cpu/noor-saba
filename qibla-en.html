@@ -167,7 +167,7 @@
   .leaflet-control-attribution a{color:var(--muted) !important; text-decoration:none}
   .leaflet-control-zoom a{background:rgba(6,38,45,.9) !important;
     color:var(--brass) !important; border-color:rgba(63,224,208,.2) !important}
-  .leaflet-container{background:#062A31; font-family:"Space Grotesk",sans-serif}
+  .leaflet-container{background:#CFEAE6; font-family:"Space Grotesk",sans-serif}
   .pin{display:grid; place-items:center; font-size:11px; font-weight:700;
        color:#04161C; background:var(--brass); border-radius:50%;
        width:22px; height:22px; box-shadow:0 0 0 4px rgba(63,224,208,.25)}
@@ -468,7 +468,7 @@ function initMap(){
   const start = myPos || {lat:30, lng:45};
   map = L.map('map', {zoomControl:false}).setView([start.lat,start.lng], myPos?9:4);
   L.control.zoom({position:'topleft'}).addTo(map);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
     maxZoom:19, attribution:'&copy; OpenStreetMap, &copy; CARTO'
   }).addTo(map);
 
