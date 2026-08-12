@@ -169,6 +169,26 @@
   .hstep .val{min-width:52px;text-align:center;color:var(--gold-soft);font-weight:700;font-size:.8rem}
 
   /* ───── کارڈز ───── */
+
+  /* ---------- اسلامی ٹولز ---------- */
+  .isl-tools h2::after{background:linear-gradient(to left,#3FE0D0,transparent)}
+  .tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+  .tool{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+    text-decoration:none;padding:15px 8px 13px;border-radius:14px;
+    border:1px solid rgba(63,224,208,.38);
+    background:linear-gradient(160deg,#0B3B44,#04161C);
+    color:#E4F7F5;
+    box-shadow:inset 0 0 22px rgba(63,224,208,.07);
+    transition:transform .12s ease, box-shadow .12s ease}
+  .tool:active{transform:scale(.97);
+    box-shadow:0 2px 12px rgba(63,224,208,.3), inset 0 0 22px rgba(63,224,208,.12)}
+  .tool-ic{display:flex;align-items:center;justify-content:center;width:34px;height:34px;
+    border-radius:50%;background:rgba(63,224,208,.14);color:#3FE0D0}
+  .tool-nm{font-family:var(--nasta);font-size:.86rem;font-weight:600;line-height:2;
+    text-align:center;white-space:nowrap;color:#E4F7F5}
+  .tool-en{font-size:.62rem;letter-spacing:.6px;color:#7FA8A8;
+    text-transform:uppercase;line-height:1.2;margin-top:-4px}
+
   .card{background:var(--card);border:1px solid var(--line);border-radius:18px;margin:14px 14px 0;padding:16px 18px;box-shadow:0 2px 10px rgba(20,31,60,.05)}
   .card h2{font-family:var(--nasta);font-size:1.02rem;font-weight:600;color:var(--night2);display:flex;align-items:center;gap:8px;line-height:2.2;white-space:nowrap;min-width:0}
   .card h2>span{flex:0 0 auto;white-space:nowrap}
@@ -729,6 +749,38 @@
     <h2>مناسبتیں اور تعطیلات</h2>
     <div class="occ-today" id="occToday">—</div>
     <ul class="occ-list" id="occList"></ul>
+  </section>
+
+
+  <!-- اسلامی ٹولز -->
+  <section class="card isl-tools" aria-label="اسلامی ٹولز">
+    <h2><span>اسلامی ٹولز</span></h2>
+    <div class="tools-grid">
+
+      <a class="tool" href="./qibla.html">
+        <span class="tool-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+               stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>
+          </svg>
+        </span>
+        <span class="tool-nm">قبلہ نما</span>
+        <span class="tool-en">Qibla</span>
+      </a>
+
+      <a class="tool" href="./istikhara.html">
+        <span class="tool-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+               stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/>
+            <path d="M8.5 8.5h6M8.5 12h4"/>
+          </svg>
+        </span>
+        <span class="tool-nm">استخارہ</span>
+        <span class="tool-en">Istikhara</span>
+      </a>
+
+    </div>
   </section>
 
   <!-- اوقاتِ شرعی -->
