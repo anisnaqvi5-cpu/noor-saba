@@ -80,6 +80,13 @@ h1{font-size:1.18rem;font-weight:700;margin:0;line-height:2}
   font-family:system-ui,sans-serif;font-size:.75rem;cursor:pointer;
 }
 .theme:hover{border-color:var(--gold)}
+.back{
+  flex:none;width:2.2rem;height:2.2rem;display:grid;place-items:center;
+  border:1px solid var(--line);border-radius:50%;color:var(--ink-soft);
+  background:none;text-decoration:none;
+}
+.back:hover{border-color:var(--gold);color:var(--gold)}
+.back svg{width:1.1rem;height:1.1rem}
 
 /* ── picker ───────────────────────── */
 .picker{
@@ -240,6 +247,10 @@ table.hours tr+tr th,table.hours tr+tr td{border-top:1px solid var(--line)}
 <div class="wrap">
 
 <header>
+  <a class="back" href="./index.html" aria-label="واپس">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+         stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+  </a>
   <div class="mark" id="mark" aria-hidden="true"><i class="sign" id="sign"></i></div>
   <div>
     <h1>قرآنی استخارہ</h1>
