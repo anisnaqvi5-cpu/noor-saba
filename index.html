@@ -30,6 +30,9 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   [hidden]{display:none !important}   /* class display rules ورنہ hidden کو دبا دیتی ہیں */
+  /* براؤزر کے اپنے تاریخ/وقت پکر (کیلنڈر پاپ اپ وغیرہ) ڈیفالٹ نارنجی رنگ میں آتے ہیں —
+     یہ سائٹ کے سنہری رنگ سے میل کھاتا ہے */
+  input[type=date],input[type=time]{accent-color:var(--gold)}
   html{-webkit-text-size-adjust:100%}
   body{background:var(--paper);color:var(--ink);font-family:var(--naskh);line-height:1.9}
   button,select{font-family:inherit}
@@ -361,10 +364,12 @@
   .occ-today{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#FBF6E7,#F6EDD2);
     border:1px solid var(--gold-soft);border-radius:12px;padding:10px 14px;margin:10px 0 4px;
     font-size:.93rem;line-height:1.6}
+  .occ-today .occ-body{flex:1 1 auto}
   .occ-today.none{display:block}
   .occ-today.none{background:var(--paper);border-color:var(--line);color:var(--ink-soft)}
   ul.occ-list{list-style:none;margin-top:8px}
   ul.occ-list li{display:flex;justify-content:space-between;gap:12px;padding:9px 2px;border-bottom:1px dashed var(--line);font-size:.9rem;line-height:1.95}
+  .what-text,.occ-body{min-width:0}
   ul.occ-list li:last-child{border-bottom:none}
   .salawat{color:#96731C;font-weight:700;font-size:.35em;letter-spacing:0;
     font-family:var(--nasta);white-space:nowrap}
@@ -376,6 +381,7 @@
   ul.occ-list li.today{background:linear-gradient(90deg,#FBF6E7,transparent);border-radius:10px;
     margin:0 -8px;padding:9px 8px;border-bottom:1px dashed var(--line)}
   ul.occ-list li.today .what{display:flex;align-items:center;gap:9px}
+  ul.occ-list li.today .what-text{flex:1 1 auto}
   .occ-today-badge{display:flex;align-items:center;justify-content:center;flex:0 0 auto;
     width:36px;height:36px;border-radius:50%;background:var(--night2);color:var(--gold-soft);
     font-family:var(--nasta);font-size:1rem;font-weight:700;box-shadow:0 3px 8px rgba(20,31,60,.22);
@@ -752,6 +758,27 @@
   </section>
 
 
+  <!-- اوقاتِ شرعی -->
+  <section class="card" aria-label="اوقات شرعی">
+    <h2>اوقاتِ شرعی فقہِ جعفری <span id="cityName" style="font-size:.8rem;color:var(--ink-soft)"></span></h2>
+    <div class="times" id="timesGrid"></div>
+    <div class="est-note" id="estNote" hidden></div>
+    <div class="prof-row">
+      <span class="prof-lbl">حسابی معیار</span>
+      <div class="prof-seg" id="profSeg" role="group" aria-label="حسابی معیار">
+        <button type="button" data-prof="falaki" class="on">فلکیاتی</button>
+        <button type="button" data-prof="anjuman">انجمنِ حسینی</button>
+      </div>
+    </div>
+    <div class="prof-note" id="profNote"></div>
+
+    <details class="adjbox">
+      <summary>⚙ اوقات کی ایڈجسٹمنٹ (منٹ میں)</summary>
+      <div id="adjRows"></div>
+      <div class="adj-note">اپنے مقامی نقشے (مثلاً انجمنِ حسینی) سے ملانے کے لیے ہر وقت میں احتیاطی منٹ کم یا زیادہ کریں</div>
+    </details>
+  </section>
+
   <!-- اسلامی ٹولز -->
   <section class="card isl-tools" aria-label="اسلامی ٹولز">
     <h2><span>اسلامی ٹولز</span></h2>
@@ -780,28 +807,33 @@
         <span class="tool-en">Istikhara</span>
       </a>
 
-    </div>
-  </section>
+      <a class="tool" href="./qaza.html">
+        <span class="tool-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+               stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/>
+            <rect x="5" y="6" width="14" height="15" rx="2"/>
+            <path d="M9 13l2 2 4-4"/>
+          </svg>
+        </span>
+        <span class="tool-nm">نمازِ قضا محاسبہ</span>
+        <span class="tool-en">Qaza Calculator</span>
+      </a>
 
-  <!-- اوقاتِ شرعی -->
-  <section class="card" aria-label="اوقات شرعی">
-    <h2>اوقاتِ شرعی فقہِ جعفری <span id="cityName" style="font-size:.8rem;color:var(--ink-soft)"></span></h2>
-    <div class="times" id="timesGrid"></div>
-    <div class="est-note" id="estNote" hidden></div>
-    <div class="prof-row">
-      <span class="prof-lbl">حسابی معیار</span>
-      <div class="prof-seg" id="profSeg" role="group" aria-label="حسابی معیار">
-        <button type="button" data-prof="falaki" class="on">فلکیاتی</button>
-        <button type="button" data-prof="anjuman">انجمنِ حسینی</button>
-      </div>
-    </div>
-    <div class="prof-note" id="profNote"></div>
+      <a class="tool" href="./qarz.html">
+        <span class="tool-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+               stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="7" width="18" height="12" rx="2"/>
+            <path d="M3 10h18"/>
+            <circle cx="17" cy="14" r="1.1" fill="currentColor" stroke="none"/>
+          </svg>
+        </span>
+        <span class="tool-nm">قرض حساب</span>
+        <span class="tool-en">Debt Calculator</span>
+      </a>
 
-    <details class="adjbox">
-      <summary>⚙ اوقات کی ایڈجسٹمنٹ (منٹ میں)</summary>
-      <div id="adjRows"></div>
-      <div class="adj-note">اپنے مقامی نقشے (مثلاً انجمنِ حسینی) سے ملانے کے لیے ہر وقت میں احتیاطی منٹ کم یا زیادہ کریں</div>
-    </details>
+    </div>
   </section>
 
   <!-- آب و ہوا -->
@@ -2135,14 +2167,15 @@ function colorWords(s){
 function renderOccasions(){
   const dayOcc = occOf(selDate);
   const isToday = sameDay(selDate, today);
-  const lbl = isToday ? '<span class="occ-today-badge">آج</span>' : ud(selDate.getDate()) + " " + GMON[selDate.getMonth()];
+  const badge = isToday ? '<span class="occ-today-badge">آج</span>' : '';
+  const dateLbl = isToday ? '' : ud(selDate.getDate()) + " " + GMON[selDate.getMonth()];
   const box = $("occToday");
   if(dayOcc.length){
     box.className = "occ-today";
-    box.innerHTML = lbl + ": " + dayOcc.map(o => colorWords(o.t) + (o.hol?'<span class="tag">تعطیل</span>':"")).join(" · ");
+    box.innerHTML = badge + '<span class="occ-body">' + dateLbl + ": " + dayOcc.map(o => colorWords(o.t) + (o.hol?'<span class="tag">تعطیل</span>':"")).join(" · ") + '</span>';
   } else {
     box.className = "occ-today none";
-    box.innerHTML = lbl + ": کوئی خاص مناسبت نہیں";
+    box.innerHTML = badge + '<span class="occ-body">' + dateLbl + ": کوئی خاص مناسبت نہیں</span>";
   }
   /* پورے دکھائے جانے والے مہینے کی مناسبتیں — ماضی کی جھلک بھی، آئندہ کی بھی */
   const dim = new Date(viewY, viewM+1, 0).getDate();
@@ -2156,7 +2189,7 @@ function renderOccasions(){
     const st = sameDay(dt,today) ? "today" : (dt < today ? "past" : "future");
     const prefix = st==="today" ? '<span class="occ-today-badge">آج</span>' : st==="past" ? '<span class="occ-chk" aria-hidden="true">✓</span>' : "";
     return `<li class="${st} ${o.hol?"holiday":""}">
-      <span class="what">${prefix}${colorWords(o.t)}</span>
+      <span class="what">${prefix}<span class="what-text">${colorWords(o.t)}</span></span>
       <span class="when">${WD[dt.getDay()]}، ${ud(dt.getDate())} ${GMON[dt.getMonth()]} – ${udh(h.d)} ${HMON_SHORT[h.m-1]}</span>
     </li>`;
   }).join("") || "<li><span class='what' style='color:var(--ink-soft)'>اس مہینے کوئی مناسبت درج نہیں</span></li>";
