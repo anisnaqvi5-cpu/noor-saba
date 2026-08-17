@@ -7,4 +7,13 @@
       "75:09:42:BB:2D:23:A4:FE:BF:12:9A:E0:EC:9B:27:4E:D9:26:69:34:11:7C:F6:69:70:8D:CA:EC:8A:F9:75:34"
     ]
   }
+},{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "pk.khatmquran.app",
+    "sha256_cert_fingerprints": [
+      "C5:1A:30:1A:0C:80:C0:B3:03:A6:48:81:ED:B3:65:19:9B:85:FF:E2:EC:DD:50:B0:B1:D5:DD:76:1D:C1:29:5B"
+    ]
+  }
 }]
