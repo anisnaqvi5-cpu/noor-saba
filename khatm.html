@@ -309,6 +309,18 @@ input[type=text]:focus,input[type=number]:focus,input[type=date]:focus,input[typ
   </div>
 </div>
 
+<div id="codeModal" class="modal-overlay hidden">
+  <div class="modal-box" style="text-align:center">
+    <h2 data-t="tCreatedTitle"></h2>
+    <div class="code-box" id="codeModalShow"></div>
+    <p class="note" data-t="codeWarn" style="margin-top:10px"></p>
+    <div class="row" style="margin-top:14px">
+      <button class="btn ghost sm" id="codeModalCopy" data-t="copyCode"></button>
+      <button class="btn sm gold" id="codeModalClose" data-t="close"></button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ================= storage layer =================
    Local-only keys (lang, myKhatms, myClaims) stay in localStorage — they are
@@ -369,7 +381,7 @@ ur:{dir:"rtl", digits:"en",
  alarmLabel:"روزانہ یاد دہانی کا وقت",
  setPassLabel:"پاس ورڈ مقرر کریں", passNote:"پاس ورڈ کے بغیر کوئی اس ختم کو نہیں کھول سکے گا۔",
  createKhatm:"ختم بنائیں",
- codeWarn:"معلومات کوڈ اور پاس ورڈ کے ساتھ محفوظ ہوتی ہیں۔ دونوں صرف شرکاء اور والدین کو دیں۔",
+ codeWarn:"معلومات کوڈ کے ساتھ محفوظ ہوتی ہیں۔ کوڈ صرف شرکاء اور والدین کو دیں۔",
  todayTitle:"آج کا حصہ", startedOn:"آغاز {d}", dayOf:"دن {a} از {b}", refresh:"تازہ کریں", finished:"ختم مکمل ہو چکا",
  pageOne:"صفحہ {a}", pageRange:"صفحہ {a} تا {b}", doneYes:"پڑھ لیا", doneNo:"ابھی نہیں پڑھا",
  sharedNote:"مشترک ختم: ہر شریک کا حصہ اسی دن کے صفحات کا ایک جزو ہے۔",
@@ -405,7 +417,7 @@ ur:{dir:"rtl", digits:"en",
  deleteKhatm:"ختم حذف کریں", adminPassPrompt:"ایڈمن پاس ورڈ درج کریں", tWrongAdminPass:"پاس ورڈ غلط ہے",
  deleteConfirm:"کیا واقعی یہ ختم ہمیشہ کے لیے حذف کرنا ہے؟", tDeleted:"ختم حذف ہو گیا",
  tabFamily:"خاندانی ختم", tabPublic:"عمومی ختم",
- noteTitle:"یادداشت", close:"بند کریں", tNoteSaved:"یادداشت محفوظ ہو گئی"},
+ noteTitle:"یادداشت", close:"بند کریں", tNoteSaved:"یادداشت محفوظ ہو گئی", tCreatedTitle:"ختم بن گیا"},
 
 fa:{dir:"rtl", digits:"fa",
  title:"ختم قرآن خانوادگی", subtitle:"بر پایهٔ صفحه‌بندی مصحف عثمان طه — ۶۰۴ صفحه",
@@ -425,7 +437,7 @@ fa:{dir:"rtl", digits:"fa",
  alarmLabel:"ساعت یادآوری روزانه",
  setPassLabel:"تعیین رمز", passNote:"بدون رمز کسی نمی‌تواند این ختم را باز کند.",
  createKhatm:"ساخت ختم",
- codeWarn:"اطلاعات با کد و رمز ذخیره می‌شود. هر دو را فقط به شرکت‌کنندگان و والدین بدهید.",
+ codeWarn:"اطلاعات با کد ذخیره می‌شود. کد را فقط به شرکت‌کنندگان و والدین بدهید.",
  todayTitle:"سهم امروز", startedOn:"آغاز {d}", dayOf:"روز {a} از {b}", refresh:"به‌روزرسانی", finished:"ختم کامل شد",
  pageOne:"صفحهٔ {a}", pageRange:"صفحهٔ {a} تا {b}", doneYes:"خوانده شد", doneNo:"هنوز خوانده نشده",
  sharedNote:"ختم مشترک: سهم هر نفر بخشی از صفحات همان روز است.",
@@ -461,7 +473,7 @@ fa:{dir:"rtl", digits:"fa",
  deleteKhatm:"حذف ختم", adminPassPrompt:"رمز ادمین را وارد کنید", tWrongAdminPass:"رمز اشتباه است",
  deleteConfirm:"آیا واقعاً می‌خواهید این ختم برای همیشه حذف شود؟", tDeleted:"ختم حذف شد",
  tabFamily:"ختم خانوادگی", tabPublic:"ختم عمومی",
- noteTitle:"یادداشت", close:"بستن", tNoteSaved:"یادداشت ذخیره شد"},
+ noteTitle:"یادداشت", close:"بستن", tNoteSaved:"یادداشت ذخیره شد", tCreatedTitle:"ختم ساخته شد"},
 
 en:{dir:"ltr", digits:"en",
  title:"Family Quran Khatm", subtitle:"Based on the Uthman Taha mushaf — 604 pages",
@@ -481,7 +493,7 @@ en:{dir:"ltr", digits:"en",
  alarmLabel:"Daily reminder time",
  setPassLabel:"Set a password", passNote:"Without the password nobody can open this khatm.",
  createKhatm:"Create khatm",
- codeWarn:"Data is stored under the code and password. Share both only with participants and parents.",
+ codeWarn:"Data is stored under the code. Share the code only with participants and parents.",
  todayTitle:"Today's portion", startedOn:"started {d}", dayOf:"Day {a} of {b}", refresh:"Refresh", finished:"Khatm complete",
  pageOne:"Page {a}", pageRange:"Pages {a}–{b}", doneYes:"Read", doneNo:"Not read yet",
  sharedNote:"Shared khatm: each person's portion is part of that day's pages.",
@@ -517,7 +529,7 @@ en:{dir:"ltr", digits:"en",
  deleteKhatm:"Delete khatm", adminPassPrompt:"Enter admin password", tWrongAdminPass:"Wrong password",
  deleteConfirm:"Really delete this khatm forever?", tDeleted:"Khatm deleted",
  tabFamily:"Family khatm", tabPublic:"Public khatm",
- noteTitle:"Notes", close:"Close", tNoteSaved:"Note saved"}
+ noteTitle:"Notes", close:"Close", tNoteSaved:"Note saved", tCreatedTitle:"Khatm created"}
 };
 
 /* ================= constants ================= */
@@ -1083,8 +1095,13 @@ $('createBtn').onclick = async () => {
   draft = { mode:'shared', members:[] };
   $('khatmTitle').value = '';
   showMain();
-  toast(t('tCreated',{c:state.code}));
+  $('codeModalShow').textContent = state.code;
+  $('codeModal').classList.remove('hidden');
 };
+
+$('codeModalCopy').onclick = () => navigator.clipboard?.writeText($('codeModalShow').textContent)
+  .then(()=>toast(t('tCopied')), ()=>toast(t('tNotCopied')));
+$('codeModalClose').onclick = () => $('codeModal').classList.add('hidden');
 
 $('joinBtn').onclick = async () => {
   const c = $('joinCode').value.trim().toUpperCase();
