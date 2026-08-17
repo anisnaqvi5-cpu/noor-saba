@@ -154,6 +154,12 @@ input[type=text]:focus,input[type=number]:focus,input[type=date]:focus,input[typ
       </div>
 
       <div class="card">
+        <h2 data-t="allKhatms"></h2>
+        <div id="allKhatmsList"></div>
+        <button class="btn ghost sm" id="allKhatmsBtn" data-t="viewAll"></button>
+      </div>
+
+      <div class="card">
         <h2 data-t="joinTitle"></h2>
         <label for="joinCode" data-t="codeLabel"></label>
         <input type="text" id="joinCode" maxlength="10" placeholder="TAHA47">
@@ -417,7 +423,8 @@ ur:{dir:"rtl", digits:"en",
  deleteKhatm:"ختم حذف کریں", adminPassPrompt:"ایڈمن پاس ورڈ درج کریں", tWrongAdminPass:"پاس ورڈ غلط ہے",
  deleteConfirm:"کیا واقعی یہ ختم ہمیشہ کے لیے حذف کرنا ہے؟", tDeleted:"ختم حذف ہو گیا",
  tabFamily:"خاندانی ختم", tabPublic:"عمومی ختم",
- noteTitle:"یادداشت", close:"بند کریں", tNoteSaved:"یادداشت محفوظ ہو گئی", tCreatedTitle:"ختم بن گیا"},
+ noteTitle:"یادداشت", close:"بند کریں", tNoteSaved:"یادداشت محفوظ ہو گئی", tCreatedTitle:"ختم بن گیا",
+ allKhatms:"تمام ختم (ایڈمن)", viewAll:"سب دیکھیں", noneFound:"کوئی ختم نہیں ملا"},
 
 fa:{dir:"rtl", digits:"fa",
  title:"ختم قرآن خانوادگی", subtitle:"بر پایهٔ صفحه‌بندی مصحف عثمان طه — ۶۰۴ صفحه",
@@ -473,7 +480,8 @@ fa:{dir:"rtl", digits:"fa",
  deleteKhatm:"حذف ختم", adminPassPrompt:"رمز ادمین را وارد کنید", tWrongAdminPass:"رمز اشتباه است",
  deleteConfirm:"آیا واقعاً می‌خواهید این ختم برای همیشه حذف شود؟", tDeleted:"ختم حذف شد",
  tabFamily:"ختم خانوادگی", tabPublic:"ختم عمومی",
- noteTitle:"یادداشت", close:"بستن", tNoteSaved:"یادداشت ذخیره شد", tCreatedTitle:"ختم ساخته شد"},
+ noteTitle:"یادداشت", close:"بستن", tNoteSaved:"یادداشت ذخیره شد", tCreatedTitle:"ختم ساخته شد",
+ allKhatms:"همه ختم‌ها (ادمین)", viewAll:"مشاهده همه", noneFound:"ختمی یافت نشد"},
 
 en:{dir:"ltr", digits:"en",
  title:"Family Quran Khatm", subtitle:"Based on the Uthman Taha mushaf — 604 pages",
@@ -529,15 +537,19 @@ en:{dir:"ltr", digits:"en",
  deleteKhatm:"Delete khatm", adminPassPrompt:"Enter admin password", tWrongAdminPass:"Wrong password",
  deleteConfirm:"Really delete this khatm forever?", tDeleted:"Khatm deleted",
  tabFamily:"Family khatm", tabPublic:"Public khatm",
- noteTitle:"Notes", close:"Close", tNoteSaved:"Note saved", tCreatedTitle:"Khatm created"}
+ noteTitle:"Notes", close:"Close", tNoteSaved:"Note saved", tCreatedTitle:"Khatm created",
+ allKhatms:"All khatms (admin)", viewAll:"View all", noneFound:"No khatms found"}
 };
 
 /* ================= constants ================= */
 const ADMIN_PASS = '8834791';
+let adminUnlocked = false;
 function checkAdmin(){
+  if(adminUnlocked) return true;
   const p = window.prompt(t('adminPassPrompt'));
   if(p === null) return false;
   if(p !== ADMIN_PASS){ toast(t('tWrongAdminPass')); return false; }
+  adminUnlocked = true;
   return true;
 }
 const TOTAL = 604;
@@ -1147,10 +1159,37 @@ $('notifBtn').onclick = async () => {
   else { n.dataset.locked='1'; n.textContent = t('reminderNo'); }
 };
 
-let noteUnlocked = false;
+async function loadAllKhatms(){
+  if(!checkAdmin()) return;
+  const { data, error } = await sb.from('kv_store').select('key,value').like('key','khatm:%');
+  if(error){ toast(t('tSaved')); return; }
+  const list = data.map(r => { try{ return JSON.parse(r.value); }catch(e){ return null; } }).filter(Boolean);
+  const box = $('allKhatmsList');
+  if(!list.length){ box.innerHTML = `<p class="note">${t('noneFound')}</p>`; return; }
+  box.innerHTML = list.map(k => `
+    <div class="member-chip">
+      <span class="name" style="font-weight:700">${k.title}<br><span style="font-size:.72rem;color:var(--muted);direction:ltr;display:inline-block">${k.code}</span></span>
+      <button class="btn sm ghost" data-aopen="${k.code}">${t('open')}</button>
+      <button class="x" data-adel="${k.code}" title="${t('deleteKhatm')}">✕</button>
+    </div>`).join('');
+  box.querySelectorAll('[data-aopen]').forEach(b => b.onclick = async () => {
+    const s = await load(b.dataset.aopen);
+    if(!s) return toast(t('tNotFound'));
+    state = s; rememberKhatm(s.code, s.title || s.code); showMain();
+  });
+  box.querySelectorAll('[data-adel]').forEach(b => b.onclick = async () => {
+    if(!window.confirm(t('deleteConfirm'))) return;
+    await store.delete('khatm:'+b.dataset.adel, true);
+    myKhatms = myKhatms.filter(k => k.code !== b.dataset.adel);
+    saveMyList(); renderMyKhatms();
+    toast(t('tDeleted'));
+    loadAllKhatms();
+  });
+}
+$('allKhatmsBtn').onclick = loadAllKhatms;
+
 async function openNote(){
-  if(!noteUnlocked && !checkAdmin()) return;
-  noteUnlocked = true;
+  if(!checkAdmin()) return;
   let val = '';
   try{ const r = await store.get('note', true); val = r.value; }catch(e){}
   $('noteText').value = val;
