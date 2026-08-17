@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ختم قرآن</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+:root{
+  --parchment:#EFE7D2; --parchment2:#E4D9BC;
+  --verdigris:#0E3B34; --verdigris2:#17564C;
+  --gold:#C9A227; --ink:#12211E; --rose:#A8546A; --muted:#6D7B75;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--parchment);color:var(--ink);font-family:'Vazirmatn',system-ui,sans-serif;font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%}
+body[data-lang=ur]{font-family:'Noto Nastaliq Urdu','Vazirmatn',serif;line-height:2.2}
+body[data-lang=ur] .compact{line-height:1.7}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 90px}
+
+header.top{background:var(--verdigris);color:var(--parchment);border-radius:0 0 22px 22px;padding:20px 18px;margin:0 -16px 18px;position:relative;overflow:hidden}
+header.top::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(201,162,39,.10) 0 2px,transparent 2px 14px);pointer-events:none}
+.bism{font-family:'Amiri',serif;font-size:1.4rem;color:var(--gold);margin:0;line-height:1.6}
+.top h1{font-size:1.3rem;margin:4px 0 0;font-weight:700}
+.top .sub{font-size:.76rem;opacity:.75;margin-top:4px;line-height:1.6}
+.langbar{display:flex;gap:6px;margin-top:12px;position:relative;z-index:2}
+.langbar button{flex:1;padding:7px 4px;font-size:.8rem;border-radius:9px;cursor:pointer;background:rgba(255,255,255,.10);color:var(--parchment);border:1px solid rgba(255,255,255,.18);font-family:inherit}
+.langbar button[aria-pressed=true]{background:var(--gold);color:#2A2003;border-color:var(--gold);font-weight:700}
+
+.card{background:#fff;border:1px solid var(--parchment2);border-radius:14px;padding:16px;margin-bottom:14px}
+.card h2{font-size:1.02rem;margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--parchment2)}
+label{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px;line-height:1.6}
+input,select,button{font-family:inherit;font-size:1rem}
+input[type=text],input[type=password],input[type=date],input[type=time],input[type=number],select{width:100%;padding:11px 12px;border:1px solid var(--parchment2);border-radius:10px;background:#FCFAF4;color:var(--ink)}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.btn{background:var(--verdigris);color:var(--parchment);border:none;padding:13px 18px;border-radius:11px;cursor:pointer;width:100%;line-height:1.5}
+.btn:hover{background:var(--verdigris2)}
+.btn.ghost{background:transparent;color:var(--verdigris);border:1px solid var(--parchment2)}
+.btn.gold{background:var(--gold);color:#2A2003}
+.btn.sm{width:auto;padding:8px 14px;font-size:.85rem;border-radius:9px}
+.row{display:flex;gap:8px}.row>*{flex:1}
+
+.seg{display:flex;border:1px solid var(--parchment2);border-radius:11px;overflow:hidden}
+.seg button{flex:1;padding:11px 8px;border:none;background:#FCFAF4;cursor:pointer;font-size:.88rem;color:var(--muted);line-height:1.5}
+.seg button[aria-pressed=true]{background:var(--verdigris);color:var(--parchment);font-weight:700}
+
+.member-chip{display:flex;align-items:center;gap:8px;background:#FCFAF4;border:1px solid var(--parchment2);border-radius:10px;padding:7px 10px;margin-bottom:6px}
+.dot{width:12px;height:12px;border-radius:50%;flex:none;display:inline-block}
+.member-chip .name{flex:1;font-size:.95rem}
+.x{background:none;border:none;color:var(--rose);cursor:pointer;font-size:1.1rem;padding:0 4px}
+
+.today-card{border:1px solid var(--parchment2);border-radius:12px;padding:12px;margin-bottom:9px;background:#FCFAF4;display:flex;align-items:center;gap:12px}
+.today-card.done{background:#F1F6F2;border-color:#BFD8C6}
+.today-info{flex:1;min-width:0}
+.today-name{font-weight:700;display:flex;align-items:center;gap:7px;font-size:.95rem}
+.today-range{font-family:'Amiri',serif;font-size:1.3rem;color:var(--verdigris);line-height:1.5;direction:ltr;text-align:start}
+.today-meta{font-size:.75rem;color:var(--muted);line-height:1.6}
+.tick{width:52px;height:52px;flex:none;border-radius:50%;border:2px solid var(--parchment2);background:#fff;cursor:pointer;font-size:1.4rem;color:var(--parchment2)}
+.tick[aria-pressed=true]{background:var(--verdigris);border-color:var(--verdigris);color:var(--gold)}
+
+.pbar{height:9px;background:var(--parchment2);border-radius:99px;overflow:hidden;margin-top:6px}
+.pbar i{display:block;height:100%;border-radius:99px;transition:width .4s}
+.pline{display:flex;justify-content:space-between;font-size:.85rem;gap:10px}
+
+.grid{display:grid;grid-template-columns:repeat(30,1fr);gap:2px;margin-top:3px}
+.cell{aspect-ratio:1/1.35;border:none;padding:0;border-radius:2px;cursor:pointer}
+.juz-label{font-size:.7rem;color:var(--muted);margin:8px 0 0;line-height:1.6}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin-top:12px}
+.legend span{display:flex;align-items:center;gap:5px}
+.note{font-size:.78rem;color:var(--muted);line-height:1.8}
+.warn{background:#FFF6E8;border:1px solid #E8D5A8;border-radius:10px;padding:10px 12px;font-size:.78rem;margin-top:10px;line-height:1.8}
+.code-box{font-family:'Amiri',serif;font-size:1.55rem;letter-spacing:4px;color:var(--verdigris);text-align:center;background:#FCFAF4;border:1px dashed var(--parchment2);border-radius:10px;padding:8px;direction:ltr}
+.hidden{display:none!important}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--verdigris);color:var(--parchment);padding:11px 20px;border-radius:11px;font-size:.85rem;z-index:50;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90%;text-align:center}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body data-lang="ur">
+
+<div class="wrap">
+  <header class="top">
+    <p class="bism">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْم</p>
+    <h1 id="headTitle"></h1>
+    <div class="sub" data-t="subtitle"></div>
+    <div class="langbar">
+      <button type="button" data-lang="ur">اردو</button>
+      <button type="button" data-lang="fa">فارسی</button>
+      <button type="button" data-lang="en">English</button>
+    </div>
+  </header>
+
+  <div id="loading" class="card">…</div>
+
+  <!-- ============ SETUP ============ -->
+  <section id="setup" class="hidden">
+
+    <div class="card" id="publicCard">
+      <h2 data-t="pubTitle"></h2>
+      <p class="note" data-t="pubIntro"></p>
+      <div id="publicList"></div>
+      <label for="pubNewTitle" data-t="pubCreate"></label>
+      <div class="row">
+        <input type="text" id="pubNewTitle" style="flex:3">
+        <button class="btn sm gold" id="pubCreateBtn" style="flex:1" data-t="add"></button>
+      </div>
+    </div>
+
+    <div class="card" id="myKhatmsCard">
+      <h2 data-t="myKhatms"></h2>
+      <div id="myKhatmsList"></div>
+    </div>
+
+    <div class="card">
+      <h2 data-t="joinTitle"></h2>
+      <label for="joinCode" data-t="codeLabel"></label>
+      <input type="text" id="joinCode" maxlength="10" placeholder="TAHA47">
+      <div style="height:10px"></div>
+      <button class="btn ghost" id="joinBtn" data-t="openKhatm"></button>
+      <p class="note" data-t="joinNote"></p>
+    </div>
+
+    <div class="card">
+      <h2 data-t="newTitle"></h2>
+
+      <label for="khatmTitle" data-t="khatmTitleLabel"></label>
+      <input type="text" id="khatmTitle">
+
+      <label data-t="typeLabel"></label>
+      <div class="seg" id="modeSeg">
+        <button type="button" data-mode="shared" aria-pressed="true" data-t="shared"></button>
+        <button type="button" data-mode="solo" aria-pressed="false" data-t="solo"></button>
+      </div>
+      <p class="note" id="modeHint"></p>
+
+      <label for="newName" data-t="addReader"></label>
+      <div class="row">
+        <input type="text" id="newName" style="flex:3">
+        <button class="btn sm gold" id="addBtn" style="flex:1" data-t="add"></button>
+      </div>
+      <div id="memberList" style="margin-top:10px"></div>
+
+      <label data-t="startLabel"></label>
+      <div class="row" id="dateRow">
+        <select id="dDay"></select>
+        <select id="dMonth" style="flex:2"></select>
+        <select id="dYear"></select>
+      </div>
+      <p class="note" id="startHint"></p>
+
+      <label for="perDay" data-t="perDayLabel"></label>
+      <input type="number" id="perDay" value="20" min="1" max="604">
+      <p class="note" id="lengthHint"></p>
+
+      <label for="alarmTime" data-t="alarmLabel"></label>
+      <input type="time" id="alarmTime" value="19:00">
+
+      <div style="height:14px"></div>
+      <button class="btn" id="createBtn" data-t="createKhatm"></button>
+      <div class="warn" data-t="codeWarn"></div>
+    </div>
+  </section>
+
+  <!-- ============ MAIN ============ -->
+  <!-- ============ PUBLIC VIEW ============ -->
+  <section id="publicView" class="hidden">
+    <div class="card">
+      <h2 id="pubHead"></h2>
+      <div class="pline compact" style="font-size:.85rem">
+        <span id="pubClaimedLabel"></span>
+        <button class="btn ghost sm" id="pubRefresh" data-t="refresh"></button>
+      </div>
+      <div class="pbar"><i id="pubBar" style="width:0%;background:var(--gold)"></i></div>
+      <p class="note" data-t="pubOnce"></p>
+    </div>
+
+    <div class="card">
+      <h2 data-t="pubYourShare"></h2>
+      <div id="myClaims"></div>
+      <label for="pubName" data-t="pubYourName"></label>
+      <input type="text" id="pubName">
+      <label for="pubPages" data-t="pubHowMany"></label>
+      <input type="number" id="pubPages" value="10" min="1" max="604">
+      <div style="height:10px"></div>
+      <button class="btn" id="pubTakeBtn" data-t="pubTake"></button>
+    </div>
+
+    <div class="card">
+      <h2 data-t="pubParticipants"></h2>
+      <div id="pubPeople"></div>
+    </div>
+
+    <div class="card">
+      <h2 data-t="mushafTitle"></h2>
+      <div id="pubMushaf"></div>
+    </div>
+
+    <button class="btn ghost" id="pubBack" data-t="back"></button>
+    <div style="height:20px"></div>
+  </section>
+
+  <section id="main" class="hidden">
+    <div class="card">
+      <h2 data-t="todayTitle"></h2>
+      <div class="pline compact" style="color:var(--muted);font-size:.8rem;margin-bottom:10px">
+        <span><strong id="dateLabel" style="color:var(--verdigris)"></strong><br><span id="dayLabel"></span></span>
+        <button class="btn ghost sm" id="refreshBtn" data-t="refresh"></button>
+      </div>
+      <div id="todayList"></div>
+      <p class="note" id="todayNote"></p>
+    </div>
+
+    <div class="card">
+      <h2 data-t="progressTitle"></h2>
+      <div id="progressList"></div>
+    </div>
+
+    <div class="card">
+      <h2 data-t="mushafTitle"></h2>
+      <p class="note" data-t="mushafNote"></p>
+      <div id="mushaf"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+
+    <div class="card">
+      <h2 data-t="settingsTitle"></h2>
+
+      <label for="editPerDay" data-t="perDayLabel"></label>
+      <div class="row">
+        <input type="number" id="editPerDay" min="1" max="604" style="flex:3">
+        <button class="btn sm ghost" id="savePerDay" style="flex:1" data-t="save"></button>
+      </div>
+      <p class="note" id="editLengthHint"></p>
+
+      <div style="height:16px"></div>
+      <button class="btn ghost sm" id="notifBtn" data-t="enableReminder"></button>
+      <p class="note" id="notifNote"></p>
+    </div>
+
+    <div class="card">
+      <h2 data-t="codeTitle"></h2>
+      <div class="code-box" id="codeShow"></div>
+      <div style="height:10px"></div>
+      <div class="row">
+        <button class="btn ghost sm" id="copyBtn" data-t="copyCode"></button>
+        <button class="btn ghost sm" id="exitBtn" data-t="backToList"></button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= storage layer =================
+   Local-only keys (lang, myKhatms, myClaims) stay in localStorage — they are
+   per-device by design. Shared keys (khatm:*, publicKhatms) go to Supabase
+   so any phone can read and write them. */
+const SUPABASE_URL = 'https://megmzhnumvdqpapjnwzh.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ku2MZQM1mg-md56Kb8z0dg_tt3o65Fl';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const store = {
+  async get(key, shared){
+    if(!shared){
+      const v = localStorage.getItem('khatmapp:' + key);
+      if(v === null) throw new Error('missing');
+      return { key, value: v, shared };
+    }
+    const { data, error } = await sb.from('kv_store').select('value').eq('key', key).maybeSingle();
+    if(error || !data) throw new Error('missing');
+    return { key, value: data.value, shared };
+  },
+  async set(key, value, shared){
+    if(!shared){
+      localStorage.setItem('khatmapp:' + key, value);
+      return { key, value, shared };
+    }
+    const { error } = await sb.from('kv_store').upsert({ key, value });
+    if(error) throw error;
+    return { key, value, shared };
+  },
+  async delete(key, shared){
+    if(!shared){
+      localStorage.removeItem('khatmapp:' + key);
+      return { key, deleted:true, shared };
+    }
+    const { error } = await sb.from('kv_store').delete().eq('key', key);
+    if(error) throw error;
+    return { key, deleted:true, shared };
+  }
+};
+
+/* ================= translations ================= */
+const T = {
+ur:{dir:"rtl", digits:"en",
+ title:"خاندانی ختم قرآن", subtitle:"مصحف عثمان طہ کی صفحہ بندی کے مطابق — 604 صفحات",
+ myKhatms:"میرے ختم", noKhatms:"ابھی کوئی ختم محفوظ نہیں۔ نیچے سے نیا بنائیں یا کوڈ سے شامل ہوں۔",
+ open:"کھولیں", remove:"فہرست سے ہٹائیں",
+ joinTitle:"موجودہ ختم میں شامل ہوں", codeLabel:"ختم کا کوڈ", passLabel:"پاس ورڈ", openKhatm:"ختم کھولیں",
+ joinNote:"اگر ختم پہلے بن چکا ہے تو یہی کوڈ اور پاس ورڈ باقی شرکاء اور والدین کے فون میں ڈالیں۔",
+ newTitle:"نیا ختم بنائیں", khatmTitleLabel:"ختم کا عنوان", khatmTitlePh:"مثلاً: رمضان 1447",
+ typeLabel:"ختم کی قسم", shared:"مشترک", solo:"الگ الگ",
+ sharedHint:"پورے 604 صفحات شرکاء میں تقسیم ہوں گے اور سب مل کر ایک ختم مکمل کریں گے۔",
+ soloHint:"ہر شریک الگ سے پورے 604 صفحات پڑھے گا۔",
+ addReader:"شریک شامل کریں", namePh:"شریک کا نام", add:"شامل کریں", noMembers:"ابھی کوئی شریک نہیں۔",
+ startLabel:"شروع کی تاریخ",
+ perDayLabel:"روزانہ فی شریک صفحات", save:"محفوظ کریں",
+ lengthShared:"{n} شرکاء کے ساتھ ختم {d} دن میں مکمل ہوگا۔",
+ lengthSolo:"ہر شریک کا ختم {d} دن میں مکمل ہوگا۔",
+ alarmLabel:"روزانہ یاد دہانی کا وقت",
+ setPassLabel:"پاس ورڈ مقرر کریں", passNote:"پاس ورڈ کے بغیر کوئی اس ختم کو نہیں کھول سکے گا۔",
+ createKhatm:"ختم بنائیں",
+ codeWarn:"معلومات کوڈ اور پاس ورڈ کے ساتھ محفوظ ہوتی ہیں۔ دونوں صرف شرکاء اور والدین کو دیں۔",
+ todayTitle:"آج کا حصہ", startedOn:"آغاز {d}", dayOf:"دن {a} از {b}", refresh:"تازہ کریں", finished:"ختم مکمل ہو چکا",
+ pageOne:"صفحہ {a}", pageRange:"صفحہ {a} تا {b}", doneYes:"پڑھ لیا", doneNo:"ابھی نہیں پڑھا",
+ sharedNote:"مشترک ختم: ہر شریک کا حصہ اسی دن کے صفحات کا ایک جزو ہے۔",
+ soloNote:"الگ ختم: ہر شریک یہی صفحات الگ سے پڑھے گا۔",
+ progressTitle:"پیش رفت", pagesN:"{n} صفحات", totalKhatm:"کل ختم", ofPages:"{a} از {b} صفحات",
+ mushafTitle:"مصحف", mushafNote:"ہر خانہ ایک صفحہ ہے۔ آج کے صفحات پر نشان ہے۔ ہاتھ سے درج یا حذف کرنے کے لیے خانے پر دبائیں۔",
+ juz:"پارہ {n} — صفحہ {a} تا {b}", unread:"غیر پڑھا", page:"صفحہ {n}",
+ settingsTitle:"ترتیبات", changePassTitle:"پاس ورڈ تبدیل کریں", oldPassPh:"پرانا پاس ورڈ", newPassPh:"نیا پاس ورڈ",
+ changePassBtn:"پاس ورڈ بدلیں",
+ enableReminder:"یاد دہانی چالو کریں",
+ reminderOn:"یاد دہانی {t} بجے کے لیے چالو ہے۔ یہ صرف اُس وقت چلتی ہے جب یہ صفحہ کھلا ہو — پکا کرنے کے لیے یہی وقت فون کے الارم میں بھی رکھ لیں۔",
+ reminderSet:"مقررہ وقت: {t}", reminderNo:"اجازت نہیں ملی۔ فون کے الارم میں وقت رکھ لیں۔",
+ reminderUnsupported:"یہ براؤزر یاد دہانی نہیں چلاتا۔ فون کا الارم استعمال کریں۔",
+ notifTitle:"قرآن پڑھنے کا وقت", notifBody:"آج کا حصہ تیار ہے۔",
+ codeTitle:"ختم کا کوڈ", copyCode:"کوڈ کاپی کریں", backToList:"فہرست پر واپس",
+ tCopied:"کوڈ کاپی ہو گیا", tNotCopied:"کاپی نہیں ہوا", tSaved:"محفوظ نہیں ہوا — کنکشن دیکھیں",
+ tMarked:"درج ہو گیا — {n}", tNeedMember:"کم از کم ایک شریک شامل کریں", tNeedTitle:"ختم کا عنوان لکھیں",
+ tNeedPass:"پاس ورڈ لکھیں", tWrongPass:"پاس ورڈ غلط ہے", tNotFound:"اس کوڈ سے کوئی ختم نہیں ملا",
+ tCreated:"ختم بن گیا — کوڈ: {c}", tRefreshed:"تازہ ہو گیا", tPassChanged:"پاس ورڈ بدل گیا",
+ pubTitle:"عمومی ختم", pubIntro:"یہ ختم سب کے لیے کھلے ہیں۔ کوئی بھی شریک ہو سکتا ہے۔",
+ pubNone:"ابھی کوئی عمومی ختم موجود نہیں۔ نیچے سے پہلا بنائیں۔",
+ pubCreate:"نیا عمومی ختم بنائیں", pubJoin:"شریک ہوں", pubOpen:"کھولیں",
+ pubClaimed:"{a} از 604 صفحات لے لیے گئے", pubYourName:"آپ کا نام",
+ pubHowMany:"آپ کتنے صفحات پڑھیں گے؟", pubTake:"صفحات لے لیں",
+ pubYourShare:"آپ کا حصہ", pubRead:"پڑھ لیا", pubPending:"باقی ہے",
+ pubAllocated:"آپ کے لیے صفحہ {a} تا {b}", pubFull:"تمام صفحات لے لیے گئے ہیں — ختم مکمل",
+ pubTooMany:"صرف {n} صفحات باقی ہیں", pubNeedName:"اپنا نام لکھیں",
+ pubTaken:"صفحہ {a} تا {b} آپ کے نام ہو گئے", pubNoClaim:"آپ نے ابھی کوئی صفحات نہیں لیے۔",
+ pubOnce:"ہر شریک ایک بار صفحات لیتا ہے — روزانہ نہیں۔ پڑھنے کے بعد ✓ لگا دیں، پھر چاہیں تو مزید لے سکتے ہیں.",
+ pubParticipants:"شرکاء", back:"واپس",
+ localOnly:"یہ فائل براہِ راست براؤزر میں کھلی ہے، اس لیے ڈیٹا صرف اسی فون میں محفوظ ہوگا۔ دوسرے فون سے وہی ختم دیکھنے کے لیے ایپ کو Claude کے اندر چلائیں۔",
+ tPerDaySaved:"روزانہ صفحات بدل گئے", loading:"لوڈ ہو رہا ہے…"},
+
+fa:{dir:"rtl", digits:"fa",
+ title:"ختم قرآن خانوادگی", subtitle:"بر پایهٔ صفحه‌بندی مصحف عثمان طه — ۶۰۴ صفحه",
+ myKhatms:"ختم‌های من", noKhatms:"هنوز ختمی ذخیره نشده. از پایین یکی بسازید یا با کد وارد شوید.",
+ open:"باز کردن", remove:"حذف از فهرست",
+ joinTitle:"ورود به ختم موجود", codeLabel:"کد ختم", passLabel:"رمز", openKhatm:"باز کردن ختم",
+ joinNote:"اگر ختم قبلاً ساخته شده، همین کد و رمز را در گوشی شرکت‌کنندگان و والدین وارد کنید.",
+ newTitle:"ساخت ختم جدید", khatmTitleLabel:"عنوان ختم", khatmTitlePh:"مثلاً: رمضان ۱۴۴۷",
+ typeLabel:"نوع ختم", shared:"مشترک", solo:"جداگانه",
+ sharedHint:"کل ۶۰۴ صفحه بین شرکت‌کنندگان تقسیم می‌شود و با هم یک ختم کامل می‌کنند.",
+ soloHint:"هر شرکت‌کننده جداگانه هر ۶۰۴ صفحه را می‌خواند.",
+ addReader:"افزودن شرکت‌کننده", namePh:"نام شرکت‌کننده", add:"افزودن", noMembers:"هنوز کسی اضافه نشده.",
+ startLabel:"تاریخ شروع",
+ perDayLabel:"صفحه در روز برای هر نفر", save:"ذخیره",
+ lengthShared:"با {n} شرکت‌کننده، ختم در {d} روز کامل می‌شود.",
+ lengthSolo:"ختم هر نفر در {d} روز کامل می‌شود.",
+ alarmLabel:"ساعت یادآوری روزانه",
+ setPassLabel:"تعیین رمز", passNote:"بدون رمز کسی نمی‌تواند این ختم را باز کند.",
+ createKhatm:"ساخت ختم",
+ codeWarn:"اطلاعات با کد و رمز ذخیره می‌شود. هر دو را فقط به شرکت‌کنندگان و والدین بدهید.",
+ todayTitle:"سهم امروز", startedOn:"آغاز {d}", dayOf:"روز {a} از {b}", refresh:"به‌روزرسانی", finished:"ختم کامل شد",
+ pageOne:"صفحهٔ {a}", pageRange:"صفحهٔ {a} تا {b}", doneYes:"خوانده شد", doneNo:"هنوز خوانده نشده",
+ sharedNote:"ختم مشترک: سهم هر نفر بخشی از صفحات همان روز است.",
+ soloNote:"ختم جداگانه: هر نفر همین صفحات را جدا می‌خواند.",
+ progressTitle:"پیشرفت", pagesN:"{n} صفحه", totalKhatm:"کل ختم", ofPages:"{a} از {b} صفحه",
+ mushafTitle:"مصحف", mushafNote:"هر خانه یک صفحه است. صفحات امروز کادر دارند. برای ثبت یا حذف دستی روی خانه بزنید.",
+ juz:"جزء {n} — صفحهٔ {a} تا {b}", unread:"خوانده‌نشده", page:"صفحهٔ {n}",
+ settingsTitle:"تنظیمات", changePassTitle:"تغییر رمز", oldPassPh:"رمز فعلی", newPassPh:"رمز جدید",
+ changePassBtn:"تغییر رمز",
+ enableReminder:"روشن کردن یادآوری",
+ reminderOn:"یادآوری برای ساعت {t} روشن است. فقط تا وقتی این صفحه باز باشد کار می‌کند — همان ساعت را در آلارم گوشی هم بگذارید.",
+ reminderSet:"ساعت تعیین‌شده: {t}", reminderNo:"اجازه داده نشد. ساعت را در آلارم گوشی تنظیم کنید.",
+ reminderUnsupported:"این مرورگر یادآوری را پشتیبانی نمی‌کند. از آلارم گوشی استفاده کنید.",
+ notifTitle:"وقت خواندن قرآن", notifBody:"سهم امروز ختم آماده است.",
+ codeTitle:"کد ختم", copyCode:"کپی کد", backToList:"بازگشت به فهرست",
+ tCopied:"کد کپی شد", tNotCopied:"کپی نشد", tSaved:"ذخیره نشد — اتصال را بررسی کنید",
+ tMarked:"ثبت شد — {n}", tNeedMember:"حداقل یک شرکت‌کننده اضافه کنید", tNeedTitle:"عنوان ختم را بنویسید",
+ tNeedPass:"رمز را وارد کنید", tWrongPass:"رمز اشتباه است", tNotFound:"ختمی با این کد پیدا نشد",
+ tCreated:"ختم ساخته شد — کد: {c}", tRefreshed:"به‌روز شد", tPassChanged:"رمز تغییر کرد",
+ pubTitle:"ختم عمومی", pubIntro:"این ختم‌ها برای همه باز است. هر کسی می‌تواند شرکت کند.",
+ pubNone:"هنوز ختم عمومی وجود ندارد. اولی را از پایین بسازید.",
+ pubCreate:"ساخت ختم عمومی جدید", pubJoin:"شرکت", pubOpen:"باز کردن",
+ pubClaimed:"{a} از ۶۰۴ صفحه برداشته شده", pubYourName:"نام شما",
+ pubHowMany:"چند صفحه می‌خوانید؟", pubTake:"برداشتن صفحات",
+ pubYourShare:"سهم شما", pubRead:"خوانده شد", pubPending:"باقی مانده",
+ pubAllocated:"برای شما صفحهٔ {a} تا {b}", pubFull:"همهٔ صفحات برداشته شده — ختم کامل است",
+ pubTooMany:"فقط {n} صفحه باقی مانده", pubNeedName:"نام خود را بنویسید",
+ pubTaken:"صفحهٔ {a} تا {b} به نام شما ثبت شد", pubNoClaim:"هنوز صفحه‌ای برنداشته‌اید.",
+ pubOnce:"هر شرکت‌کننده یک بار صفحه برمی‌دارد — نه هر روز. پس از خواندن ✓ بزنید، بعد می‌توانید باز هم بردارید.",
+ pubParticipants:"شرکت‌کنندگان", back:"بازگشت",
+ localOnly:"این فایل مستقیم در مرورگر باز شده، پس اطلاعات فقط روی همین گوشی ذخیره می‌شود. برای دیدن یک ختم از گوشی دیگر، برنامه را داخل Claude اجرا کنید.",
+ tPerDaySaved:"صفحات روزانه تغییر کرد", loading:"در حال بارگذاری…"},
+
+en:{dir:"ltr", digits:"en",
+ title:"Family Quran Khatm", subtitle:"Based on the Uthman Taha mushaf — 604 pages",
+ myKhatms:"My khatms", noKhatms:"No khatm saved yet. Create one below or join with a code.",
+ open:"Open", remove:"Remove from list",
+ joinTitle:"Join an existing khatm", codeLabel:"Khatm code", passLabel:"Password", openKhatm:"Open khatm",
+ joinNote:"If the khatm already exists, enter this code and password on the participants' and parents' phones.",
+ newTitle:"Start a new khatm", khatmTitleLabel:"Khatm title", khatmTitlePh:"e.g. Ramadan 1447",
+ typeLabel:"Khatm type", shared:"Shared", solo:"Separate",
+ sharedHint:"All 604 pages are divided among participants, who complete one khatm together.",
+ soloHint:"Each participant reads all 604 pages on their own.",
+ addReader:"Add a participant", namePh:"Participant's name", add:"Add", noMembers:"No participants yet.",
+ startLabel:"Start date",
+ perDayLabel:"Pages per day, per person", save:"Save",
+ lengthShared:"With {n} participants the khatm finishes in {d} days.",
+ lengthSolo:"Each participant's khatm finishes in {d} days.",
+ alarmLabel:"Daily reminder time",
+ setPassLabel:"Set a password", passNote:"Without the password nobody can open this khatm.",
+ createKhatm:"Create khatm",
+ codeWarn:"Data is stored under the code and password. Share both only with participants and parents.",
+ todayTitle:"Today's portion", startedOn:"started {d}", dayOf:"Day {a} of {b}", refresh:"Refresh", finished:"Khatm complete",
+ pageOne:"Page {a}", pageRange:"Pages {a}–{b}", doneYes:"Read", doneNo:"Not read yet",
+ sharedNote:"Shared khatm: each person's portion is part of that day's pages.",
+ soloNote:"Separate khatm: each person reads these same pages on their own.",
+ progressTitle:"Progress", pagesN:"{n} pages", totalKhatm:"Whole khatm", ofPages:"{a} of {b} pages",
+ mushafTitle:"Mushaf", mushafNote:"Each cell is one page. Today's pages are outlined. Tap a cell to mark or unmark it by hand.",
+ juz:"Juz {n} — pages {a}–{b}", unread:"Unread", page:"Page {n}",
+ settingsTitle:"Settings", changePassTitle:"Change password", oldPassPh:"Current password", newPassPh:"New password",
+ changePassBtn:"Change password",
+ enableReminder:"Turn on reminder",
+ reminderOn:"Reminder is on for {t}. It only runs while this page is open — set the same time in your phone's alarm to be safe.",
+ reminderSet:"Set for {t}", reminderNo:"Permission denied. Set the time in your phone's alarm instead.",
+ reminderUnsupported:"This browser doesn't support reminders. Use your phone's alarm.",
+ notifTitle:"Time to read Quran", notifBody:"Today's portion is ready.",
+ codeTitle:"Khatm code", copyCode:"Copy code", backToList:"Back to list",
+ tCopied:"Code copied", tNotCopied:"Couldn't copy", tSaved:"Not saved — check your connection",
+ tMarked:"Marked — {n}", tNeedMember:"Add at least one participant", tNeedTitle:"Give the khatm a title",
+ tNeedPass:"Enter a password", tWrongPass:"Wrong password", tNotFound:"No khatm found with that code",
+ tCreated:"Khatm created — code: {c}", tRefreshed:"Refreshed", tPassChanged:"Password changed",
+ pubTitle:"Public khatms", pubIntro:"These khatms are open to everyone. Anyone can take part.",
+ pubNone:"No public khatm yet. Create the first one below.",
+ pubCreate:"Create a public khatm", pubJoin:"Take part", pubOpen:"Open",
+ pubClaimed:"{a} of 604 pages taken", pubYourName:"Your name",
+ pubHowMany:"How many pages will you read?", pubTake:"Take pages",
+ pubYourShare:"Your share", pubRead:"Read", pubPending:"Pending",
+ pubAllocated:"Pages {a}–{b} are yours", pubFull:"All pages taken — khatm complete",
+ pubTooMany:"Only {n} pages left", pubNeedName:"Enter your name",
+ pubTaken:"Pages {a}–{b} are now yours", pubNoClaim:"You haven't taken any pages yet.",
+ pubOnce:"Each participant takes pages once — not daily. Mark ✓ when done, then you may take more.",
+ pubParticipants:"Participants", back:"Back",
+ localOnly:"This file is open directly in a browser, so data stays on this device only. To share a khatm across phones, run it inside Claude.",
+ tPerDaySaved:"Daily pages updated", loading:"Loading…"}
+};
+
+/* ================= constants ================= */
+const TOTAL = 604;
+const PALETTE = ['#0E3B34','#A8546A','#C9A227','#3D6B8E','#7A5C3E','#5C7A4E','#8E5B9E','#B0543A'];
+const JUZ_START = [1,22,42,62,82,102,121,142,162,182,201,222,242,262,282,302,322,342,362,382,402,422,442,462,482,502,522,542,562,582];
+const FA_MONTHS = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const G_MONTHS = {
+  ur:['جنوری','فروری','مارچ','اپریل','مئی','جون','جولائی','اگست','ستمبر','اکتوبر','نومبر','دسمبر'],
+  en:['January','February','March','April','May','June','July','August','September','October','November','December']
+};
+
+let lang = 'ur';
+let state = null;
+let myKhatms = [];              // [{code, title, pass}]
+let draft = { mode:'shared', members:[] };
+let notifTimer = null;
+
+const $ = id => document.getElementById(id);
+const t = (k, vars) => {
+  let s = T[lang][k] || k;
+  if(vars) for(const v in vars) s = s.replace('{'+v+'}', vars[v]);
+  return s;
+};
+const FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
+const num = n => T[lang].digits === 'fa'
+  ? String(n).replace(/[0-9]/g, d => FA_DIGITS[+d])
+  : String(n);
+
+function toast(msg){ const el=$('toast'); el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2200); }
+function todayISO(){ const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10); }
+function daysBetween(a,b){ return Math.round((new Date(b+'T00:00') - new Date(a+'T00:00'))/864e5); }
+function makeCode(){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=''; for(let i=0;i<6;i++) s+=c[Math.floor(Math.random()*c.length)]; return s; }
+
+/* -------- Jalali (Shamsi) conversion -------- */
+function div(a,b){ return ~~(a/b); }
+function g2j(gy, gm, gd){
+  const gdm = [0,31,59,90,120,151,181,212,243,273,304,334];
+  let gy2 = (gm > 2) ? (gy + 1) : gy;
+  let days = 355666 + (365*gy) + div(gy2+3,4) - div(gy2+99,100) + div(gy2+399,400) + gd + gdm[gm-1];
+  let jy = -1595 + 33*div(days,12053);
+  days %= 12053;
+  jy += 4*div(days,1461);
+  days %= 1461;
+  if(days > 365){ jy += div(days-1,365); days = (days-1)%365; }
+  let jm, jd;
+  if(days < 186){ jm = 1 + div(days,31); jd = 1 + (days%31); }
+  else { jm = 7 + div(days-186,30); jd = 1 + ((days-186)%30); }
+  return [jy, jm, jd];
+}
+function j2g(jy, jm, jd){
+  jy += 1595;
+  let days = -355668 + (365*jy) + div(jy,33)*8 + div((jy%33)+3,4) + jd
+           + ((jm < 7) ? (jm-1)*31 : ((jm-7)*30) + 186);
+  let gy = 400*div(days,146097);
+  days %= 146097;
+  if(days > 36524){ gy += 100*div(--days,36524); days %= 36524; if(days >= 365) days++; }
+  gy += 4*div(days,1461);
+  days %= 1461;
+  if(days > 365){ gy += div(days-1,365); days = (days-1)%365; }
+  let gd = days + 1;
+  const leap = (gy%4===0 && gy%100!==0) || (gy%400===0);
+  const ml = [0,31,leap?29:28,31,30,31,30,31,31,30,31,30,31];
+  let gm = 0;
+  for(gm=0; gm<13 && gd > ml[gm]; gm++) gd -= ml[gm];
+  return [gy, gm, gd];
+}
+function jIsLeap(jy){
+  const g = j2g(jy,12,30);
+  return g2j(g[0],g[1],g[2])[2] === 30;
+}
+function jMonthLen(jy, jm){
+  if(jm <= 6) return 31;
+  if(jm <= 11) return 30;
+  return jIsLeap(jy) ? 30 : 29;
+}
+function gMonthLen(gy, gm){
+  return new Date(gy, gm, 0).getDate();
+}
+const pad = n => String(n).padStart(2,'0');
+
+/* ---- date picker (Jalali in Persian, Gregorian otherwise) ---- */
+let startISO = null;
+
+function buildDatePicker(){
+  const iso = startISO || todayISO();
+  const [gy,gm,gd] = iso.split('-').map(Number);
+  const jalali = (lang === 'fa');
+  const [y,m,d] = jalali ? g2j(gy,gm,gd) : [gy,gm,gd];
+  const months = jalali ? FA_MONTHS : G_MONTHS[lang];
+  const thisYear = jalali ? g2j(...todayISO().split('-').map(Number))[0]
+                          : Number(todayISO().slice(0,4));
+
+  const ySel = $('dYear'), mSel = $('dMonth'), dSel = $('dDay');
+  ySel.innerHTML = '';
+  for(let yy = thisYear - 1; yy <= thisYear + 3; yy++){
+    ySel.insertAdjacentHTML('beforeend', `<option value="${yy}" ${yy===y?'selected':''}>${num(yy)}</option>`);
+  }
+  mSel.innerHTML = months.map((nm,i) =>
+    `<option value="${i+1}" ${i+1===m?'selected':''}>${nm}</option>`).join('');
+  fillDays(d);
+}
+function fillDays(keep){
+  const jalali = (lang === 'fa');
+  const y = +$('dYear').value, m = +$('dMonth').value;
+  const len = jalali ? jMonthLen(y,m) : gMonthLen(y,m);
+  const d = Math.min(keep || +$('dDay').value || 1, len);
+  $('dDay').innerHTML = Array.from({length:len}, (_,i) =>
+    `<option value="${i+1}" ${i+1===d?'selected':''}>${num(i+1)}</option>`).join('');
+  syncStartISO();
+}
+function syncStartISO(){
+  const y = +$('dYear').value, m = +$('dMonth').value, d = +$('dDay').value;
+  const g = (lang === 'fa') ? j2g(y,m,d) : [y,m,d];
+  startISO = `${g[0]}-${pad(g[1])}-${pad(g[2])}`;
+  renderStartHint();
+}
+
+function fmtDate(iso){
+  if(!iso) return '';
+  const [y,m,d] = iso.split('-').map(Number);
+  if(lang === 'fa'){
+    const [jy,jm,jd] = g2j(y,m,d);
+    return `${num(jd)} ${FA_MONTHS[jm-1]} ${num(jy)}`;
+  }
+  return new Date(iso+'T00:00').toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+}
+
+/* -------- assignment (pages-per-day driven) -------- */
+function totalDays(mode, n, perDay){
+  return mode === 'shared'
+    ? Math.ceil(TOTAL / (perDay * Math.max(1,n)))
+    : Math.ceil(TOTAL / perDay);
+}
+function assignment(memberIdx, dayIdx){
+  const per = state.perDay, n = state.members.length;
+  const slot = state.mode === 'shared' ? (dayIdx * n + memberIdx) : dayIdx;
+  const from = slot * per + 1;
+  const to = Math.min(TOTAL, from + per - 1);
+  return from > TOTAL ? [TOTAL+1, TOTAL] : [from, to];
+}
+const khatmDays = () => totalDays(state.mode, state.members.length, state.perDay);
+const currentDayIdx = () => Math.max(0, Math.min(khatmDays()-1, daysBetween(state.startDate, todayISO())));
+const readSet = mid => new Set(state.progress[mid] || []);
+function rangeDone(mid,r){
+  if(r[1] < r[0]) return true;
+  const s = readSet(mid);
+  for(let p=r[0];p<=r[1];p++) if(!s.has(p)) return false;
+  return true;
+}
+const rangeLabel = r => r[1] < r[0] ? '—'
+  : (r[0]===r[1] ? t('pageOne',{a:num(r[0])}) : t('pageRange',{a:num(r[0]),b:num(r[1])}));
+
+/* ================= storage ================= */
+async function save(){
+  try{ await store.set('khatm:'+state.code, JSON.stringify(state), true); }
+  catch(e){ toast(t('tSaved')); throw e; }
+}
+async function load(code){
+  try{ const r = await store.get('khatm:'+code, true); return r ? JSON.parse(r.value) : null; }
+  catch(e){ return null; }
+}
+async function saveMyList(){
+  try{ await store.set('myKhatms', JSON.stringify(myKhatms), false); }catch(e){}
+}
+function rememberKhatm(code, title){
+  myKhatms = myKhatms.filter(k => k.code !== code);
+  myKhatms.unshift({ code, title });
+  saveMyList();
+}
+
+/* ================= language ================= */
+function applyLang(l){
+  lang = l;
+  document.body.dataset.lang = l;
+  document.documentElement.lang = l;
+  document.documentElement.dir = T[l].dir;
+  document.title = t('title');
+  document.querySelectorAll('[data-t]').forEach(el => el.textContent = t(el.dataset.t));
+  document.querySelectorAll('.langbar button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === l));
+  $('newName').placeholder = t('namePh');
+  $('khatmTitle').placeholder = t('khatmTitlePh');
+  $('loading').textContent = t('loading');
+  $('headTitle').textContent = state ? state.title : t('title');
+  buildDatePicker(); renderModeHint(); renderMembers(); renderMyKhatms(); renderPublicList();
+  $('pubName').placeholder = t('pubYourName');
+  if(pubState) renderPublic();
+  if(state) render();
+  try{ store.set('lang', l, false); }catch(e){}
+}
+
+/* ================= setup ================= */
+function renderModeHint(){
+  $('modeHint').textContent = draft.mode === 'shared' ? t('sharedHint') : t('soloHint');
+  renderLengthHint();
+}
+function renderLengthHint(){
+  const per = Math.max(1, parseInt($('perDay').value) || 20);
+  const n = Math.max(1, draft.members.length);
+  const d = totalDays(draft.mode, n, per);
+  $('lengthHint').textContent = draft.mode === 'shared'
+    ? t('lengthShared',{ n:num(n), d:num(d) })
+    : t('lengthSolo',{ d:num(d) });
+}
+function renderStartHint(){
+  $('startHint').textContent = fmtDate(startISO || todayISO());
+}
+function renderMembers(){
+  const box = $('memberList');
+  box.innerHTML = draft.members.length
+    ? draft.members.map((m,i)=>`<div class="member-chip"><span class="dot" style="background:${m.color}"></span><span class="name">${m.name}</span><button class="x" data-i="${i}">✕</button></div>`).join('')
+    : `<p class="note">${t('noMembers')}</p>`;
+  box.querySelectorAll('.x').forEach(b => b.onclick = () => { draft.members.splice(+b.dataset.i,1); renderMembers(); renderLengthHint(); });
+}
+function addMember(){
+  const v = $('newName').value.trim(); if(!v) return;
+  draft.members.push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), name:v, color:PALETTE[draft.members.length % PALETTE.length] });
+  $('newName').value=''; renderMembers(); renderLengthHint();
+}
+function renderMyKhatms(){
+  const box = $('myKhatmsList');
+  if(!myKhatms.length){ box.innerHTML = `<p class="note">${t('noKhatms')}</p>`; return; }
+  box.innerHTML = myKhatms.map((k,i)=>`
+    <div class="member-chip">
+      <span class="name" style="font-weight:700">${k.title}<br><span style="font-size:.72rem;color:var(--muted);direction:ltr;display:inline-block">${k.code}</span></span>
+      <button class="btn sm ghost" data-open="${i}">${t('open')}</button>
+      <button class="x" data-del="${i}" title="${t('remove')}">✕</button>
+    </div>`).join('');
+  box.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openSaved(+b.dataset.open));
+  box.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
+    myKhatms.splice(+b.dataset.del,1); saveMyList(); renderMyKhatms();
+  });
+}
+async function openSaved(i){
+  const k = myKhatms[i];
+  const s = await load(k.code);
+  if(!s) return toast(t('tNotFound'));
+  state = s; showMain();
+}
+
+/* ================= main render ================= */
+function render(){
+  const di = currentDayIdx(), days = khatmDays();
+  $('headTitle').textContent = state.title;
+  $('dateLabel').textContent = fmtDate(todayISO());
+  $('dayLabel').textContent = t('dayOf', { a:num(di+1), b:num(days) })
+    + ' — ' + t('startedOn', { d: fmtDate(state.startDate) });
+  $('editPerDay').value = state.perDay;
+  $('editLengthHint').textContent = state.mode === 'shared'
+    ? t('lengthShared',{ n:num(state.members.length), d:num(days) })
+    : t('lengthSolo',{ d:num(days) });
+
+  $('todayList').innerHTML = state.members.map((m,i)=>{
+    const r = assignment(i,di), done = rangeDone(m.id,r);
+    const label = r[1] < r[0] ? t('finished') : rangeLabel(r);
+    return `<div class="today-card ${done?'done':''}">
+      <div class="today-info">
+        <div class="today-name"><span class="dot" style="background:${m.color}"></span>${m.name}</div>
+        <div class="today-range">${label}</div>
+        <div class="today-meta">${done ? t('doneYes') : t('doneNo')}</div>
+      </div>
+      <button class="tick" data-i="${i}" aria-pressed="${done}">✓</button>
+    </div>`;
+  }).join('');
+  $('todayList').querySelectorAll('.tick').forEach(b => b.onclick = () => toggleToday(+b.dataset.i));
+  $('todayNote').textContent = state.mode === 'shared' ? t('sharedNote') : t('soloNote');
+
+  let html = state.members.map(m=>{
+    const c = (state.progress[m.id]||[]).length;
+    const target = state.mode === 'shared' ? TOTAL/state.members.length : TOTAL;
+    const pct = Math.min(100, Math.round(c/target*100));
+    return `<div style="margin-bottom:13px">
+      <div class="pline"><span><span class="dot" style="background:${m.color}"></span> ${m.name}</span>
+      <span>${t('pagesN',{n:num(c)})} — ${num(pct)}%</span></div>
+      <div class="pbar"><i style="width:${pct}%;background:${m.color}"></i></div></div>`;
+  }).join('');
+  const all = state.members.reduce((s,m)=>s+(state.progress[m.id]||[]).length,0);
+  const grand = state.mode === 'shared' ? TOTAL : TOTAL*state.members.length;
+  html += `<div class="pline" style="font-weight:700;padding-top:8px;border-top:1px solid var(--parchment2)">
+    <span>${t('totalKhatm')}</span><span>${t('ofPages',{a:num(all),b:num(grand)})}</span></div>
+    <div class="pbar"><i style="width:${Math.min(100,all/grand*100)}%;background:var(--gold)"></i></div>`;
+  $('progressList').innerHTML = html;
+
+  renderMushaf(di);
+  $('legend').innerHTML = state.members.map(m=>`<span><span class="dot" style="background:${m.color}"></span>${m.name}</span>`).join('')
+    + `<span><span class="dot" style="background:var(--parchment2)"></span>${t('unread')}</span>`;
+  $('codeShow').textContent = state.code;
+  if(!$('notifNote').dataset.locked) $('notifNote').textContent = t('reminderSet',{t:state.alarmTime});
+}
+
+function renderMushaf(di){
+  const owner = {};
+  state.members.forEach(m => (state.progress[m.id]||[]).forEach(p => owner[p] = m.color));
+  const todayPages = new Set();
+  state.members.forEach((m,i)=>{ const r = assignment(i,di); for(let p=r[0];p<=r[1];p++) todayPages.add(p); });
+
+  let html = '';
+  for(let j=0;j<30;j++){
+    const from = JUZ_START[j], to = j===29 ? TOTAL : JUZ_START[j+1]-1;
+    html += `<div class="juz-label">${t('juz',{n:num(j+1),a:num(from),b:num(to)})}</div><div class="grid">`;
+    for(let p=from;p<=to;p++){
+      html += `<button class="cell" data-p="${p}" aria-label="${t('page',{n:num(p)})}"
+        style="background:${owner[p]||'var(--parchment2)'};${todayPages.has(p)?'outline:1.5px solid var(--rose);outline-offset:1px':''}"></button>`;
+    }
+    html += `</div>`;
+  }
+  $('mushaf').innerHTML = html;
+  $('mushaf').querySelectorAll('.cell').forEach(c => c.onclick = () => togglePage(+c.dataset.p));
+}
+
+/* ================= actions ================= */
+async function toggleToday(i){
+  const m = state.members[i], r = assignment(i, currentDayIdx());
+  if(r[1] < r[0]) return;
+  const s = readSet(m.id), done = rangeDone(m.id,r);
+  for(let p=r[0];p<=r[1];p++) done ? s.delete(p) : s.add(p);
+  state.progress[m.id] = [...s].sort((a,b)=>a-b);
+  render(); await save();
+  if(!done) toast(t('tMarked',{n:m.name}));
+}
+async function togglePage(p){
+  const di = currentDayIdx();
+  let target = state.members[0];
+  state.members.forEach((m,i)=>{ const r = assignment(i,di); if(p>=r[0] && p<=r[1]) target = m; });
+  const owned = state.members.find(m => (state.progress[m.id]||[]).includes(p));
+  if(owned) target = owned;
+  const s = readSet(target.id);
+  s.has(p) ? s.delete(p) : s.add(p);
+  state.progress[target.id] = [...s].sort((a,b)=>a-b);
+  render(); await save();
+}
+
+/* ================= reminder ================= */
+function scheduleNotif(){
+  if(notifTimer) clearTimeout(notifTimer);
+  if(!('Notification' in window) || Notification.permission !== 'granted') return;
+  const [h,mi] = state.alarmTime.split(':').map(Number);
+  const now = new Date(), when = new Date();
+  when.setHours(h,mi,0,0);
+  if(when <= now) when.setDate(when.getDate()+1);
+  notifTimer = setTimeout(()=>{ new Notification(t('notifTitle'), { body: t('notifBody') }); scheduleNotif(); }, when - now);
+  const n = $('notifNote'); n.dataset.locked = '1'; n.textContent = t('reminderOn',{t:state.alarmTime});
+}
+
+
+/* ================= public khatms ================= */
+let pubIndex = [];      // [{code,title}]  shared
+let pubState = null;    // currently open public khatm
+let myClaimIds = [];    // local: ids of claims made on this device
+
+/* All public khatms live in ONE shared key. Splitting the title list and the
+   page records across two keys meant a half-written state could survive; this
+   cannot. */
+async function loadPubIndex(){
+  try{
+    const r = await store.get('publicKhatms', true);
+    pubIndex = r ? JSON.parse(r.value) : [];
+  }catch(e){ pubIndex = []; }
+  pubIndex.forEach(k => { if(!Array.isArray(k.claims)) k.claims = []; });
+}
+async function savePubIndex(){
+  await store.set('publicKhatms', JSON.stringify(pubIndex), true);   // errors bubble up
+}
+const findPub = code => pubIndex.find(k => k.code === code);
+
+async function loadMyClaims(){
+  try{ const r = await store.get('myClaims', false); myClaimIds = r ? JSON.parse(r.value) : []; }
+  catch(e){ myClaimIds = []; }
+}
+async function saveMyClaims(){
+  try{ await store.set('myClaims', JSON.stringify(myClaimIds), false); }catch(e){}
+}
+
+const claimedCount = k => k.claims.reduce((n,c) => n + (c.to - c.from + 1), 0);
+const nextFreePage = k => claimedCount(k) + 1;
+
+function renderPublicList(){
+  const box = $('publicList');
+  if(!pubIndex.length){ box.innerHTML = `<p class="note">${t('pubNone')}</p>`; return; }
+  box.innerHTML = pubIndex.map((k,i) => `
+    <div class="member-chip">
+      <span class="name" style="font-weight:700">${k.title}</span>
+      <button class="btn sm ghost" data-pub="${i}">${t('pubOpen')}</button>
+    </div>`).join('');
+  box.querySelectorAll('[data-pub]').forEach(b => b.onclick = () => openPublic(pubIndex[+b.dataset.pub].code));
+}
+
+async function openPublic(code){
+  await loadPubIndex();
+  const k = findPub(code);
+  if(!k) return toast(t('tNotFound'));
+  pubState = k;
+  $('setup').classList.add('hidden');
+  $('main').classList.add('hidden');
+  $('publicView').classList.remove('hidden');
+  window.scrollTo(0,0);
+  renderPublic();
+}
+
+function renderPublic(){
+  const k = pubState;
+  $('headTitle').textContent = k.title;
+  $('pubHead').textContent = k.title;
+  const taken = claimedCount(k);
+  $('pubClaimedLabel').textContent = t('pubClaimed', { a: num(taken) });
+  $('pubBar').style.width = Math.min(100, taken/TOTAL*100) + '%';
+
+  // my claims
+  const mine = k.claims.filter(c => myClaimIds.includes(c.id));
+  $('myClaims').innerHTML = mine.length
+    ? mine.map(c => `<div class="today-card ${c.done?'done':''}">
+        <div class="today-info">
+          <div class="today-range">${t('pageRange',{a:num(c.from),b:num(c.to)})}</div>
+          <div class="today-meta">${c.done ? t('pubRead') : t('pubPending')}</div>
+        </div>
+        <button class="tick" data-claim="${c.id}" aria-pressed="${!!c.done}">✓</button>
+      </div>`).join('')
+    : `<p class="note">${t('pubNoClaim')}</p>`;
+  $('myClaims').querySelectorAll('[data-claim]').forEach(b => b.onclick = () => toggleClaim(b.dataset.claim));
+
+  // everyone
+  $('pubPeople').innerHTML = k.claims.length
+    ? k.claims.map(c => `<div class="member-chip">
+        <span class="name">${c.name}</span>
+        <span style="font-size:.82rem;color:var(--muted)">${t('pageRange',{a:num(c.from),b:num(c.to)})}</span>
+        <span>${c.done ? '✓' : '…'}</span>
+      </div>`).join('')
+    : `<p class="note">${t('noMembers')}</p>`;
+
+  // mushaf: green = read, gold = taken but unread
+  let html = '';
+  const status = {};
+  k.claims.forEach(c => { for(let p=c.from;p<=c.to;p++) status[p] = c.done ? 'var(--verdigris)' : 'var(--gold)'; });
+  for(let j=0;j<30;j++){
+    const from = JUZ_START[j], to = j===29 ? TOTAL : JUZ_START[j+1]-1;
+    html += `<div class="juz-label">${t('juz',{n:num(j+1),a:num(from),b:num(to)})}</div><div class="grid">`;
+    for(let p=from;p<=to;p++)
+      html += `<span class="cell" style="background:${status[p]||'var(--parchment2)'};display:block"></span>`;
+    html += `</div>`;
+  }
+  $('pubMushaf').innerHTML = html;
+
+  const left = TOTAL - taken;
+  $('pubTakeBtn').disabled = left <= 0;
+  $('pubTakeBtn').textContent = left <= 0 ? t('pubFull') : t('pubTake');
+  $('pubPages').max = Math.max(1, left);
+}
+
+async function takePages(){
+  const name = $('pubName').value.trim();
+  if(!name) return toast(t('pubNeedName'));
+  let want = Math.max(1, parseInt($('pubPages').value) || 1);
+
+  await loadPubIndex();                    // avoid overwriting others' claims
+  const k = findPub(pubState.code);
+  if(!k){ renderPublicList(); return toast(t('tNotFound')); }
+  pubState = k;
+  const left = TOTAL - claimedCount(k);
+  if(left <= 0) { renderPublic(); return toast(t('pubFull')); }
+  if(want > left){ want = left; toast(t('pubTooMany',{n:num(left)})); }
+
+  const from = nextFreePage(k), to = from + want - 1;
+  const id = 'c' + Date.now() + Math.random().toString(36).slice(2,5);
+  k.claims.push({ id, name, from, to, done:false });
+  myClaimIds.push(id); saveMyClaims();
+  try{ await savePubIndex(); }
+  catch(e){ k.claims.pop(); renderPublic(); return toast(t('tSaved')); }
+  renderPublic();
+  toast(t('pubTaken',{a:num(from),b:num(to)}));
+}
+
+async function toggleClaim(id){
+  await loadPubIndex();
+  const k = findPub(pubState.code);
+  if(!k) return toast(t('tNotFound'));
+  pubState = k;
+  const c = k.claims.find(x => x.id === id);
+  if(!c) return;
+  c.done = !c.done;
+  try{ await savePubIndex(); }
+  catch(e){ c.done = !c.done; return toast(t('tSaved')); }
+  renderPublic();
+}
+
+async function createPublic(){
+  const title = $('pubNewTitle').value.trim();
+  if(!title) return toast(t('tNeedTitle'));
+  const code = makeCode();
+  await loadPubIndex();
+  pubIndex.unshift({ code, title, claims: [] });
+  try{ await savePubIndex(); }
+  catch(e){ pubIndex.shift(); return toast(t('tSaved')); }
+  $('pubNewTitle').value = '';
+  renderPublicList();
+  openPublic(code);
+}
+
+/* ================= boot ================= */
+const showSetup = () => {
+  state = null; pubState = null;
+  $('publicView').classList.add('hidden');
+  $('headTitle').textContent = t('title');
+  $('setup').classList.remove('hidden'); $('main').classList.add('hidden');
+  renderMyKhatms();
+};
+const showMain = () => { $('publicView').classList.add('hidden'); $('setup').classList.add('hidden'); $('main').classList.remove('hidden'); render(); scheduleNotif(); };
+
+async function boot(){
+  startISO = todayISO();
+  let savedLang = null;
+  try{ const r = await store.get('lang', false); savedLang = r && r.value; }catch(e){}
+  try{ const r = await store.get('myKhatms', false); if(r) myKhatms = JSON.parse(r.value); }catch(e){}
+  await loadMyClaims();
+  await loadPubIndex();
+  applyLang(T[savedLang] ? savedLang : 'ur');
+  $('loading').classList.add('hidden');
+  showSetup();
+}
+
+document.querySelectorAll('.langbar button').forEach(b => b.onclick = () => applyLang(b.dataset.lang));
+$('modeSeg').querySelectorAll('button').forEach(b => b.onclick = () => {
+  draft.mode = b.dataset.mode;
+  $('modeSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  renderModeHint();
+});
+$('addBtn').onclick = addMember;
+$('newName').addEventListener('keydown', e => { if(e.key === 'Enter') addMember(); });
+$('perDay').addEventListener('input', renderLengthHint);
+$('dYear').addEventListener('change', () => fillDays());
+$('dMonth').addEventListener('change', () => fillDays());
+$('dDay').addEventListener('change', syncStartISO);
+
+$('createBtn').onclick = async () => {
+  const title = $('khatmTitle').value.trim();
+  if(!title) return toast(t('tNeedTitle'));
+  if(!draft.members.length) return toast(t('tNeedMember'));
+  state = {
+    code: makeCode(), title, mode: draft.mode, members: draft.members,
+    startDate: startISO || todayISO(),
+    perDay: Math.max(1, parseInt($('perDay').value) || 20),
+    alarmTime: $('alarmTime').value || '19:00',
+    progress: {}
+  };
+  draft.members.forEach(m => state.progress[m.id] = []);
+  await save();
+  rememberKhatm(state.code, title);
+  draft = { mode:'shared', members:[] };
+  $('khatmTitle').value = '';
+  showMain();
+  toast(t('tCreated',{c:state.code}));
+};
+
+$('joinBtn').onclick = async () => {
+  const c = $('joinCode').value.trim().toUpperCase();
+  if(!c) return;
+  const s = await load(c);
+  if(!s) return toast(t('tNotFound'));
+  state = s;
+  rememberKhatm(s.code, s.title || s.code);
+  $('joinCode').value = '';
+  showMain();
+};
+
+$('refreshBtn').onclick = async () => {
+  const s = await load(state.code);
+  if(s){ state = s; render(); toast(t('tRefreshed')); }
+};
+
+$('savePerDay').onclick = async () => {
+  const v = Math.max(1, Math.min(TOTAL, parseInt($('editPerDay').value) || state.perDay));
+  state.perDay = v; render(); await save();
+  toast(t('tPerDaySaved'));
+};
+
+$('copyBtn').onclick = () => navigator.clipboard?.writeText(state.code)
+  .then(()=>toast(t('tCopied')), ()=>toast(t('tNotCopied')));
+$('exitBtn').onclick = () => showSetup();
+
+$('notifBtn').onclick = async () => {
+  const n = $('notifNote');
+  if(!('Notification' in window)){ n.dataset.locked='1'; n.textContent = t('reminderUnsupported'); return; }
+  const p = await Notification.requestPermission();
+  if(p === 'granted') scheduleNotif();
+  else { n.dataset.locked='1'; n.textContent = t('reminderNo'); }
+};
+
+$('pubCreateBtn').onclick = createPublic;
+$('pubTakeBtn').onclick = takePages;
+$('pubBack').onclick = () => { pubState = null; $('publicView').classList.add('hidden'); showSetup(); window.scrollTo(0,0); };
+$('pubRefresh').onclick = async () => {
+  await loadPubIndex();
+  const k = findPub(pubState.code);
+  if(k){ pubState = k; renderPublic(); toast(t('tRefreshed')); }
+};
+
+boot();
+</script>
+</body>
+</html>
