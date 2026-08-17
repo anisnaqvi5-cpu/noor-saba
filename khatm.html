@@ -98,69 +98,78 @@ input:focus,select:focus,button:focus-visible{outline:2px solid var(--gold);outl
   <!-- ============ SETUP ============ -->
   <section id="setup" class="hidden">
 
-    <div class="card" id="publicCard">
-      <h2 data-t="pubTitle"></h2>
-      <p class="note" data-t="pubIntro"></p>
-      <div id="publicList"></div>
-      <label for="pubNewTitle" data-t="pubCreate"></label>
-      <div class="row">
-        <input type="text" id="pubNewTitle" style="flex:3">
-        <button class="btn sm gold" id="pubCreateBtn" style="flex:1" data-t="add"></button>
+    <div class="seg" id="setupTab" style="margin-bottom:14px">
+      <button type="button" data-tab="family" aria-pressed="true" data-t="tabFamily"></button>
+      <button type="button" data-tab="public" aria-pressed="false" data-t="tabPublic"></button>
+    </div>
+
+    <div id="publicGroup" class="hidden">
+      <div class="card" id="publicCard">
+        <h2 data-t="pubTitle"></h2>
+        <p class="note" data-t="pubIntro"></p>
+        <div id="publicList"></div>
+        <label for="pubNewTitle" data-t="pubCreate"></label>
+        <div class="row">
+          <input type="text" id="pubNewTitle" style="flex:3">
+          <button class="btn sm gold" id="pubCreateBtn" style="flex:1" data-t="add"></button>
+        </div>
       </div>
     </div>
 
-    <div class="card" id="myKhatmsCard">
-      <h2 data-t="myKhatms"></h2>
-      <div id="myKhatmsList"></div>
-    </div>
-
-    <div class="card">
-      <h2 data-t="joinTitle"></h2>
-      <label for="joinCode" data-t="codeLabel"></label>
-      <input type="text" id="joinCode" maxlength="10" placeholder="TAHA47">
-      <div style="height:10px"></div>
-      <button class="btn ghost" id="joinBtn" data-t="openKhatm"></button>
-      <p class="note" data-t="joinNote"></p>
-    </div>
-
-    <div class="card">
-      <h2 data-t="newTitle"></h2>
-
-      <label for="khatmTitle" data-t="khatmTitleLabel"></label>
-      <input type="text" id="khatmTitle">
-
-      <label data-t="typeLabel"></label>
-      <div class="seg" id="modeSeg">
-        <button type="button" data-mode="shared" aria-pressed="true" data-t="shared"></button>
-        <button type="button" data-mode="solo" aria-pressed="false" data-t="solo"></button>
+    <div id="familyGroup">
+      <div class="card" id="myKhatmsCard">
+        <h2 data-t="myKhatms"></h2>
+        <div id="myKhatmsList"></div>
       </div>
-      <p class="note" id="modeHint"></p>
 
-      <label for="newName" data-t="addReader"></label>
-      <div class="row">
-        <input type="text" id="newName" style="flex:3">
-        <button class="btn sm gold" id="addBtn" style="flex:1" data-t="add"></button>
+      <div class="card">
+        <h2 data-t="joinTitle"></h2>
+        <label for="joinCode" data-t="codeLabel"></label>
+        <input type="text" id="joinCode" maxlength="10" placeholder="TAHA47">
+        <div style="height:10px"></div>
+        <button class="btn ghost" id="joinBtn" data-t="openKhatm"></button>
+        <p class="note" data-t="joinNote"></p>
       </div>
-      <div id="memberList" style="margin-top:10px"></div>
 
-      <label data-t="startLabel"></label>
-      <div class="row" id="dateRow">
-        <select id="dDay"></select>
-        <select id="dMonth" style="flex:2"></select>
-        <select id="dYear"></select>
+      <div class="card">
+        <h2 data-t="newTitle"></h2>
+
+        <label for="khatmTitle" data-t="khatmTitleLabel"></label>
+        <input type="text" id="khatmTitle">
+
+        <label data-t="typeLabel"></label>
+        <div class="seg" id="modeSeg">
+          <button type="button" data-mode="shared" aria-pressed="true" data-t="shared"></button>
+          <button type="button" data-mode="solo" aria-pressed="false" data-t="solo"></button>
+        </div>
+        <p class="note" id="modeHint"></p>
+
+        <label for="newName" data-t="addReader"></label>
+        <div class="row">
+          <input type="text" id="newName" style="flex:3">
+          <button class="btn sm gold" id="addBtn" style="flex:1" data-t="add"></button>
+        </div>
+        <div id="memberList" style="margin-top:10px"></div>
+
+        <label data-t="startLabel"></label>
+        <div class="row" id="dateRow">
+          <select id="dDay"></select>
+          <select id="dMonth" style="flex:2"></select>
+          <select id="dYear"></select>
+        </div>
+        <p class="note" id="startHint"></p>
+
+        <label for="perDay" data-t="perDayLabel"></label>
+        <input type="number" id="perDay" value="20" min="1" max="604">
+        <p class="note" id="lengthHint"></p>
+
+        <label for="alarmTime" data-t="alarmLabel"></label>
+        <input type="time" id="alarmTime" value="19:00">
+
+        <div style="height:14px"></div>
+        <button class="btn" id="createBtn" data-t="createKhatm"></button>
+        <div class="warn" data-t="codeWarn"></div>
       </div>
-      <p class="note" id="startHint"></p>
-
-      <label for="perDay" data-t="perDayLabel"></label>
-      <input type="number" id="perDay" value="20" min="1" max="604">
-      <p class="note" id="lengthHint"></p>
-
-      <label for="alarmTime" data-t="alarmLabel"></label>
-      <input type="time" id="alarmTime" value="19:00">
-
-      <div style="height:14px"></div>
-      <button class="btn" id="createBtn" data-t="createKhatm"></button>
-      <div class="warn" data-t="codeWarn"></div>
     </div>
   </section>
 
@@ -351,7 +360,8 @@ ur:{dir:"rtl", digits:"en",
  localOnly:"یہ فائل براہِ راست براؤزر میں کھلی ہے، اس لیے ڈیٹا صرف اسی فون میں محفوظ ہوگا۔ دوسرے فون سے وہی ختم دیکھنے کے لیے ایپ کو Claude کے اندر چلائیں۔",
  tPerDaySaved:"روزانہ صفحات بدل گئے", loading:"لوڈ ہو رہا ہے…",
  deleteKhatm:"ختم حذف کریں", adminPassPrompt:"ایڈمن پاس ورڈ درج کریں", tWrongAdminPass:"پاس ورڈ غلط ہے",
- deleteConfirm:"کیا واقعی یہ ختم ہمیشہ کے لیے حذف کرنا ہے؟", tDeleted:"ختم حذف ہو گیا"},
+ deleteConfirm:"کیا واقعی یہ ختم ہمیشہ کے لیے حذف کرنا ہے؟", tDeleted:"ختم حذف ہو گیا",
+ tabFamily:"خاندانی ختم", tabPublic:"عمومی ختم"},
 
 fa:{dir:"rtl", digits:"fa",
  title:"ختم قرآن خانوادگی", subtitle:"بر پایهٔ صفحه‌بندی مصحف عثمان طه — ۶۰۴ صفحه",
@@ -405,7 +415,8 @@ fa:{dir:"rtl", digits:"fa",
  localOnly:"این فایل مستقیم در مرورگر باز شده، پس اطلاعات فقط روی همین گوشی ذخیره می‌شود. برای دیدن یک ختم از گوشی دیگر، برنامه را داخل Claude اجرا کنید.",
  tPerDaySaved:"صفحات روزانه تغییر کرد", loading:"در حال بارگذاری…",
  deleteKhatm:"حذف ختم", adminPassPrompt:"رمز ادمین را وارد کنید", tWrongAdminPass:"رمز اشتباه است",
- deleteConfirm:"آیا واقعاً می‌خواهید این ختم برای همیشه حذف شود؟", tDeleted:"ختم حذف شد"},
+ deleteConfirm:"آیا واقعاً می‌خواهید این ختم برای همیشه حذف شود؟", tDeleted:"ختم حذف شد",
+ tabFamily:"ختم خانوادگی", tabPublic:"ختم عمومی"},
 
 en:{dir:"ltr", digits:"en",
  title:"Family Quran Khatm", subtitle:"Based on the Uthman Taha mushaf — 604 pages",
@@ -459,7 +470,8 @@ en:{dir:"ltr", digits:"en",
  localOnly:"This file is open directly in a browser, so data stays on this device only. To share a khatm across phones, run it inside Claude.",
  tPerDaySaved:"Daily pages updated", loading:"Loading…",
  deleteKhatm:"Delete khatm", adminPassPrompt:"Enter admin password", tWrongAdminPass:"Wrong password",
- deleteConfirm:"Really delete this khatm forever?", tDeleted:"Khatm deleted"}
+ deleteConfirm:"Really delete this khatm forever?", tDeleted:"Khatm deleted",
+ tabFamily:"Family khatm", tabPublic:"Public khatm"}
 };
 
 /* ================= constants ================= */
@@ -965,12 +977,20 @@ async function createPublic(){
 }
 
 /* ================= boot ================= */
+let setupTab = 'family';
+function showSetupTab(tab){
+  setupTab = tab;
+  $('familyGroup').classList.toggle('hidden', tab !== 'family');
+  $('publicGroup').classList.toggle('hidden', tab !== 'public');
+  $('setupTab').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.tab === tab));
+}
 const showSetup = () => {
   state = null; pubState = null;
   $('publicView').classList.add('hidden');
   $('headTitle').textContent = t('title');
   $('setup').classList.remove('hidden'); $('main').classList.add('hidden');
   renderMyKhatms();
+  showSetupTab(setupTab);
 };
 const showMain = () => { $('publicView').classList.add('hidden'); $('setup').classList.add('hidden'); $('main').classList.remove('hidden'); render(); scheduleNotif(); };
 
@@ -987,6 +1007,7 @@ async function boot(){
 }
 
 document.querySelectorAll('.langbar button').forEach(b => b.onclick = () => applyLang(b.dataset.lang));
+$('setupTab').querySelectorAll('button').forEach(b => b.onclick = () => showSetupTab(b.dataset.tab));
 $('modeSeg').querySelectorAll('button').forEach(b => b.onclick = () => {
   draft.mode = b.dataset.mode;
   $('modeSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
