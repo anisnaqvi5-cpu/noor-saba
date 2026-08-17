@@ -175,6 +175,7 @@ input:focus,select:focus,button:focus-visible{outline:2px solid var(--gold);outl
       </div>
       <div class="pbar"><i id="pubBar" style="width:0%;background:var(--gold)"></i></div>
       <p class="note" data-t="pubOnce"></p>
+      <button class="btn ghost sm" id="pubDeleteBtn" data-t="deleteKhatm" style="color:var(--rose);border-color:var(--rose);margin-top:8px"></button>
     </div>
 
     <div class="card">
@@ -248,6 +249,8 @@ input:focus,select:focus,button:focus-visible{outline:2px solid var(--gold);outl
         <button class="btn ghost sm" id="copyBtn" data-t="copyCode"></button>
         <button class="btn ghost sm" id="exitBtn" data-t="backToList"></button>
       </div>
+      <div style="height:8px"></div>
+      <button class="btn ghost sm" id="deleteBtn" data-t="deleteKhatm" style="color:var(--rose);border-color:var(--rose)"></button>
     </div>
   </section>
 </div>
@@ -346,7 +349,9 @@ ur:{dir:"rtl", digits:"en",
  pubOnce:"ہر شریک ایک بار صفحات لیتا ہے — روزانہ نہیں۔ پڑھنے کے بعد ✓ لگا دیں، پھر چاہیں تو مزید لے سکتے ہیں.",
  pubParticipants:"شرکاء", back:"واپس",
  localOnly:"یہ فائل براہِ راست براؤزر میں کھلی ہے، اس لیے ڈیٹا صرف اسی فون میں محفوظ ہوگا۔ دوسرے فون سے وہی ختم دیکھنے کے لیے ایپ کو Claude کے اندر چلائیں۔",
- tPerDaySaved:"روزانہ صفحات بدل گئے", loading:"لوڈ ہو رہا ہے…"},
+ tPerDaySaved:"روزانہ صفحات بدل گئے", loading:"لوڈ ہو رہا ہے…",
+ deleteKhatm:"ختم حذف کریں", adminPassPrompt:"ایڈمن پاس ورڈ درج کریں", tWrongAdminPass:"پاس ورڈ غلط ہے",
+ deleteConfirm:"کیا واقعی یہ ختم ہمیشہ کے لیے حذف کرنا ہے؟", tDeleted:"ختم حذف ہو گیا"},
 
 fa:{dir:"rtl", digits:"fa",
  title:"ختم قرآن خانوادگی", subtitle:"بر پایهٔ صفحه‌بندی مصحف عثمان طه — ۶۰۴ صفحه",
@@ -398,7 +403,9 @@ fa:{dir:"rtl", digits:"fa",
  pubOnce:"هر شرکت‌کننده یک بار صفحه برمی‌دارد — نه هر روز. پس از خواندن ✓ بزنید، بعد می‌توانید باز هم بردارید.",
  pubParticipants:"شرکت‌کنندگان", back:"بازگشت",
  localOnly:"این فایل مستقیم در مرورگر باز شده، پس اطلاعات فقط روی همین گوشی ذخیره می‌شود. برای دیدن یک ختم از گوشی دیگر، برنامه را داخل Claude اجرا کنید.",
- tPerDaySaved:"صفحات روزانه تغییر کرد", loading:"در حال بارگذاری…"},
+ tPerDaySaved:"صفحات روزانه تغییر کرد", loading:"در حال بارگذاری…",
+ deleteKhatm:"حذف ختم", adminPassPrompt:"رمز ادمین را وارد کنید", tWrongAdminPass:"رمز اشتباه است",
+ deleteConfirm:"آیا واقعاً می‌خواهید این ختم برای همیشه حذف شود؟", tDeleted:"ختم حذف شد"},
 
 en:{dir:"ltr", digits:"en",
  title:"Family Quran Khatm", subtitle:"Based on the Uthman Taha mushaf — 604 pages",
@@ -450,10 +457,19 @@ en:{dir:"ltr", digits:"en",
  pubOnce:"Each participant takes pages once — not daily. Mark ✓ when done, then you may take more.",
  pubParticipants:"Participants", back:"Back",
  localOnly:"This file is open directly in a browser, so data stays on this device only. To share a khatm across phones, run it inside Claude.",
- tPerDaySaved:"Daily pages updated", loading:"Loading…"}
+ tPerDaySaved:"Daily pages updated", loading:"Loading…",
+ deleteKhatm:"Delete khatm", adminPassPrompt:"Enter admin password", tWrongAdminPass:"Wrong password",
+ deleteConfirm:"Really delete this khatm forever?", tDeleted:"Khatm deleted"}
 };
 
 /* ================= constants ================= */
+const ADMIN_PASS = '8834791';
+function checkAdmin(){
+  const p = window.prompt(t('adminPassPrompt'));
+  if(p === null) return false;
+  if(p !== ADMIN_PASS){ toast(t('tWrongAdminPass')); return false; }
+  return true;
+}
 const TOTAL = 604;
 const PALETTE = ['#0E3B34','#A8546A','#C9A227','#3D6B8E','#7A5C3E','#5C7A4E','#8E5B9E','#B0543A'];
 const JUZ_START = [1,22,42,62,82,102,121,142,162,182,201,222,242,262,282,302,322,342,362,382,402,422,442,462,482,502,522,542,562,582];
@@ -1029,6 +1045,16 @@ $('copyBtn').onclick = () => navigator.clipboard?.writeText(state.code)
   .then(()=>toast(t('tCopied')), ()=>toast(t('tNotCopied')));
 $('exitBtn').onclick = () => showSetup();
 
+$('deleteBtn').onclick = async () => {
+  if(!checkAdmin()) return;
+  if(!window.confirm(t('deleteConfirm'))) return;
+  await store.delete('khatm:'+state.code, true);
+  myKhatms = myKhatms.filter(k => k.code !== state.code);
+  saveMyList();
+  toast(t('tDeleted'));
+  showSetup();
+};
+
 $('notifBtn').onclick = async () => {
   const n = $('notifNote');
   if(!('Notification' in window)){ n.dataset.locked='1'; n.textContent = t('reminderUnsupported'); return; }
@@ -1040,6 +1066,19 @@ $('notifBtn').onclick = async () => {
 $('pubCreateBtn').onclick = createPublic;
 $('pubTakeBtn').onclick = takePages;
 $('pubBack').onclick = () => { pubState = null; $('publicView').classList.add('hidden'); showSetup(); window.scrollTo(0,0); };
+$('pubDeleteBtn').onclick = async () => {
+  if(!checkAdmin()) return;
+  if(!window.confirm(t('deleteConfirm'))) return;
+  await loadPubIndex();
+  pubIndex = pubIndex.filter(k => k.code !== pubState.code);
+  try{ await savePubIndex(); }
+  catch(e){ return toast(t('tSaved')); }
+  toast(t('tDeleted'));
+  pubState = null;
+  $('publicView').classList.add('hidden');
+  renderPublicList();
+  showSetup();
+};
 $('pubRefresh').onclick = async () => {
   await loadPubIndex();
   const k = findPub(pubState.code);
