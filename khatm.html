@@ -98,6 +98,15 @@ input[type=text]:focus,input[type=number]:focus,input[type=date]:focus,input[typ
 .hidden{display:none!important}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--verdigris);color:var(--parchment);padding:11px 20px;border-radius:11px;font-size:.85rem;z-index:50;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;max-width:90%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+#noteFab{position:fixed;bottom:18px;right:18px;width:52px;height:52px;border-radius:50%;border:none;background:var(--gold);color:#2A2003;font-size:1.4rem;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25);z-index:40;transition:transform .15s}
+#noteFab:hover{transform:scale(1.08)}
+#noteFab:active{transform:scale(.92)}
+.modal-overlay{position:fixed;inset:0;background:rgba(18,33,30,.55);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px;animation:riseIn .2s ease both}
+.modal-box{background:#fff;border-radius:16px;padding:18px;width:100%;max-width:420px;animation:popIn .25s cubic-bezier(.2,.8,.2,1) both}
+.modal-box h2{font-size:1.02rem;margin:0 0 12px}
+#noteText{width:100%;padding:11px 12px;border:1px solid var(--parchment2);border-radius:10px;background:#FCFAF4;color:var(--ink);font-family:inherit;resize:vertical}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -288,6 +297,18 @@ input[type=text]:focus,input[type=number]:focus,input[type=date]:focus,input[typ
 
 <div class="toast" id="toast"></div>
 
+<button id="noteFab" title="یادداشت">📝</button>
+<div id="noteModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h2 data-t="noteTitle"></h2>
+    <textarea id="noteText" rows="9"></textarea>
+    <div class="row" style="margin-top:10px">
+      <button class="btn ghost sm" id="noteCloseBtn" data-t="close"></button>
+      <button class="btn sm gold" id="noteSaveBtn" data-t="save"></button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ================= storage layer =================
    Local-only keys (lang, myKhatms, myClaims) stay in localStorage — they are
@@ -383,7 +404,8 @@ ur:{dir:"rtl", digits:"en",
  tPerDaySaved:"روزانہ صفحات بدل گئے", loading:"لوڈ ہو رہا ہے…",
  deleteKhatm:"ختم حذف کریں", adminPassPrompt:"ایڈمن پاس ورڈ درج کریں", tWrongAdminPass:"پاس ورڈ غلط ہے",
  deleteConfirm:"کیا واقعی یہ ختم ہمیشہ کے لیے حذف کرنا ہے؟", tDeleted:"ختم حذف ہو گیا",
- tabFamily:"خاندانی ختم", tabPublic:"عمومی ختم"},
+ tabFamily:"خاندانی ختم", tabPublic:"عمومی ختم",
+ noteTitle:"یادداشت", close:"بند کریں", tNoteSaved:"یادداشت محفوظ ہو گئی"},
 
 fa:{dir:"rtl", digits:"fa",
  title:"ختم قرآن خانوادگی", subtitle:"بر پایهٔ صفحه‌بندی مصحف عثمان طه — ۶۰۴ صفحه",
@@ -438,7 +460,8 @@ fa:{dir:"rtl", digits:"fa",
  tPerDaySaved:"صفحات روزانه تغییر کرد", loading:"در حال بارگذاری…",
  deleteKhatm:"حذف ختم", adminPassPrompt:"رمز ادمین را وارد کنید", tWrongAdminPass:"رمز اشتباه است",
  deleteConfirm:"آیا واقعاً می‌خواهید این ختم برای همیشه حذف شود؟", tDeleted:"ختم حذف شد",
- tabFamily:"ختم خانوادگی", tabPublic:"ختم عمومی"},
+ tabFamily:"ختم خانوادگی", tabPublic:"ختم عمومی",
+ noteTitle:"یادداشت", close:"بستن", tNoteSaved:"یادداشت ذخیره شد"},
 
 en:{dir:"ltr", digits:"en",
  title:"Family Quran Khatm", subtitle:"Based on the Uthman Taha mushaf — 604 pages",
@@ -493,7 +516,8 @@ en:{dir:"ltr", digits:"en",
  tPerDaySaved:"Daily pages updated", loading:"Loading…",
  deleteKhatm:"Delete khatm", adminPassPrompt:"Enter admin password", tWrongAdminPass:"Wrong password",
  deleteConfirm:"Really delete this khatm forever?", tDeleted:"Khatm deleted",
- tabFamily:"Family khatm", tabPublic:"Public khatm"}
+ tabFamily:"Family khatm", tabPublic:"Public khatm",
+ noteTitle:"Notes", close:"Close", tNoteSaved:"Note saved"}
 };
 
 /* ================= constants ================= */
@@ -1104,6 +1128,23 @@ $('notifBtn').onclick = async () => {
   const p = await Notification.requestPermission();
   if(p === 'granted') scheduleNotif();
   else { n.dataset.locked='1'; n.textContent = t('reminderNo'); }
+};
+
+let noteUnlocked = false;
+async function openNote(){
+  if(!noteUnlocked && !checkAdmin()) return;
+  noteUnlocked = true;
+  let val = '';
+  try{ const r = await store.get('note', true); val = r.value; }catch(e){}
+  $('noteText').value = val;
+  $('noteModal').classList.remove('hidden');
+}
+$('noteFab').onclick = openNote;
+$('noteCloseBtn').onclick = () => $('noteModal').classList.add('hidden');
+$('noteSaveBtn').onclick = async () => {
+  try{ await store.set('note', $('noteText').value, true); toast(t('tNoteSaved')); }
+  catch(e){ toast(t('tSaved')); }
+  $('noteModal').classList.add('hidden');
 };
 
 $('pubCreateBtn').onclick = createPublic;
