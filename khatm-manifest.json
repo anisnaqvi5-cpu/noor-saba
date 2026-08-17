@@ -1,0 +1,21 @@
+{
+  "name": "ختم قرآن",
+  "short_name": "ختم قرآن",
+  "description": "خاندانی اور عمومی ختم قرآن کی پیش رفت کا سادہ حساب — مصحف عثمان طہ کی صفحہ بندی کے مطابق۔",
+  "lang": "ur",
+  "dir": "rtl",
+  "start_url": "./khatm.html",
+  "scope": "./khatm.html",
+  "id": "khatm-quran-tracker",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#EFE7D2",
+  "theme_color": "#0E3B34",
+  "categories": ["lifestyle", "utilities"],
+  "icons": [
+    { "src": "./khatm-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./khatm-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./khatm-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
